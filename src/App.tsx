@@ -12,38 +12,29 @@ function App() {
         <Navbar.Group align={Alignment.LEFT}>
           <Navbar.Heading>Schedules</Navbar.Heading>
           <Navbar.Divider />
-          <Button className="bp3-minimal" icon="home" text="Home" />
-          <Button className="bp3-minimal" icon="document" text="Files" />
+          <Link to="/">
+            <Button className="bp3-minimal" icon="home" text="Home" />
+          </Link>
+          <Link to="/page1">
+            <Button className="bp3-minimal" icon="document" text="Page 1" />
+          </Link>
+          <Link to="/page2">
+            <Button className="bp3-minimal" icon="document" text="Page 2" />
+          </Link>
         </Navbar.Group>
       </Navbar>
 
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/page1">Page 1</Link>
-            </li>
-            <li>
-              <Link to="/page2">Page 2</Link>
-            </li>
-          </ul>
-        </nav>
-
-        <Switch>
-          <Route path="/page1">
-            <Page1 />
-          </Route>
-          <Route path="/page2">
-            <Page2 />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
+      <Switch>
+        <Route path="/page1">
+          <Page1 />
+        </Route>
+        <Route path="/page2">
+          <Page2 />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
     </Router>
   );
 }
