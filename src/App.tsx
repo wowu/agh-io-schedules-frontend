@@ -11,6 +11,7 @@ const Container = styled(Content)`
   padding: 0 50px;
   margin-top: 20px;
 `;
+
 const AppContent = styled.div`
   min-height: 500px;
   padding: 24px;
