@@ -1,9 +1,15 @@
+import { PageHeader, Row } from 'antd';
+
 export default function Page1() {
   return (
     <>
-      <h2>Strona główna</h2>
+      <Row justify={'center'}>
+        <PageHeader
+          className="site-page-header"
+          title="Strona główna"
+        />
+      </Row>
 
-      <p>Tutaj będą fajne rzeczy</p>
     </>
   );
 }
