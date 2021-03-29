@@ -1,7 +1,7 @@
 import CenteredHeader from '../components/CenteredHeader';
 import React from 'react';
 
-export default function Page1() {
+export default function Home() {
   return (
     <>
 
