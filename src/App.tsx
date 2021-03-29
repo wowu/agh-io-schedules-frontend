@@ -1,16 +1,20 @@
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { Layout, Menu, Row } from 'antd';
+import { Layout, Menu, } from 'antd';
 import styled from 'styled-components';
 
-import Home from './components/Home';
-import Schedules from './components/Schedules';
-import ImportForm from './components/ImportForm';
+import Home from './pages/Home';
+import ScheduleList from './pages/ScheduleList';
+import ImportForm from './pages/ImportForm';
+import LoginForm from './pages/LoginForm';
+import Schedule from './pages/Schedule';
 
 const { Header, Content, Footer } = Layout;
 
 const Container = styled(Content)`
-  padding: 0 50px;
-  margin-top: 20px;
+  padding: 0 30px;
+  width: 100%;
+  margin: 20px auto 0 auto;
+  max-width: 1400px;
 `;
 
 const AppContent = styled.div`
@@ -34,22 +38,34 @@ function App() {
             <Menu.Item key="3">
               <Link to="/schedules">Harmonogramy</Link>
             </Menu.Item>
+            <Menu.Item key="5">
+              <Link to="/schedule">Przykładowy harmonogram </Link>
+            </Menu.Item>
+            <Menu.Item key="4">
+              <Link to="/login">Zaloguj się</Link>
+            </Menu.Item>
           </Menu>
         </Header>
 
         <Container>
           <AppContent>
-              <Switch>
-                <Route exact path="/">
-                  <Home/>
-                </Route>
-                <Route path="/schedules">
-                  <Schedules/>
-                </Route>
-                <Route path="/import">
-                  <ImportForm/>
-                </Route>
-              </Switch>
+            <Switch>
+              <Route exact path="/">
+                <Home/>
+              </Route>
+              <Route path="/schedules">
+                <ScheduleList/>
+              </Route>
+              <Route path="/import">
+                <ImportForm/>
+              </Route>
+              <Route path="/login">
+                <LoginForm/>
+              </Route>
+              <Route path="/schedule">
+                <Schedule/>
+              </Route>
+            </Switch>
           </AppContent>
         </Container>
 
