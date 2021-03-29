@@ -1,17 +1,14 @@
-import { Button, Checkbox, Col, Form, Input, PageHeader, Row, Space } from 'antd';
+import { Button, Col, Form, Row, } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import Dragger from 'antd/es/upload/Dragger';
-import Title from 'antd/es/typography/Title';
+import CenteredHeader from '../components/CenteredHeader';
+import React from 'react';
 
 export default function ImportForm() {
   return (
     <>
-      <Row justify={'center'}>
-        <PageHeader
-          className="site-page-header"
-          title="Wyślij harmonogram"
-        />
-      </Row>
+
+      <CenteredHeader title={'Wyślij harmonogram'}/>
       <Form
         name="basic"
         initialValues={{ remember: true }}

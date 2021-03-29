@@ -1,5 +1,8 @@
 import { ScheduleOutlined } from '@ant-design/icons';
-import { Avatar, Button, List, PageHeader, Row } from 'antd';
+import { Button, List, } from 'antd';
+import CenteredHeader from '../components/CenteredHeader';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const data = [
   {
@@ -17,17 +20,13 @@ const data = [
 ];
 
 
-export default function Schedules() {
+export default function ScheduleList() {
 
 
   return (
     <>
-      <Row justify={"center"}>
-        <PageHeader
-          className="site-page-header"
-          title="Moje harmonogramy"
-        />
-      </Row>
+
+      <CenteredHeader title={'Harmonogramy'}/>
       <List
         itemLayout="horizontal"
         dataSource={data}
@@ -35,7 +34,7 @@ export default function Schedules() {
           <List.Item actions={[<Button>Edytuj</Button>]}>
             <List.Item.Meta
               avatar={<ScheduleOutlined/>}
-              title={<a href="https://ant.design">{item.title}</a>}
+              title={<Link to={"/schedule"}>{item.title}</Link>}
               description="Jakiś opis"
             />
           </List.Item>
