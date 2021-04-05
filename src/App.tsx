@@ -7,6 +7,7 @@ import ScheduleList from './pages/ScheduleList';
 import ImportForm from './pages/ImportForm';
 import LoginForm from './pages/LoginForm';
 import Schedule from './pages/Schedule';
+import NotificationSettings from './pages/NotificationSettings'
 
 const { Header, Content, Footer } = Layout;
 
@@ -38,11 +39,14 @@ function App() {
             <Menu.Item key="3">
               <Link to="/schedules">Harmonogramy</Link>
             </Menu.Item>
-            <Menu.Item key="5">
+            <Menu.Item key="4">
               <Link to="/schedule">Przykładowy harmonogram </Link>
             </Menu.Item>
-            <Menu.Item key="4">
+            <Menu.Item key="5">
               <Link to="/login">Zaloguj się</Link>
+            </Menu.Item>
+            <Menu.Item key="6">
+              <Link to="/notification-settings">Skofiguruj Powiadomienia</Link>
             </Menu.Item>
           </Menu>
         </Header>
@@ -64,6 +68,9 @@ function App() {
               </Route>
               <Route path="/schedule">
                 <Schedule/>
+              </Route>
+              <Route path="/notification-settings">
+                <NotificationSettings/>
               </Route>
             </Switch>
           </AppContent>
