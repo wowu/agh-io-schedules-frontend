@@ -60,7 +60,7 @@ export default function NotificationSettings() {
                     </Menu.Item>)}
               </Menu>
             } placement="bottomLeft">
-              <Button>{item.time ? item.time : "Wybierz czas"}</Button>
+              <Button style={{ marginLeft: 10 }}>{item.time ? item.time : "Wybierz czas"}</Button>
             </Dropdown>
           </List.Item>
         )}
