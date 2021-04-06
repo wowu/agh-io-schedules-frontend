@@ -33,7 +33,7 @@ export default function NotificationSettings() {
   return (
     <>
       {/* <ReactJson src={data} collapsed={true} /> */}
-      <CenteredHeader title='Skofiguruj powiadomienia' />
+      <CenteredHeader title='Skonfiguruj powiadomienia' />
       <List
         itemLayout="horizontal"
         dataSource={data}
@@ -45,7 +45,7 @@ export default function NotificationSettings() {
             <List.Item.Meta
               title={item.title}
             />
-            Jak wcześnie
+            Przypomnij przed
             <Dropdown overlay={
               <Menu>
                 {

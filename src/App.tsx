@@ -43,10 +43,10 @@ function App() {
               <Link to="/schedule">Przykładowy harmonogram </Link>
             </Menu.Item>
             <Menu.Item key="5">
-              <Link to="/login">Zaloguj się</Link>
+              <Link to="/notification-settings">Skonfiguruj powiadomienia</Link>
             </Menu.Item>
             <Menu.Item key="6">
-              <Link to="/notification-settings">Skonfiguruj Powiadomienia</Link>
+              <Link to="/login">Zaloguj się</Link>
             </Menu.Item>
           </Menu>
         </Header>
