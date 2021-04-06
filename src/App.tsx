@@ -46,7 +46,7 @@ function App() {
               <Link to="/login">Zaloguj się</Link>
             </Menu.Item>
             <Menu.Item key="6">
-              <Link to="/notification-settings">Skofiguruj Powiadomienia</Link>
+              <Link to="/notification-settings">Skonfiguruj Powiadomienia</Link>
             </Menu.Item>
           </Menu>
         </Header>
