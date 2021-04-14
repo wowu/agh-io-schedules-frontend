@@ -1,5 +1,4 @@
 import { PageHeader, Row } from 'antd';
-import React from 'react';
 
 interface CenteredHeaderProps{
   title: string

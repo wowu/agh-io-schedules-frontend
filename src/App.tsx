@@ -1,5 +1,6 @@
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { Layout, Menu, } from 'antd';
+import { useState } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Layout } from 'antd';
 import styled from 'styled-components';
 
 import Home from './pages/Home';
@@ -7,7 +8,11 @@ import ScheduleList from './pages/ScheduleList';
 import ImportForm from './pages/ImportForm';
 import LoginForm from './pages/LoginForm';
 import Schedule from './pages/Schedule';
-import NotificationSettings from './pages/NotificationSettings'
+import NotificationSettings from './pages/NotificationSettings';
+import { UserContext } from './contexts/user';
+import PrivateRoute from './components/PrivateRoute';
+import { AuthService } from './services/AuthService';
+import AppMenu from './components/AppMenu';
 
 const { Header, Content, Footer } = Layout;
 
@@ -25,62 +30,48 @@ const AppContent = styled.div`
 `;
 
 function App() {
+  const [user, setUser] = useState(AuthService.getCurrentUser());
+
   return (
-    <Router>
-      <Layout>
-        <Header>
-          <Menu theme="dark" mode="horizontal">
-            <Menu.Item key="1">
-              <Link to="/">Strona główna</Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Link to="/import">Wyślij</Link>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <Link to="/schedules">Harmonogramy</Link>
-            </Menu.Item>
-            <Menu.Item key="4">
-              <Link to="/schedule">Przykładowy harmonogram </Link>
-            </Menu.Item>
-            <Menu.Item key="5">
-              <Link to="/notification-settings">Skonfiguruj powiadomienia</Link>
-            </Menu.Item>
-            <Menu.Item key="6">
-              <Link to="/login">Zaloguj się</Link>
-            </Menu.Item>
-          </Menu>
-        </Header>
+    <UserContext.Provider value={{ user, setUser }}>
+      <Router>
+        <Layout>
+          <Header>
+            <AppMenu />
+          </Header>
 
-        <Container>
-          <AppContent>
-            <Switch>
-              <Route exact path="/">
-                <Home/>
-              </Route>
-              <Route path="/schedules">
-                <ScheduleList/>
-              </Route>
-              <Route path="/import">
-                <ImportForm/>
-              </Route>
-              <Route path="/login">
-                <LoginForm/>
-              </Route>
-              <Route path="/schedule">
-                <Schedule/>
-              </Route>
-              <Route path="/notification-settings">
-                <NotificationSettings/>
-              </Route>
-            </Switch>
-          </AppContent>
-        </Container>
+          <Container>
+            <AppContent>
+              <Switch>
+                <PrivateRoute exact path="/">
+                  <Home />
+                </PrivateRoute>
+                <PrivateRoute path="/schedules">
+                  <ScheduleList />
+                </PrivateRoute>
+                <PrivateRoute path="/import">
+                  <ImportForm />
+                </PrivateRoute>
+                <PrivateRoute path="/schedule">
+                  <Schedule />
+                </PrivateRoute>
+                <PrivateRoute path="/notification-settings">
+                  <NotificationSettings />
+                </PrivateRoute>
 
-        <Footer style={{ textAlign: 'center' }}>
-          Schedules &copy; {new Date().getFullYear()} Game of Threads, AGH
-        </Footer>
-      </Layout>
-    </Router>
+                <Route path="/login">
+                  <LoginForm />
+                </Route>
+              </Switch>
+            </AppContent>
+          </Container>
+
+          <Footer style={{ textAlign: 'center' }}>
+            Schedules &copy; {new Date().getFullYear()} Game of Threads, AGH
+          </Footer>
+        </Layout>
+      </Router>
+    </UserContext.Provider>
   );
 }
 
