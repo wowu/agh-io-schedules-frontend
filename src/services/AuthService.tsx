@@ -7,10 +7,7 @@ export enum AuthResponse {
 }
 
 export class AuthService {
-  static async login(
-    username: string,
-    password: string
-  ): Promise<AuthResponse> {
+  static async login(username: string, password: string): Promise<AuthResponse> {
     const response = await fetch(`${API_URL}/api/token/create`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

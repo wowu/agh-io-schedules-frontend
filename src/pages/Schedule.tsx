@@ -39,10 +39,7 @@ function dateCellRender(value: moment.Moment) {
   const listData = getListData(value);
   return (
     listData.length > 0 && (
-      <Badge
-        count={`${listData.length} events`}
-        style={{ backgroundColor: '#52c41a' }}
-      />
+      <Badge count={`${listData.length} events`} style={{ backgroundColor: '#52c41a' }} />
       // <Badge status="success" text={`${listData.length} wydarzenia`}/>
     )
     // <ul className="events">
@@ -89,10 +86,7 @@ export default function Schedule() {
       <CenteredHeader title="Konferencja 1" />
       <Row gutter={[16, 16]} justify="space-between">
         <Col span={24} xl={12}>
-          <Calendar
-            dateCellRender={dateCellRender}
-            monthCellRender={monthCellRender}
-          />
+          <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
         </Col>
         <Col span={24} xl={11}>
           <List
@@ -100,10 +94,7 @@ export default function Schedule() {
             dataSource={data}
             renderItem={(item) => (
               <List.Item actions={[<Button>Szczegóły</Button>]}>
-                <List.Item.Meta
-                  title={<Link to="#">{item.title}</Link>}
-                  description="Jakiś opis"
-                />
+                <List.Item.Meta title={<Link to="#">{item.title}</Link>} description="Jakiś opis" />
               </List.Item>
             )}
           />

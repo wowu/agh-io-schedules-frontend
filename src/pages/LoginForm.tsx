@@ -16,10 +16,7 @@ export default function LoginForm() {
     setError(null);
     setLoading(true);
 
-    const authResponse = await AuthService.login(
-      values.username,
-      values.password
-    );
+    const authResponse = await AuthService.login(values.username, values.password);
 
     setLoading(false);
 

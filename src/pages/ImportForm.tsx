@@ -15,9 +15,7 @@ export default function ImportForm() {
               <p className="ant-upload-drag-icon">
                 <InboxOutlined />
               </p>
-              <p className="ant-upload-text">
-                Kliknij lub przeciągnij plik z harmonogramem
-              </p>
+              <p className="ant-upload-text">Kliknij lub przeciągnij plik z harmonogramem</p>
               <p className="ant-upload-hint">
                 Dopuszczalne formaty: <br /> xls, xlsx
               </p>
