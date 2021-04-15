@@ -26,7 +26,7 @@ export default function LoginForm() {
         history.push('/');
         break;
       case AuthResponse.WrongPassword:
-        setError('Złe hasło. Spróbuj jeszcze raz.');
+        setError('Niepoprawne dane logowania. Spróbuj ponownie.');
         break;
       case AuthResponse.UnknownError:
         setError('Wystąpił nieznany błąd.');
@@ -54,19 +54,6 @@ export default function LoginForm() {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
-        {error && (
-          <Row justify="center">
-            <Col span={12}>
-              <Alert
-                type="error"
-                showIcon
-                message="Błąd"
-                description={error}
-                style={{ marginBottom: 30 }}
-              />
-            </Col>
-          </Row>
-        )}
 
         <Form.Item
           label="Adres e-mail"
@@ -91,6 +78,19 @@ export default function LoginForm() {
             </Button>
           </Form.Item>
         </Row>
+        {error && (
+          <Row justify="center">
+            <Col span={12}>
+              <Alert
+                type="error"
+                showIcon
+                message="Błąd"
+                description={error}
+                style={{ marginBottom: 30 }}
+              />
+            </Col>
+          </Row>
+        )}
       </Form>
     </>
   );
