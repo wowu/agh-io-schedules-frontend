@@ -1,38 +1,66 @@
-import { Button, Form, Input, Row } from 'antd';
-import CenteredHeader from '../components/CenteredHeader';
+import React, { useContext, useState } from 'react';
+import { Button, Form, Input, Row, Alert, Col } from 'antd';
 
+import CenteredHeader from '../components/CenteredHeader';
+import { AuthService, AuthResponse } from '../services/AuthService';
+import { useHistory } from 'react-router-dom';
+import { UserContext } from '../contexts/user';
 
 export default function LoginForm() {
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
+  const history = useHistory();
+  const { user, setUser } = useContext(UserContext);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const onFinish = async (values: any) => {
+    setError(null);
+    setLoading(true);
+
+    const authResponse = await AuthService.login(values.username, values.password);
+
+    setLoading(false);
+
+    switch (authResponse) {
+      case AuthResponse.Success:
+        setUser(AuthService.getCurrentUser());
+        history.push('/');
+        break;
+      case AuthResponse.WrongPassword:
+        setError('Niepoprawne dane logowania. Spróbuj ponownie.');
+        break;
+      case AuthResponse.UnknownError:
+        setError('Wystąpił nieznany błąd.');
+        break;
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
-  const layout = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 12 }
+    setError('Popraw błędy w formularzu człowieku');
   };
 
+  const layout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 12 },
+  };
 
   return (
     <>
-      <CenteredHeader title='Zaloguj się'/>
+      <CenteredHeader title="Zaloguj się" />
+
       <Form
         {...layout}
-
         name="basic"
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
+
         <Form.Item
           label="Adres e-mail"
           name="username"
           rules={[{ required: true, message: 'Proszę podać adres e-mail!' }]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -40,17 +68,29 @@ export default function LoginForm() {
           name="password"
           rules={[{ required: true, message: 'Proszę podać hasło!' }]}
         >
-          <Input.Password/>
+          <Input.Password />
         </Form.Item>
 
         <Row justify="center">
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button loading={loading} type="primary" htmlType="submit">
               Zaloguj się
             </Button>
           </Form.Item>
         </Row>
-
+        {error && (
+          <Row justify="center">
+            <Col span={12}>
+              <Alert
+                type="error"
+                showIcon
+                message="Błąd"
+                description={error}
+                style={{ marginBottom: 30 }}
+              />
+            </Col>
+          </Row>
+        )}
       </Form>
     </>
   );
