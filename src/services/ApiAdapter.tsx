@@ -40,7 +40,9 @@ export class ApiAdapter {
 
   private static async authAndFetch(request: Request): Promise<Response> {
     const user = AuthService.getCurrentUser()
-    request.headers.set('Authorization', `Bearer ${user.accessToken}`)
+    console.log('user', user);
+    
+    request.headers.set('Authorization', `Bearer ${user.token}`)
     return fetch(request);
   }
 }
