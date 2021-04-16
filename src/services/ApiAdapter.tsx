@@ -1,39 +1,45 @@
 import { AuthService, RefreshResponse } from "./AuthService";
 
+const API_URL = 'https://agh-schedules-backend.herokuapp.com';
+
 export enum ApiError {
   NotAuthenticated = 0,
   Unknown = 1,
 }
 
 export class ApiAdapter {
-  static async call(request: Request): Promise<Response | ApiError> {
+
+  static async get(resource: string): Promise<Response>{
+    const request = new Request(`${API_URL}${resource}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    return this.call(request);
+  }
+
+  private static async call(request: Request): Promise<Response> {
 
     const response = await this.authAndFetch(request);
-    if (!(response instanceof Response)) {
-      return response;
-    }
-
+    
     if (response.status === 401) {
       const refreshResponse = await AuthService.refreshToken()
+      console.log('refresh response', refreshResponse);
       switch (refreshResponse) {
         case RefreshResponse.Success:
           return this.authAndFetch(request);
         case RefreshResponse.Expired:
         case RefreshResponse.NotLoggedIn:
-          return ApiError.NotAuthenticated;
+          return Promise.reject('Not logged in');
         case RefreshResponse.UnknownError:
-          return ApiError.Unknown;
+          return Promise.reject('Unknown');
       }
     }
 
     return response;
   }
 
-  static async authAndFetch(request: Request): Promise<Response | ApiError> {
+  private static async authAndFetch(request: Request): Promise<Response> {
     const user = AuthService.getCurrentUser()
-    if (user === null) {
-      return ApiError.NotAuthenticated;
-    }
     request.headers.set('Authorization', `Bearer ${user.accessToken}`)
     return fetch(request);
   }
