@@ -23,7 +23,6 @@ export class ApiAdapter {
     
     if (response.status === 401) {
       const refreshResponse = await AuthService.refreshToken()
-      console.log('refresh response', refreshResponse);
       switch (refreshResponse) {
         case RefreshResponse.Success:
           return this.authAndFetch(request);

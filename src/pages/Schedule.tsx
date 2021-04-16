@@ -92,7 +92,7 @@ export default function Schedule() {
 
   return (
     <>
-      {schedules && (<ReactJson src={schedules} collapsed={true} />)}
+      {schedules && (<ReactJson src={schedules} collapsed={false} />)}
       <Button onClick={loadSchedules}>Załaduj harmonogramy</Button>
       <CenteredHeader title="Konferencja 1" />
       <Row gutter={[16, 16]} justify="space-between">
