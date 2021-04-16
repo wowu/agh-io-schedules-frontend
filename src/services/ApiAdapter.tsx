@@ -34,15 +34,12 @@ export class ApiAdapter {
           return Promise.reject('Unknown');
       }
     }
-
     return response;
   }
 
   private static async authAndFetch(request: Request): Promise<Response> {
-    const user = AuthService.getCurrentUser()
-    console.log('user', user);
-    
-    request.headers.set('Authorization', `Bearer ${user.token}`)
+    const user = AuthService.getCurrentUser();
+    request.headers.set('Authorization', `Bearer ${user.token}`);
     return fetch(request);
   }
 }
