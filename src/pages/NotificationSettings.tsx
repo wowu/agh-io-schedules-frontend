@@ -2,6 +2,8 @@ import CenteredHeader from '../components/CenteredHeader';
 import { List, Button, Switch, Menu, Dropdown, Row, Spin } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../contexts/user';
+import { ScheduleService } from '../services/ScheduleService';
+import ReactJson from 'react-json-view';
 
 const mdata = [
   {
@@ -32,34 +34,21 @@ export default function NotificationSettings() {
   const { user } = useContext(UserContext);
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [data, setData] = useState<[]>([]);
+  const [data, setData] = useState<any[]>([]);
   const times = ['10m', '30m', '1h', '3h', '1d', '3d', '10d'];
 
 
-  useEffect(() =>{
-    var requestOptions = {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${user.token}`
-      },
-    };
+  useEffect(() =>{(async () => {
+      const result = await ScheduleService.getListSchedules()
+      const newData = result.map((el: string) => {return {'name': el, 'enabled': false, 'time': ''}})
+      setData(newData)
+      setLoading(false)
+    })()}, [])
 
-    fetch("https://agh-schedules-backend.herokuapp.com/api/schedule/getFiles", requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        if (!Array.isArray(result)){
-          result = []
-        }
-        const newData = result.map((el: string) => {return {'name': el, 'enabled': false, 'time': ''}})
-        setData(newData)
-        setLoading(false)
-      })
-      .catch(error => console.log('error', error));
-  }, [])
 
   return (
     <>
-      {/* <ReactJson src={data} collapsed={true} /> */}
+       {/*<ReactJson src={data} collapsed={true} />*/}
       <CenteredHeader title="Skonfiguruj powiadomienia" />
 
       {loading ?
