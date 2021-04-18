@@ -1,8 +1,10 @@
 import CenteredHeader from '../components/CenteredHeader';
-import React from 'react';
+import React, { useState } from 'react';
 import { Badge, Button, Calendar, Col, List, Row } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import ReactJson from 'react-json-view';
+import { ScheduleService } from '../services/ScheduleService';
 
 function getListData(value: moment.Moment) {
   let listData;
@@ -81,8 +83,17 @@ const data = [
 ];
 
 export default function Schedule() {
+  const [schedules, setSchedules] = useState<any>()
+
+  const loadSchedules = async () => {
+    const json = await ScheduleService.getAll()
+    setSchedules(json)
+  }
+
   return (
     <>
+      {schedules && (<ReactJson src={schedules} collapsed={false} />)}
+      <Button onClick={loadSchedules}>Załaduj harmonogramy</Button>
       <CenteredHeader title="Konferencja 1" />
       <Row gutter={[16, 16]} justify="space-between">
         <Col span={24} xl={12}>
