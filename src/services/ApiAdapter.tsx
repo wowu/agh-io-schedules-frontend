@@ -1,6 +1,4 @@
-import { AuthService, RefreshResponse } from "./AuthService";
-
-const API_URL = 'https://agh-schedules-backend.herokuapp.com';
+import { API_URL, AuthService, RefreshResponse } from "./AuthService";
 
 export enum ApiError {
   NotAuthenticated = 0,
