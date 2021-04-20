@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Router, Switch, Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import styled from 'styled-components';
 
@@ -13,6 +13,7 @@ import { UserContext } from './contexts/user';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthService } from './services/AuthService';
 import AppMenu from './components/AppMenu';
+import history from "./history";
 
 const { Header, Content, Footer } = Layout;
 
@@ -34,7 +35,7 @@ function App() {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <Router>
+      <Router history={history}>
         <Layout>
           <Header>
             <AppMenu />
