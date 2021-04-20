@@ -4,34 +4,22 @@ import CenteredHeader from '../components/CenteredHeader';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../contexts/user';
+import { ApiAdapter } from '../services/ApiAdapter';
+import { ScheduleService } from '../services/ScheduleService';
 
 
 export default function ScheduleList() {
 
   const { user } = useContext(UserContext);
 
-  let [data, setData] = useState<[]>([])
+  let [data, setData] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() =>{
-    var requestOptions = {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${user.token}`
-      },
-    };
-
-    fetch("https://agh-schedules-backend.herokuapp.com/api/schedule/getFiles", requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        if (!Array.isArray(result)){
-          result = []
-        }
-        setData(result);
-        setLoading(false)
-      })
-      .catch(error => console.log('error', error));
-  }, [])
+  useEffect(() =>{(async () => {
+      const schedules = await ScheduleService.getListSchedules()
+      setData(schedules);
+      setLoading(false)
+    })()}, [])
 
   return (
     <>
@@ -46,7 +34,7 @@ export default function ScheduleList() {
             <List.Item.Meta
               avatar={<ScheduleOutlined/>}
               title={<Link to={'/schedule'}>{item}</Link>}
-              description="opis harmonogramu"
+              description=""
             />
           </List.Item>
         )}
