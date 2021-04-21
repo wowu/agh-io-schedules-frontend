@@ -2,14 +2,14 @@ import { Alert, Col, List, Row } from 'antd';
 import ReactJson from 'react-json-view';
 import React from 'react';
 
-
 function conflictedEvents(conflictedEvents: []) {
-
   function getConflictedEventsTitle(event: any) {
     if (!event.beginTime || !event.lecturerName || !event.lecturerSurname) {
       return event.EventName;
     }
-    return `${event.eventName} - ${new Date(event.beginTime).toLocaleString()} - ${event.lecturerName} ${event.lecturerSurname}`;
+    return `${event.eventName} - ${new Date(event.beginTime).toLocaleString()} - ${
+      event.lecturerName
+    } ${event.lecturerSurname}`;
   }
 
   const getDescription = (reason: any) => {
@@ -23,16 +23,21 @@ function conflictedEvents(conflictedEvents: []) {
         <List.Item>
           <List.Item.Meta
             title={getConflictedEventsTitle(conflict.event)}
-            description={getDescription(conflict.reason)}/>
+            description={getDescription(conflict.reason)}
+          />
         </List.Item>
       )}
-    />);
+    />
+  );
 }
 
 function eventProblemDescription(conflictedSchedules: []) {
-
   const getTitle = (schedule: any) => {
-    return <span>Kolizja z harmonogramem: <strong>{schedule.conflictedScheduleName}</strong></span>;
+    return (
+      <span>
+        Kolizja z harmonogramem: <strong>{schedule.conflictedScheduleName}</strong>
+      </span>
+    );
   };
 
   return (
@@ -43,20 +48,22 @@ function eventProblemDescription(conflictedSchedules: []) {
         <List.Item>
           <List.Item.Meta
             title={getTitle(schedule)}
-            description={conflictedEvents(schedule.conflictedEvents)}/>
+            description={conflictedEvents(schedule.conflictedEvents)}
+          />
         </List.Item>
       )}
-    />);
+    />
+  );
 }
 
-
 function collisionsInSchedule(eventsWithConflicts: [], scheduleName: string) {
-
   function getTitle(event: any) {
     if (!event.beginTime || !event.lecturerName || !event.lecturerSurname) {
       return event.EventName;
     }
-    return `${event.eventName} - ${new Date(event.beginTime).toLocaleString()} - ${event.lecturerName} ${event.lecturerSurname}`;
+    return `${event.eventName} - ${new Date(event.beginTime).toLocaleString()} - ${
+      event.lecturerName
+    } ${event.lecturerSurname}`;
   }
 
   return (
@@ -68,21 +75,27 @@ function collisionsInSchedule(eventsWithConflicts: [], scheduleName: string) {
         <List.Item>
           <List.Item.Meta
             title={getTitle(event.event)}
-            description={eventProblemDescription(event.conflicts)}/>
+            description={eventProblemDescription(event.conflicts)}
+          />
         </List.Item>
       )}
-    />);
+    />
+  );
 }
 
 export default function ImportCollisions(props: { schedulesWithConflicts: [] }) {
   console.log(props);
   const schedulesWithConflicts = props.schedulesWithConflicts.map((schedule: any) => {
-    return <>
-      <Alert
-        message={collisionsInSchedule(schedule.eventsWithConflicts, schedule.scheduleName)}
-        type="error"/>
+    return (
+      <>
+        <Alert
+          message={collisionsInSchedule(schedule.eventsWithConflicts, schedule.scheduleName)}
+          type="error"
+        />
 
-      <br/></>;
+        <br />
+      </>
+    );
   });
   return (
     <>
@@ -94,7 +107,8 @@ export default function ImportCollisions(props: { schedulesWithConflicts: [] }) 
             type="error"
             showIcon
           />
-          <br/></Col>
+          <br />
+        </Col>
       </Row>
       {schedulesWithConflicts}
     </>

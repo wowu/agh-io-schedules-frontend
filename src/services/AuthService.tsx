@@ -1,5 +1,4 @@
-
-export const API_URL = process.env.REACT_APP_API_URL
+export const API_URL = process.env.REACT_APP_API_URL;
 
 export enum AuthResponse {
   Success = 0,
@@ -39,14 +38,14 @@ export class AuthService {
   }
 
   static async refreshToken(): Promise<RefreshResponse> {
-    const user = this.getCurrentUser()
+    const user = this.getCurrentUser();
     if (!user) {
       return RefreshResponse.NotLoggedIn;
     }
 
     const response = await fetch(`${API_URL}/api/auth/refresh`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user.refreshToken}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.refreshToken}` },
     });
 
     const text = await response.text();
@@ -54,7 +53,7 @@ export class AuthService {
 
     if (!response.ok) {
       if (response.status === 401) {
-        this.logout()
+        this.logout();
         return RefreshResponse.Expired;
       }
       return RefreshResponse.UnknownError;

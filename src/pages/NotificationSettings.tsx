@@ -29,34 +29,37 @@ const mdata = [
 ];
 
 export default function NotificationSettings() {
-
-
   const { user } = useContext(UserContext);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<any[]>([]);
   const times = ['10m', '30m', '1h', '3h', '1d', '3d', '10d'];
 
-
-  useEffect(() =>{(async () => {
-      const result = await ScheduleService.getListSchedules()
-      const newData = result.map((el: string) => {return {'name': el, 'enabled': false, 'time': ''}})
-      setData(newData)
-      setLoading(false)
-    })()}, [])
-
+  useEffect(() => {
+    (async () => {
+      const result = await ScheduleService.getListSchedules();
+      const newData = result.map((el: string) => {
+        return { name: el, enabled: false, time: '' };
+      });
+      setData(newData);
+      setLoading(false);
+    })();
+  }, []);
 
   return (
     <>
-       {/*<ReactJson src={data} collapsed={true} />*/}
+      {/*<ReactJson src={data} collapsed={true} />*/}
       <CenteredHeader title="Skonfiguruj powiadomienia" />
 
-      {loading ?
-        <Row justify={'center'}><Spin size="large"/></Row> :
+      {loading ? (
+        <Row justify={'center'}>
+          <Spin size="large" />
+        </Row>
+      ) : (
         <List
           itemLayout="horizontal"
           dataSource={data}
-          renderItem={(item : {name: string, enabled: boolean, time: string}) => (
+          renderItem={(item: { name: string; enabled: boolean; time: string }) => (
             <List.Item
               actions={[
                 <>
@@ -71,7 +74,7 @@ export default function NotificationSettings() {
                 </>,
               ]}
             >
-              <List.Item.Meta title={item.name}/>
+              <List.Item.Meta title={item.name} />
               Przypomnij przed
               <Dropdown
                 overlay={
@@ -96,7 +99,7 @@ export default function NotificationSettings() {
             </List.Item>
           )}
         />
-      }
+      )}
     </>
   );
 }
