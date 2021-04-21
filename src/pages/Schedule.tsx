@@ -83,18 +83,18 @@ const data = [
 ];
 
 export default function Schedule() {
-  const [schedules, setSchedules] = useState<any>()
+  const [schedules, setSchedules] = useState<any>();
 
   const loadSchedules = async () => {
-    const json = await ScheduleService.getAll()
-    setSchedules(json)
-  }
+    const json = await ScheduleService.getSchedule(1);
+    setSchedules(json);
+  };
 
   return (
     <>
-      {schedules && (<ReactJson src={schedules} collapsed={false} />)}
+      {schedules && <ReactJson src={schedules} collapsed={false} />}
       <Button onClick={loadSchedules}>Załaduj harmonogramy</Button>
-      <CenteredHeader title="Konferencja 1" />
+      <CenteredHeader title="Harmonogram 1" />
       <Row gutter={[16, 16]} justify="space-between">
         <Col span={24} xl={12}>
           <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />

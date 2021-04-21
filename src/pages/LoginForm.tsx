@@ -54,7 +54,6 @@ export default function LoginForm() {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
-
         <Form.Item
           label="Adres e-mail"
           name="username"

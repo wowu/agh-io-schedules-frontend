@@ -13,7 +13,7 @@ import { UserContext } from './contexts/user';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthService } from './services/AuthService';
 import AppMenu from './components/AppMenu';
-import history from "./history";
+import history from './history';
 
 const { Header, Content, Footer } = Layout;
 
