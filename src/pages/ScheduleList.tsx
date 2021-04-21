@@ -36,9 +36,6 @@ export default function ScheduleList() {
     removeSchedule(id);
   }
 
-  function cancelRemove(e: any) {
-  }
-
 
   return (
     <>
@@ -58,7 +55,6 @@ export default function ScheduleList() {
                   title={
                     <span>Czy na pewno chcesz usunąć ten harmonogram? <br></br>Ta operacja jest nieodwracalna!</span>}
                   onConfirm={() => confirmRemove(item.id)}
-                  onCancel={cancelRemove}
                   okText="Usuń"
                   cancelText="Anuluj"
                 ><Button danger onClick={() => {

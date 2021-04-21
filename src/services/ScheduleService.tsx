@@ -12,7 +12,7 @@ export class ScheduleService {
     }
   }
 
-  static async getListSchedules(): Promise<{ response: any, data :{schedules: []} }> {
+  static async getListSchedules(): Promise<{ response: any, data: { schedules: [] } }> {
     try {
       const response = await ApiAdapter.get('/api/schedules/');
       let data = await response.json();
