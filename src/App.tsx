@@ -25,7 +25,7 @@ const Container = styled(Content)`
 `;
 
 const AppContent = styled.div`
-  min-height: 500px;
+  min-height: 800px;
   padding: 24px;
   background: #fff;
 `;

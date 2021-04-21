@@ -48,6 +48,14 @@ export class ApiAdapter {
     return this.call(request);
   }
 
+  static async delete(resource: string): Promise<Response> {
+    const request = new Request(`${API_URL}${resource}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return this.call(request);
+  }
+
   private static async call(request: Request): Promise<Response> {
     let response;
 

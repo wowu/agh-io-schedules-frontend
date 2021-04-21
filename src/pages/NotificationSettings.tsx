@@ -37,11 +37,11 @@ export default function NotificationSettings() {
 
   useEffect(() => {
     (async () => {
-      const result = await ScheduleService.getListSchedules();
-      const newData = result.map((el: string) => {
-        return { name: el, enabled: false, time: '' };
-      });
-      setData(newData);
+      // const result = await ScheduleService.getListSchedules();
+      // const newData = result.map((el: string) => {
+      //   return { name: el, enabled: false, time: '' };
+      // });
+      // setData(newData);
       setLoading(false);
     })();
   }, []);

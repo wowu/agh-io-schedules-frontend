@@ -12,11 +12,12 @@ export class ScheduleService {
     }
   }
 
-  static async getListSchedules(): Promise<Array<any>> {
+  static async getListSchedules(): Promise<{ response: any, data :{schedules: []} }> {
     try {
       const response = await ApiAdapter.get('/api/schedules/');
-      let json = await response.json();
-      return Promise.resolve(this.arrayOrElseEmptyArray(json));
+      let data = await response.json();
+      console.log(data)
+      return Promise.resolve({response, data});
     } catch (error) {
       console.log('getListSchedules: ', error);
       return Promise.reject(error);
@@ -44,6 +45,17 @@ export class ScheduleService {
       return Promise.reject({ error, data: {} });
     }
   }
+
+  static async removeSchedule(id: number): Promise<any> {
+    try {
+      const response = await ApiAdapter.delete(`/api/schedules/${id}`);
+      return Promise.resolve( response);
+    } catch (error) {
+      console.log('getAll: ', error);
+      return Promise.reject(error);
+    }
+  }
+
 
   private static arrayOrElseEmptyArray(json: any): Array<any> {
     if (!Array.isArray(json)) {
