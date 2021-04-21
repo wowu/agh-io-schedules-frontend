@@ -30,7 +30,7 @@ function AppMenu() {
             <Link to="/schedules">Harmonogramy</Link>
           </Menu.Item>
           <Menu.Item key="4">
-            <Link to="/schedule">Przykładowy harmonogram </Link>
+            <Link to="/schedule/1">Przykładowy harmonogram </Link>
           </Menu.Item>
           <Menu.Item key="5">
             <Link to="/notification-settings">Skonfiguruj powiadomienia</Link>

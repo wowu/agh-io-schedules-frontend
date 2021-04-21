@@ -8,6 +8,36 @@ export enum ApiError {
 
 export class ApiAdapter {
 
+  static async put(resource: string, formData: FormData = new FormData()): Promise<Response>{
+    const request = new Request(`${API_URL}${resource}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      body: formData,
+      redirect: 'follow',
+    })
+    return this.call(request);
+  }
+
+  static async postErrors(resource: string, formData: FormData = new FormData()): Promise<Response>{
+    const request = new Request(`${API_URL}${resource}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data', 'invalid': 'true' },
+      body: formData,
+      redirect: 'follow',
+    })
+    return this.call(request);
+  }
+
+  static async post(resource: string, formData: FormData = new FormData()): Promise<Response>{
+    const request = new Request(`${API_URL}${resource}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      body: formData,
+      redirect: 'follow',
+    })
+    return this.call(request);
+  }
+
   static async get(resource: string): Promise<Response>{
     const request = new Request(`${API_URL}${resource}`, {
       method: 'GET',
@@ -25,7 +55,7 @@ export class ApiAdapter {
       console.log('call: ', error);
       return Promise.reject(error)
     }
-    
+
     if (response && response.status === 401) {
       const refreshResponse = await AuthService.refreshToken()
       switch (refreshResponse) {

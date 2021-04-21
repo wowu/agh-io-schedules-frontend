@@ -16,7 +16,7 @@ export enum RefreshResponse {
 
 export class AuthService {
   static async login(username: string, password: string): Promise<AuthResponse> {
-    const response = await fetch(`${API_URL}/api/token/create`, {
+    const response = await fetch(`${API_URL}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
@@ -44,7 +44,7 @@ export class AuthService {
       return RefreshResponse.NotLoggedIn;
     }
 
-    const response = await fetch(`${API_URL}/api/token/refresh`, {
+    const response = await fetch(`${API_URL}/api/auth/refresh`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user.refreshToken}` },
     });
