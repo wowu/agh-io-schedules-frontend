@@ -15,13 +15,17 @@ export default function ScheduleList() {
   const getScheduleList = async () => {
     const { response, data } = await ScheduleService.getListSchedules();
 
-    setSchedules(data.schedules.sort((a: any, b: any) =>
-      new Date(b.firstEventDate).getTime() - new Date(a.firstEventDate).getTime()));
+    setSchedules(
+      data.schedules.sort(
+        (a: any, b: any) =>
+          new Date(b.firstEventDate).getTime() - new Date(a.firstEventDate).getTime()
+      )
+    );
     setLoading(false);
   };
 
   useEffect(() => {
-    getScheduleList().then(r => r);
+    getScheduleList().then((r) => r);
   }, []);
 
   const removeSchedule = async (scheduleId: number) => {
@@ -29,20 +33,21 @@ export default function ScheduleList() {
     if (response.ok) {
       await getScheduleList();
     }
-    setSchedules((oldSchedules : any) => oldSchedules.filter((schedule: any) => schedule.id != scheduleId )) //TODO Delete this line in production version. Only for mock API.
+    setSchedules((oldSchedules: any) =>
+      oldSchedules.filter((schedule: any) => schedule.id != scheduleId)
+    ); //TODO Delete this line in production version. Only for mock API.
   };
 
   function confirmRemove(id: any) {
     removeSchedule(id);
   }
 
-
   return (
     <>
-      <CenteredHeader title={'Harmonogramy'}/>
+      <CenteredHeader title={'Harmonogramy'} />
       {loading ? (
         <Row justify={'center'}>
-          <Spin size="large"/>
+          <Spin size="large" />
         </Row>
       ) : (
         <Row justify={'center'}>
@@ -51,23 +56,35 @@ export default function ScheduleList() {
               itemLayout="horizontal"
               dataSource={schedules}
               renderItem={(item: any) => (
-                <List.Item actions={[<Popconfirm
-                  title={
-                    <span>Czy na pewno chcesz usunąć ten harmonogram? <br></br>Ta operacja jest nieodwracalna!</span>}
-                  onConfirm={() => confirmRemove(item.id)}
-                  okText="Usuń"
-                  cancelText="Anuluj"
-                ><Button danger onClick={() => {
-                }}>Usuń</Button>
-                </Popconfirm>]}>
+                <List.Item
+                  actions={[
+                    <Popconfirm
+                      title={
+                        <span>
+                          Czy na pewno chcesz usunąć ten harmonogram? <br></br>Ta operacja jest
+                          nieodwracalna!
+                        </span>
+                      }
+                      onConfirm={() => confirmRemove(item.id)}
+                      okText="Usuń"
+                      cancelText="Anuluj"
+                    >
+                      <Button danger onClick={() => {}}>
+                        Usuń
+                      </Button>
+                    </Popconfirm>,
+                  ]}
+                >
                   <List.Item.Meta
-                    avatar={<ScheduleOutlined/>}
+                    avatar={<ScheduleOutlined />}
                     title={<Link to={`/schedule/${item.id}`}>{item.name}</Link>}
                     description={item.description}
                   />
 
-                  <div>Liczba wydarzeń: {item.eventCount} <br/>
-                    {new Date(item.firstEventDate).toLocaleDateString()} - {new Date(item.lastEventDate).toLocaleDateString()}
+                  <div>
+                    Liczba wydarzeń: {item.eventCount} <br />
+                    {new Date(item.firstEventDate).toLocaleDateString()} -{' '}
+                    {new Date(item.lastEventDate).toLocaleDateString()}
                   </div>
                 </List.Item>
               )}
