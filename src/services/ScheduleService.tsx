@@ -12,12 +12,12 @@ export class ScheduleService {
     }
   }
 
-  static async getListSchedules(): Promise<{ response: any, data: { schedules: [] } }> {
+  static async getListSchedules(): Promise<{ response: any; data: { schedules: [] } }> {
     try {
       const response = await ApiAdapter.get('/api/schedules/');
       let data = await response.json();
-      console.log(data)
-      return Promise.resolve({response, data});
+      console.log(data);
+      return Promise.resolve({ response, data });
     } catch (error) {
       console.log('getListSchedules: ', error);
       return Promise.reject(error);
@@ -46,7 +46,7 @@ export class ScheduleService {
     }
   }
 
-  static async updateSchedule(files: FormData, id=1, failure: boolean = false): Promise<any> {
+  static async updateSchedule(files: FormData, id = 1, failure: boolean = false): Promise<any> {
     try {
       let response;
       if (failure) {
@@ -71,13 +71,12 @@ export class ScheduleService {
   static async removeSchedule(id: number): Promise<any> {
     try {
       const response = await ApiAdapter.delete(`/api/schedules/${id}`);
-      return Promise.resolve( response);
+      return Promise.resolve(response);
     } catch (error) {
       console.log('getAll: ', error);
       return Promise.reject(error);
     }
   }
-
 
   private static arrayOrElseEmptyArray(json: any): Array<any> {
     if (!Array.isArray(json)) {
