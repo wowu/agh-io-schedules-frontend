@@ -30,19 +30,22 @@ function AppMenu() {
             <Link to="/schedules">Harmonogramy</Link>
           </Menu.Item>
           <Menu.Item key="4">
-            <Link to="/schedule/1">Przykładowy harmonogram </Link>
+            <Link to="/schedule/1">Przykładowy harmonogram</Link>
           </Menu.Item>
           <Menu.Item key="5">
+            <Link to="/emails">Emaile prowadzących</Link>
+          </Menu.Item>
+          <Menu.Item key="6">
             <Link to="/notification-settings">Skonfiguruj powiadomienia</Link>
           </Menu.Item>
-          <Menu.Item key="6" style={{ float: 'right' }}>
+          <Menu.Item key="7" style={{ float: 'right' }}>
             <a onClick={handleLogout}>Wyloguj się</a>
           </Menu.Item>
         </>
       )}
 
       {!user && (
-        <Menu.Item key="7" style={{ float: 'right' }}>
+        <Menu.Item key="10" style={{ float: 'right' }}>
           <Link to="/login">Zaloguj się</Link>
         </Menu.Item>
       )}

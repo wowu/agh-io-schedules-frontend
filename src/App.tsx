@@ -8,6 +8,7 @@ import ScheduleList from './pages/ScheduleList';
 import ImportForm from './pages/ImportForm';
 import LoginForm from './pages/LoginForm';
 import Schedule from './pages/Schedule';
+import LecturerEmails from './pages/LecturerEmails';
 import NotificationSettings from './pages/NotificationSettings';
 import { UserContext } from './contexts/user';
 import PrivateRoute from './components/PrivateRoute';
@@ -55,6 +56,9 @@ function App() {
                 </PrivateRoute>
                 <PrivateRoute path="/schedule">
                   <Schedule />
+                </PrivateRoute>
+                <PrivateRoute path="/emails">
+                  <LecturerEmails />
                 </PrivateRoute>
                 <PrivateRoute path="/notification-settings">
                   <NotificationSettings />
