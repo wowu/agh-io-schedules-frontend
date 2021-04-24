@@ -16,8 +16,7 @@ enum UpdateFileStatus {
   networkFailure,
 }
 
-export default function UpdateScheduleModal(props: any) {
-  const { visible } = props;
+export default function UpdateScheduleModal() {
 
   const [uploading, setUploading] = useState<boolean>(false);
   const [updateFile, setUpdateFile] = useState<any>([]);
@@ -28,10 +27,8 @@ export default function UpdateScheduleModal(props: any) {
     status: -1,
     statusText: '',
   });
-  const [updateVisible, setUpdateVisible] = useState<boolean>(visible);
+  const [updateVisible, setUpdateVisible] = useState<boolean>(false);
   let [updateError, setUpdateError] = useState<{ message: string }>({ message: '' });
-  console.log("insode", visible);
-  console.log("insode oth", updateVisible);
 
   const handleUploadedSuccess = () => {
     setUpdateFile([]);
@@ -172,7 +169,7 @@ export default function UpdateScheduleModal(props: any) {
         Wyślij nową wersję harmonogramu
         </Button>
       <Modal
-        visible={visible || updateVisible}
+        visible={updateVisible}
         title="Zaktualizuj plik harmonogramu"
         footer={updateButtons()}
       >

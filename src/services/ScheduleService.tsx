@@ -1,7 +1,32 @@
 import { ApiAdapter } from './ApiAdapter';
 
+export interface Event {
+  id: number,
+  beginTime: string,
+  endTime: string,
+  eventName: string,
+  groupName: string,
+  lecturerName: string,
+  lecturerSurname: string,
+  type: string,
+  hours: 4,
+  form: string,
+  room: string
+}
+
+export interface Schedule {
+  id: number,
+  name: string
+  description: string,
+  eventCount: number,
+  firstEventDate: string,
+  lastEventDate: string,
+  publicUUID: string,
+  events: Array<Event>,
+}
+
 export class ScheduleService {
-  static async getSchedule(id: number): Promise<Array<any>> {
+  static async getSchedule(id: number): Promise<Schedule> {
     try {
       const response = await ApiAdapter.get(`/api/schedules/${id}`);
       let json = await response.json();
