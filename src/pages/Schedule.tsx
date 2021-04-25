@@ -1,12 +1,13 @@
 import CenteredHeader from '../components/CenteredHeader';
 import { useState, useEffect } from 'react';
-import { Badge, Calendar, Col, List, Row, Spin } from 'antd';
+import { Badge, Calendar, Col, List, Row, Spin, Button } from 'antd';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
 import UpdateScheduleModal from '../components/UpdateScheduleModal';
 import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
+import { DownloadFileButton } from '../components/DownloadFileButton';
 
 const EXAMPLE_SCHEDULE: ISchedule = {
   id: 1,
@@ -84,6 +85,7 @@ function getBadgeText(count: number): string {
 }
 
 function dateCellRender(date: moment.Moment, schedule: ISchedule) {
+  
   const events = findEventsOnSameDay(schedule, date);
   return (
     events.length > 0 && (
@@ -121,7 +123,9 @@ export default function Schedule() {
   useEffect(() => {
     ScheduleService.getSchedule(parseInt(params.id))
       .then((data) => {
-        setSchedule(data);
+        console.log("data",data);
+        //FIXME: Problem with development API: it returns array of schedules in place of one
+        setSchedule(data.schedules[0]);
         setLoading(false);
         setPublicLink(ScheduleService.buildPublicLink(data));
       })
@@ -133,9 +137,12 @@ export default function Schedule() {
         setLoading(false);
       });
   }, []);
+  console.log(schedule);
+
 
   useEffect(() => {
-    if (schedule != undefined) setCurrentEvents(findEventsOnSameDay(schedule, dateValue));
+    if (schedule) {
+      setCurrentEvents(findEventsOnSameDay(schedule, dateValue))};
   }, [dateValue, schedule]);
 
   return (
@@ -170,6 +177,12 @@ export default function Schedule() {
           </Row>
           <Row>
             <UpdateScheduleModal />
+            <DownloadFileButton downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)} filename={'schedule.xls'} >
+
+              <Button type="primary">
+                Pobierz harmonogram
+            </Button>
+            </DownloadFileButton>
           </Row>
         </>
       )}
