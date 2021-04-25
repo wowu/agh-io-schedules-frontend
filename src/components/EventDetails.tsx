@@ -1,7 +1,5 @@
-import ReactJson from 'react-json-view'
+import ReactJson from 'react-json-view';
 
 export default function EventDetails(props: any) {
-  return (
-    <ReactJson src={props.event} />
-  )
+  return <ReactJson src={props.event} />;
 }

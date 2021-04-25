@@ -1,31 +1,36 @@
 import { ApiAdapter } from './ApiAdapter';
+import { API_URL } from './AuthService';
 
 export interface Event {
-  id: number,
-  beginTime: string,
-  endTime: string,
-  eventName: string,
-  groupName: string,
-  lecturerName: string,
-  lecturerSurname: string,
-  type: string,
-  hours: 4,
-  form: string,
-  room: string
+  id: number;
+  beginTime: string;
+  endTime: string;
+  eventName: string;
+  groupName: string;
+  lecturerName: string;
+  lecturerSurname: string;
+  type: string;
+  hours: number;
+  form: string;
+  room: string;
 }
 
 export interface Schedule {
-  id: number,
-  name: string
-  description: string,
-  eventCount: number,
-  firstEventDate: string,
-  lastEventDate: string,
-  publicUUID: string,
-  events: Array<Event>,
+  id: number;
+  name: string;
+  description: string;
+  eventCount: number;
+  firstEventDate: string;
+  lastEventDate: string;
+  publicUUID: string;
+  events: Array<Event>;
 }
 
 export class ScheduleService {
+  static buildPublicLink(schedule: Schedule): string {
+    return `${API_URL!}/api/public/schedules/${schedule.publicUUID}`;
+  }
+
   static async getSchedule(id: number): Promise<Schedule> {
     try {
       const response = await ApiAdapter.get(`/api/schedules/${id}`);

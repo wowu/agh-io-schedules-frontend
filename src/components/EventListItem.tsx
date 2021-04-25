@@ -46,7 +46,7 @@ export default function EventListItem(props: EventListItemProps) {
           </Button>
         }
       >
-        <EventDetails event={props.item}/>
+        <EventDetails event={props.item} />
       </Modal>
     </>
   );

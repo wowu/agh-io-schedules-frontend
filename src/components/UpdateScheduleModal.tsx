@@ -7,7 +7,6 @@ import ImportCollisions from '../components/ImportCollisions';
 import ImportError from '../components/ImportError';
 import ImportNetworkFailure from '../components/ImportNetworkFailure';
 
-
 enum UpdateFileStatus {
   default,
   success,
@@ -17,7 +16,6 @@ enum UpdateFileStatus {
 }
 
 export default function UpdateScheduleModal() {
-
   const [uploading, setUploading] = useState<boolean>(false);
   const [updateFile, setUpdateFile] = useState<any>([]);
   let [updateSuccessData, setUpdateSuccessData] = useState<any>();
@@ -36,7 +34,6 @@ export default function UpdateScheduleModal() {
     setUpdateVisible(false);
     // TODO Refresh current schedule
   };
-
 
   const onNetworkFailure = (error: { message: string }) => {
     console.log(error);
@@ -167,12 +164,8 @@ export default function UpdateScheduleModal() {
     <>
       <Button type="primary" onClick={showModal}>
         Wyślij nową wersję harmonogramu
-        </Button>
-      <Modal
-        visible={updateVisible}
-        title="Zaktualizuj plik harmonogramu"
-        footer={updateButtons()}
-      >
+      </Button>
+      <Modal visible={updateVisible} title="Zaktualizuj plik harmonogramu" footer={updateButtons()}>
         <>
           {updateStatus != UpdateFileStatus.success && (
             <Dragger {...draggerProps}>
@@ -182,7 +175,7 @@ export default function UpdateScheduleModal() {
               <p className="ant-upload-text">Kliknij lub przeciągnij plik z harmonogramem</p>
               <p className="ant-upload-hint">
                 Dopuszczalne formaty: <br /> xls, xlsx
-                </p>
+              </p>
             </Dragger>
           )}
           <br />
@@ -190,5 +183,5 @@ export default function UpdateScheduleModal() {
         </>
       </Modal>
     </>
-  )
+  );
 }
