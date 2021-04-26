@@ -1,25 +1,40 @@
-import { Col, List, Row, Spin, Table } from 'antd';
+import { Button, Col, List, Row, Space, Spin, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
+import LecturerForm, { LecturerFormValues } from '../components/LecturerForm';
 import { Lecturer, LecturerEmailsService } from '../services/LecturerEmailsService';
 
-export default function LecturerEmails() {
-  // const { user } = useContext(UserContext);
+interface LecturerEditProps {
+  lecturer: Lecturer;
+  onEdit: (lecturer: Lecturer, values: LecturerFormValues) => void;
+}
 
-  const [lecturers, setLecturers] = useState<Lecturer[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+function LecturerEdit(props: LecturerEditProps) {
+  const [visible, setVisible] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await LecturerEmailsService.getLecturers();
-      const { lecturers } = data;
-      setLecturers(lecturers);
-      setLoading(false);
-    };
+  return (
+    <>
+      <a onClick={() => setVisible(true)}>Edytuj</a>
 
-    fetchData();
-  }, []);
+      <LecturerForm
+        visible={visible}
+        onSubmit={(values) => props.onEdit(props.lecturer, values)}
+        lecturer={props.lecturer}
+        title="Edytuj prowadzącego"
+        onCancel={() => setVisible(false)}
+      />
+    </>
+  );
+}
 
+interface LecturersTableProps {
+  lecturers: Lecturer[];
+  loading: boolean;
+  onRemove: (lecturer: Lecturer) => void;
+  onEdit: (lecturer: Lecturer, values: LecturerFormValues) => void;
+}
+
+function LecturersTable(props: LecturersTableProps) {
   const columns = [
     {
       title: 'Imię',
@@ -36,24 +51,79 @@ export default function LecturerEmails() {
     {
       title: 'Akcje',
       key: 'actions',
-      render: () => <div>Usuń</div>,
+      render: (_text: string, record: Lecturer) => (
+        <>
+          <Space size="middle">
+            <LecturerEdit onEdit={props.onEdit} lecturer={record} />
+            <a onClick={() => props.onRemove(record)}>Usuń</a>
+          </Space>
+        </>
+      ),
     },
   ];
 
   return (
+    <Row justify={'center'}>
+      <Col span={24} lg={18} xl={14}>
+        <Table loading={props.loading} dataSource={props.lecturers} columns={columns} />
+      </Col>
+    </Row>
+  );
+}
+
+export default function LecturerEmails() {
+  const [lecturers, setLecturers] = useState<Lecturer[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
+
+  const fetchLecturers = async () => {
+    setLoading(true);
+    const { data } = await LecturerEmailsService.getLecturers();
+    const { lecturers } = data;
+    setLecturers(lecturers);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchLecturers();
+  }, []);
+
+  const onCreateFormSubmit = async (values: LecturerFormValues) => {
+    setCreateModalVisible(false);
+
+    await LecturerEmailsService.createLecturer(values.name, values.email);
+
+    fetchLecturers();
+  };
+
+  const onRemove = async (lecturer: Lecturer) => {
+    await LecturerEmailsService.removeLecturer(lecturer.id);
+    fetchLecturers();
+  };
+
+  const onEdit = async (lecturer: Lecturer, values: LecturerFormValues) => {
+    await LecturerEmailsService.updateLecturer(lecturer.id, values.name, values.email);
+    fetchLecturers();
+  };
+
+  return (
     <>
       <CenteredHeader title={'Emaile prowadzących'} />
-      {loading ? (
-        <Row justify={'center'}>
-          <Spin size="large" />
-        </Row>
-      ) : (
-        <Row justify={'center'}>
-          <Col span={24} lg={18} xl={14}>
-            <Table dataSource={lecturers} columns={columns} />
-          </Col>
-        </Row>
-      )}
+
+      <LecturersTable loading={loading} lecturers={lecturers} onRemove={onRemove} onEdit={onEdit} />
+
+      <Row justify={'center'}>
+        <Button type="primary" onClick={() => setCreateModalVisible(true)}>
+          Dodaj email
+        </Button>
+
+        <LecturerForm
+          visible={createModalVisible}
+          onSubmit={onCreateFormSubmit}
+          title="Dodaj prowadzącego"
+          onCancel={() => setCreateModalVisible(false)}
+        />
+      </Row>
     </>
   );
 }

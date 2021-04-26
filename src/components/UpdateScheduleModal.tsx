@@ -73,7 +73,7 @@ export default function UpdateScheduleModal() {
       ); //TODO: failure param only for development
       if (response.ok) {
         onUploadSuccess(data);
-      } else if (response.status == 400) {
+      } else if (response.status === 400) {
         onUploadCollisions(data);
       } else {
         onOtherError(response);
@@ -167,7 +167,7 @@ export default function UpdateScheduleModal() {
       </Button>
       <Modal visible={updateVisible} title="Zaktualizuj plik harmonogramu" footer={updateButtons()}>
         <>
-          {updateStatus != UpdateFileStatus.success && (
+          {updateStatus !== UpdateFileStatus.success && (
             <Dragger {...draggerProps}>
               <p className="ant-upload-drag-icon">
                 <InboxOutlined />

@@ -1,5 +1,4 @@
 import { createRef } from 'react';
-import { ScheduleService } from '../services/ScheduleService';
 
 export interface DownloadFileButtonProps {
   filename: string;
