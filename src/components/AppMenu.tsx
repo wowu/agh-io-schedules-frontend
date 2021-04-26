@@ -20,32 +20,35 @@ function AppMenu() {
     <Menu theme="dark" mode="horizontal" selectable={false}>
       {user && (
         <>
-          <Menu.Item key="1">
+          <Menu.Item key="home">
             <Link to="/">Strona główna</Link>
           </Menu.Item>
-          <Menu.Item key="2">
+          <Menu.Item key="import">
             <Link to="/import">Wyślij</Link>
           </Menu.Item>
-          <Menu.Item key="3">
+          <Menu.Item key="schedules">
             <Link to="/schedules">Harmonogramy</Link>
           </Menu.Item>
-          <Menu.Item key="4">
-            <Link to="/schedule/1">Przykładowy harmonogram</Link>
+          <Menu.Item key="schedule">
+            <Link to="/schedule/1">Harmonogram</Link>
           </Menu.Item>
-          <Menu.Item key="5">
+          <Menu.Item key="emails">
             <Link to="/emails">Emaile prowadzących</Link>
           </Menu.Item>
-          <Menu.Item key="6">
-            <Link to="/notification-settings">Skonfiguruj powiadomienia</Link>
+          <Menu.Item key="users">
+            <Link to="/users">Użytkownicy</Link>
           </Menu.Item>
-          <Menu.Item key="7" style={{ float: 'right' }}>
+          <Menu.Item key="notification-settings">
+            <Link to="/notification-settings">Powiadomienia</Link>
+          </Menu.Item>
+          <Menu.Item key="logout" style={{ float: 'right' }}>
             <a onClick={handleLogout}>Wyloguj się</a>
           </Menu.Item>
         </>
       )}
 
       {!user && (
-        <Menu.Item key="10" style={{ float: 'right' }}>
+        <Menu.Item key="login" style={{ float: 'right' }}>
           <Link to="/login">Zaloguj się</Link>
         </Menu.Item>
       )}

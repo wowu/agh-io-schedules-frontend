@@ -134,6 +134,8 @@ export default function LecturerEmails() {
 
       <LecturersTable loading={loading} lecturers={lecturers} onRemove={onRemove} onEdit={onEdit} />
 
+      <br />
+
       <Row justify={'center'}>
         <Button type="primary" onClick={() => setCreateModalVisible(true)}>
           Dodaj email

@@ -94,7 +94,6 @@ export default function ImportForm() {
   let draggerProps = {
     onRemove: (file: any) => {
       setFiles((prevFiles: any) => {
-        const index = prevFiles.indexOf(file);
         return prevFiles.filter((el: any) => el !== file);
       });
     },

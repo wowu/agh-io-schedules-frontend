@@ -1,22 +1,20 @@
 import { Modal, Form, Input, Checkbox } from 'antd';
-import { Lecturer } from '../services/LecturerEmailsService';
+import { User } from '../services/UserService';
 
-export interface LecturerFormValues {
-  name: string;
-  surname: string;
+export interface UserFormValues {
   email: string;
   activeSubscription: boolean;
 }
 
-interface LecturerFormProps {
+interface UserFormProps {
   title: string;
-  lecturer?: Lecturer;
+  user?: User;
   visible: boolean;
-  onSubmit: (values: LecturerFormValues) => void;
+  onSubmit: (values: UserFormValues) => void;
   onCancel: () => void;
 }
 
-export default function LecturerForm(props: LecturerFormProps) {
+export default function UserForm(props: UserFormProps) {
   const [form] = Form.useForm();
 
   return (
@@ -38,13 +36,7 @@ export default function LecturerForm(props: LecturerFormProps) {
           });
       }}
     >
-      <Form id="addEmail" layout="vertical" form={form} initialValues={props.lecturer}>
-        <Form.Item name="name" label="Imię" rules={[{ required: true }]}>
-          <Input placeholder="Jan" />
-        </Form.Item>
-        <Form.Item name="surname" label="Nazwisko" rules={[{ required: true }]}>
-          <Input placeholder="Kowalski" />
-        </Form.Item>
+      <Form id="addEmail" layout="vertical" form={form} initialValues={props.user}>
         <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
           <Input placeholder="kowalski@example.com" />
         </Form.Item>
