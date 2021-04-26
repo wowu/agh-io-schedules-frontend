@@ -28,13 +28,20 @@ export class LecturerEmailsService {
     }
   }
 
-  static async createLecturer(name: string, email: string): Promise<Response<Lecturer>> {
+  static async createLecturer(
+    name: string,
+    surname: string,
+    email: string,
+    activeSubscription: boolean
+  ): Promise<Response<Lecturer>> {
     try {
       const response = await ApiAdapter.post(
         '/api/lecturers/',
         objectToFormData({
           name,
+          surname,
           email,
+          activeSubscription,
         })
       );
       let data = await response.json();
@@ -48,14 +55,18 @@ export class LecturerEmailsService {
   static async updateLecturer(
     id: number,
     name: string,
-    email: string
+    surname: string,
+    email: string,
+    activeSubscription: boolean
   ): Promise<Response<Lecturer>> {
     try {
       const response = await ApiAdapter.put(
         `/api/lecturers/${id}`,
         objectToFormData({
           name,
+          surname,
           email,
+          activeSubscription,
         })
       );
       let data = await response.json();

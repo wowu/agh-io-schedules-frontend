@@ -1,4 +1,4 @@
-import { Button, Col, List, Row, Space, Spin, Table } from 'antd';
+import { Button, Col, Row, Space, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
 import LecturerForm, { LecturerFormValues } from '../components/LecturerForm';
@@ -12,13 +12,18 @@ interface LecturerEditProps {
 function LecturerEdit(props: LecturerEditProps) {
   const [visible, setVisible] = useState<boolean>(false);
 
+  const onEdit = (values: LecturerFormValues) => {
+    setVisible(false);
+    props.onEdit(props.lecturer, values);
+  };
+
   return (
     <>
       <a onClick={() => setVisible(true)}>Edytuj</a>
 
       <LecturerForm
         visible={visible}
-        onSubmit={(values) => props.onEdit(props.lecturer, values)}
+        onSubmit={onEdit}
         lecturer={props.lecturer}
         title="Edytuj prowadzącego"
         onCancel={() => setVisible(false)}
@@ -47,6 +52,10 @@ function LecturersTable(props: LecturersTableProps) {
     {
       title: 'Email',
       dataIndex: 'email',
+    },
+    {
+      title: 'Powiadomienia',
+      dataIndex: 'activeSubscription',
     },
     {
       title: 'Akcje',
@@ -91,7 +100,12 @@ export default function LecturerEmails() {
   const onCreateFormSubmit = async (values: LecturerFormValues) => {
     setCreateModalVisible(false);
 
-    await LecturerEmailsService.createLecturer(values.name, values.email);
+    await LecturerEmailsService.createLecturer(
+      values.name,
+      values.surname,
+      values.email,
+      values.activeSubscription
+    );
 
     fetchLecturers();
   };
@@ -102,7 +116,13 @@ export default function LecturerEmails() {
   };
 
   const onEdit = async (lecturer: Lecturer, values: LecturerFormValues) => {
-    await LecturerEmailsService.updateLecturer(lecturer.id, values.name, values.email);
+    await LecturerEmailsService.updateLecturer(
+      lecturer.id,
+      values.name,
+      values.surname,
+      values.email,
+      values.activeSubscription
+    );
     fetchLecturers();
   };
 
