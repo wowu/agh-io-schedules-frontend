@@ -1,4 +1,4 @@
-import { Button, Col, Row, Space, Table } from 'antd';
+import { Button, Col, Row, Space, Table, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
 import LecturerForm, { LecturerFormValues } from '../components/LecturerForm';
@@ -56,6 +56,8 @@ function LecturersTable(props: LecturersTableProps) {
     {
       title: 'Powiadomienia',
       dataIndex: 'activeSubscription',
+      render: (_text: string, record: Lecturer) =>
+        record.activeSubscription ? <Tag color="green">TAK</Tag> : <Tag color="red">NIE</Tag>,
     },
     {
       title: 'Akcje',
