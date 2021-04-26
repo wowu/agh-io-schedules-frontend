@@ -1,74 +1,100 @@
 import CenteredHeader from '../components/CenteredHeader';
-import React, { useState } from 'react';
-import { Alert, Badge, Button, Calendar, Col, List, Modal, Row } from 'antd';
+import { useState, useEffect } from 'react';
+import { Badge, Calendar, Col, List, Row, Spin, Button } from 'antd';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
-import ReactJson from 'react-json-view';
-import { ScheduleService } from '../services/ScheduleService';
-import Dragger from 'antd/es/upload/Dragger';
-import { InboxOutlined } from '@ant-design/icons';
-import ImportCollisions from '../components/ImportCollisions';
-import ImportError from '../components/ImportError';
-import ImportNetworkFailure from '../components/ImportNetworkFailure';
+import { useParams } from 'react-router-dom';
+import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
+import UpdateScheduleModal from '../components/UpdateScheduleModal';
+import EventListItem from '../components/EventListItem';
+import CopyToClipboardButton from '../components/CopyToClipboardButton';
+import { DownloadFileButton } from '../components/DownloadFileButton';
 
-enum UpdateFileStatus {
-  default,
-  success,
-  collisions,
-  error,
-  networkFailure,
-}
+const EXAMPLE_SCHEDULE: ISchedule = {
+  id: 1,
+  name: 'Stacjonarne - Inf - 20/21',
+  description: 'Plan dla studiów stacjonarnych - wersja 13',
+  eventCount: 4,
+  firstEventDate: '2021-04-19T12:00:00.000Z',
+  lastEventDate: '2021-05-21T12:00:00.000Z',
+  publicUUID: '5b9c0167-35fb-45d5-8d83-b93c7577208d',
+  events: [
+    {
+      id: 1,
+      beginTime: '2021-04-19T12:00:00.000Z',
+      endTime: '2021-04-19T15:00:00.000Z',
+      eventName: 'Wykład z kododawania',
+      groupName: 'wszyscy',
+      lecturerName: 'Jan',
+      lecturerSurname: 'Nowak',
+      type: 'lecture',
+      hours: 4,
+      form: 'local',
+      room: '3.21',
+    },
+    {
+      id: 2,
+      beginTime: '2021-04-19T16:00:00.000Z',
+      endTime: '2021-04-19T19:00:00.000Z',
+      eventName: 'Wykład z kododawania 2',
+      groupName: 'wszyscy',
+      lecturerName: 'Jan',
+      lecturerSurname: 'Nowak',
+      type: 'lecture',
+      hours: 4,
+      form: 'local',
+      room: '3.21',
+    },
+    {
+      id: 3,
+      beginTime: '2021-04-29T16:00:00.000Z',
+      endTime: '2021-04-29T19:00:00.000Z',
+      eventName: 'Zajęcia z programistyki 2',
+      groupName: 'grupa 1',
+      lecturerName: 'Jan',
+      lecturerSurname: 'Kowalski',
+      type: 'lab',
+      hours: 4,
+      form: 'local',
+      room: '4.21',
+    },
+    {
+      id: 4,
+      beginTime: '2021-05-21T10:30:00.000Z',
+      endTime: '2021-05-21T12:00:00.000Z',
+      eventName: 'Wykład z kododawania 2',
+      groupName: 'grupa 2',
+      lecturerName: 'Tadeusz',
+      lecturerSurname: 'Kowalski',
+      type: 'lab',
+      hours: 2,
+      form: 'local',
+      room: '3.21',
+    },
+  ],
+};
 
-function getListData(value: moment.Moment) {
-  let listData;
-  switch (value.date()) {
-    case 8:
-      listData = [
-        { type: 'warning', content: 'This is warning event.' },
-        { type: 'success', content: 'This is usual event.' },
-      ];
-      break;
-    case 10:
-      listData = [
-        { type: 'warning', content: 'This is warning event.' },
-        { type: 'success', content: 'This is usual event.' },
-        { type: 'error', content: 'This is error event.' },
-      ];
-      break;
-    case 15:
-      listData = [
-        { type: 'warning', content: 'This is warning event' },
-        { type: 'success', content: 'This is very long usual event。。....' },
-        { type: 'error', content: 'This is error event 1.' },
-        { type: 'error', content: 'This is error event 2.' },
-        { type: 'error', content: 'This is error event 3.' },
-        { type: 'error', content: 'This is error event 4.' },
-      ];
-      break;
+function getBadgeText(count: number): string {
+  switch (count) {
+    case 0:
+      return '';
+    case 1:
+      return '1 event';
     default:
+      return `${count} events`;
   }
-  return listData || [];
 }
 
-function dateCellRender(value: moment.Moment) {
-  const listData = getListData(value);
+function dateCellRender(date: moment.Moment, schedule: ISchedule) {
+  const events = findEventsOnSameDay(schedule, date);
   return (
-    listData.length > 0 && (
-      <Badge count={`${listData.length} events`} style={{ backgroundColor: '#52c41a' }} />
-      // <Badge status="success" text={`${listData.length} wydarzenia`}/>
+    events.length > 0 && (
+      <Badge count={getBadgeText(events.length)} style={{ backgroundColor: '#52c41a' }} />
     )
-    // <ul className="events">
-    //   {listData.map(item => (
-    //     <li key={item.content}>
-    //       <Badge status={item.type as PresetStatusColorType} text={item.content}/>
-    //     </li>
-    //   ))}
-    // </ul>
   );
 }
 
-function getMonthData(value: moment.Moment) {
-  return 'month description';
+function getMonthData(date: moment.Moment) {
+  return '';
 }
 
 function monthCellRender(value: moment.Moment) {
@@ -80,221 +106,84 @@ function monthCellRender(value: moment.Moment) {
   ) : null;
 }
 
-const scheduleDataRequiredToUpload = {
-  id: 1,
-};
-
-const data = [
-  {
-    title: 'Event 1',
-  },
-  {
-    title: 'Event 2',
-  },
-  {
-    title: 'Event 3',
-  },
-  {
-    title: 'Event 4',
-  },
-];
+function findEventsOnSameDay(schedule: ISchedule, date: moment.Moment): Array<Event> {
+  return schedule.events.filter((e: Event) => moment(e.beginTime).isSame(date, 'day'));
+}
 
 export default function Schedule() {
-  const [schedules, setSchedules] = useState<any>();
+  const params = useParams<any>();
 
-  const [uploading, setUploading] = useState<boolean>(false);
-  const [updateFile, setUpdateFile] = useState<any>([]);
-  let [updateSuccessData, setUpdateSuccessData] = useState<any>();
-  let [updateCollisionsData, setUpdateCollisionsData] = useState<any>();
-  let [updateStatus, setUpdateStatus] = useState<UpdateFileStatus>(UpdateFileStatus.default);
-  let [updateResponse, setUpdateResponse] = useState<{ status: number; statusText: string }>({
-    status: -1,
-    statusText: '',
-  });
-  const [updateVisible, setUpdateVisible] = useState<boolean>(false);
-  let [updateError, setUpdateError] = useState<{ message: string }>({ message: '' });
+  const [schedule, setSchedule] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [dateValue, setDateValue] = useState<moment.Moment>(moment());
+  const [currentEvents, setCurrentEvents] = useState<Array<Event>>([]);
+  const [publicLink, setPublicLink] = useState<string>('');
 
-  const loadSchedules = async () => {
-    const json = await ScheduleService.getSchedule(1);
-    setSchedules(json);
-  };
+  useEffect(() => {
+    ScheduleService.getSchedule(parseInt(params.id))
+      .then((data) => {
+        console.log('data', data);
+        setSchedule(data);
+        setLoading(false);
+        setPublicLink(ScheduleService.buildPublicLink(data));
+      })
+      .catch((reason: any) => {
+        console.log(reason);
+      });
+  }, []);
+  console.log(schedule);
 
-  const showMessage = () => {
-    switch (updateStatus) {
-      case UpdateFileStatus.default:
-        return <></>;
-      case UpdateFileStatus.success:
-        return (
-          <Alert
-            message="Nie znaleziono kolizji w nowej wersji."
-            description="Zaktualizowano harmonogram."
-            type="success"
-            showIcon
-          />
-        );
-      case UpdateFileStatus.collisions:
-        return ImportCollisions(updateCollisionsData);
-      case UpdateFileStatus.error:
-        return ImportError(updateResponse);
-      case UpdateFileStatus.networkFailure:
-        return ImportNetworkFailure(updateError);
+  useEffect(() => {
+    if (schedule) {
+      setCurrentEvents(findEventsOnSameDay(schedule, dateValue));
     }
-  };
-
-  const onNetworkFailure = (error: { message: string }) => {
-    console.log(error);
-    setUpdateError(error);
-    setUpdateStatus(UpdateFileStatus.networkFailure);
-  };
-
-  const onOtherError = (response: any) => {
-    setUpdateResponse(response);
-    setUpdateStatus(UpdateFileStatus.error);
-  };
-
-  const onUploadCollisions = (collisionsData: any) => {
-    setUpdateCollisionsData({ schedulesWithConflicts: [collisionsData] });
-    setUpdateStatus(UpdateFileStatus.collisions);
-  };
-
-  const onUploadSuccess = (newSchedulesData: any) => {
-    setUpdateSuccessData(newSchedulesData);
-    setUpdateStatus(UpdateFileStatus.success);
-    setUpdateFile([]);
-  };
-
-  const uploadNewSchedule = async () => {
-    const formData = new FormData();
-    formData.append('files[]', updateFile[0]);
-    setUploading(true);
-    try {
-      const { response, data } = await ScheduleService.updateSchedule(
-        formData,
-        scheduleDataRequiredToUpload.id,
-        false
-      ); //TODO: failure param only for development
-      if (response.ok) {
-        onUploadSuccess(data);
-      } else if (response.status == 400) {
-        onUploadCollisions(data);
-      } else {
-        onOtherError(response);
-      }
-    } catch (error) {
-      onNetworkFailure(error.error);
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const showModal = () => {
-    setUpdateVisible(true);
-  };
-
-  const handleUploadedSuccess = () => {
-    setUpdateFile([]);
-    setUpdateStatus(UpdateFileStatus.default);
-    setUpdateVisible(false);
-    // TODO Refresh current schedule
-  };
-
-  let draggerProps = {
-    onRemove: (file: any) => {
-      setUpdateFile([]);
-    },
-    beforeUpload: (file: File) => {
-      setUpdateFile([file]);
-      return false;
-    },
-    multiple: false,
-    maxCount: 1,
-    fileList: updateFile,
-    accept:
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel',
-  };
-
-  const updateButtons = (): any => {
-    switch (updateStatus) {
-      case UpdateFileStatus.success: {
-        return [
-          <Button key="back" onClick={handleUploadedSuccess}>
-            Zamknij
-          </Button>,
-        ];
-      }
-      default: {
-        return [
-          <Button
-            key="back"
-            onClick={() => {
-              setUpdateVisible(false);
-              setUpdateFile([]);
-            }}
-          >
-            Zamknij
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={uploading}
-            onClick={uploadNewSchedule}
-            disabled={updateFile.length === 0}
-          >
-            Wyślij harmonogram
-          </Button>,
-        ];
-      }
-    }
-  };
+  }, [dateValue, schedule]);
 
   return (
     <>
-      {schedules && <ReactJson src={schedules} collapsed={false} />}
-      <Button onClick={loadSchedules}>Załaduj harmonogramy</Button>
-      <CenteredHeader title="Harmonogram 1" />
+      {loading ? (
+        <Row justify={'center'}>
+          <Spin size="large" />
+        </Row>
+      ) : (
+        <>
+          <Row justify={'end'}>
+            <CopyToClipboardButton content={publicLink} />
+          </Row>
+          <CenteredHeader title={schedule.name} subtitle={schedule.description} />
 
-      <Row gutter={[16, 16]} justify="space-between">
-        <Col span={24} xl={12}>
-          <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
-        </Col>
-        <Col span={24} xl={11}>
-          <List
-            itemLayout="horizontal"
-            dataSource={data}
-            renderItem={(item) => (
-              <List.Item actions={[<Button>Szczegóły</Button>]}>
-                <List.Item.Meta title={<Link to="#">{item.title}</Link>} description="Jakiś opis" />
-              </List.Item>
-            )}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Button type="primary" onClick={showModal}>
-          Wyślij nową wersję harmonogramu
-        </Button>
-        <Modal
-          visible={updateVisible}
-          title="Zaktualizuj plik harmonogramu"
-          footer={updateButtons()}
-        >
-          <>
-            {updateStatus != UpdateFileStatus.success && (
-              <Dragger {...draggerProps}>
-                <p className="ant-upload-drag-icon">
-                  <InboxOutlined />
-                </p>
-                <p className="ant-upload-text">Kliknij lub przeciągnij plik z harmonogramem</p>
-                <p className="ant-upload-hint">
-                  Dopuszczalne formaty: <br /> xls, xlsx
-                </p>
-              </Dragger>
-            )}
-            <br />
-            {showMessage()}
-          </>
-        </Modal>
-      </Row>
+          <Row gutter={[16, 16]} justify="space-between">
+            <Col span={24} xl={12}>
+              <Calendar
+                dateCellRender={(date: moment.Moment) => dateCellRender(date, schedule)}
+                monthCellRender={monthCellRender}
+                value={dateValue}
+                onChange={(date) => setDateValue(date)}
+              />
+            </Col>
+            <Col span={24} xl={11}>
+              <List
+                itemLayout="horizontal"
+                dataSource={currentEvents}
+                renderItem={(item) => <EventListItem item={item} />}
+              />
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col>
+              <UpdateScheduleModal />
+            </Col>
+            <Col>
+              <DownloadFileButton
+                downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)}
+                filename={'schedule.xls'}
+              >
+                <Button type="primary">Pobierz harmonogram</Button>
+              </DownloadFileButton>
+            </Col>
+          </Row>
+        </>
+      )}
     </>
   );
 }
