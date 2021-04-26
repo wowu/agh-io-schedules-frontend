@@ -1,19 +1,16 @@
 import { ScheduleOutlined } from '@ant-design/icons';
 import { Button, Col, List, Popconfirm, Row, Spin } from 'antd';
 import CenteredHeader from '../components/CenteredHeader';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../contexts/user';
 import { ScheduleService } from '../services/ScheduleService';
 
 export default function ScheduleList() {
-  const { user } = useContext(UserContext);
-
   let [schedules, setSchedules] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const getScheduleList = async () => {
-    const { response, data } = await ScheduleService.getListSchedules();
+    const { data } = await ScheduleService.getListSchedules();
 
     setSchedules(
       data.schedules.sort(

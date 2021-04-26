@@ -1,5 +1,4 @@
-import { Modal, Form, Input, Switch, Checkbox } from 'antd';
-import React, { useState } from 'react';
+import { Modal, Form, Input, Checkbox } from 'antd';
 import { Lecturer } from '../services/LecturerEmailsService';
 
 export interface LecturerFormValues {

@@ -8,7 +8,7 @@ import { UserContext } from '../contexts/user';
 
 export default function LoginForm() {
   const history = useHistory();
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 

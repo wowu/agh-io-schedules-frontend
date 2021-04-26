@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Switch, Checkbox } from 'antd';
+import { Modal, Form, Input, Checkbox } from 'antd';
 import { User } from '../services/UserService';
 
 export interface UserFormValues {
