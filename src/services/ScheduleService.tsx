@@ -109,6 +109,17 @@ export class ScheduleService {
     }
   }
 
+  static async updateScheduleMetadata(fields: FormData, id: number) {
+    try {
+      const response = await ApiAdapter.post(`/api/schedules/${id}/file`, fields);
+      const data = await response.json();
+      return Promise.resolve({ response, data })
+    } catch (error) {
+      console.log('updateScheduleMetadata: error');
+      return Promise.reject({ error, data: {} });
+    }
+  }
+
   static async removeSchedule(id: number): Promise<any> {
     try {
       const response = await ApiAdapter.delete(`/api/schedules/${id}`);

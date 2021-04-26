@@ -1,5 +1,5 @@
 import CenteredHeader from '../components/CenteredHeader';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Badge, Calendar, Col, List, Row, Spin, Button } from 'antd';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import UpdateScheduleModal from '../components/UpdateScheduleModal';
 import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
 import { DownloadFileButton } from '../components/DownloadFileButton';
+import UpdateScheduleMetadataModal from '../components/UpdateScheduleMetadataModal';
 
 function getBadgeText(count: number): string {
   switch (count) {
@@ -55,7 +56,7 @@ export default function Schedule() {
   const [currentEvents, setCurrentEvents] = useState<Array<Event>>([]);
   const [publicLink, setPublicLink] = useState<string>('');
 
-  useEffect(() => {
+  function loadSchedule() {
     ScheduleService.getSchedule(parseInt(params.id))
       .then((data) => {
         console.log('data', data);
@@ -66,6 +67,10 @@ export default function Schedule() {
       .catch((reason: any) => {
         console.log(reason);
       });
+  }
+
+  useEffect(() => {
+    loadSchedule();
   }, [params.id]);
   console.log(schedule);
 
@@ -83,8 +88,13 @@ export default function Schedule() {
         </Row>
       ) : (
         <>
-          <Row justify={'end'}>
-            <CopyToClipboardButton content={publicLink} />
+          <Row justify={'end'} gutter={16}>
+            <Col>
+              <CopyToClipboardButton content={publicLink} />
+            </Col>
+            <Col>
+              <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
+            </Col>
           </Row>
           <CenteredHeader title={schedule.name} subtitle={schedule.description} />
 
