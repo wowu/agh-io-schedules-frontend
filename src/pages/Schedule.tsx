@@ -123,8 +123,7 @@ export default function Schedule() {
     ScheduleService.getSchedule(parseInt(params.id))
       .then((data) => {
         console.log('data', data);
-        //FIXME: Problem with development API:
-        setSchedule(EXAMPLE_SCHEDULE);
+        setSchedule(data);
         setLoading(false);
         setPublicLink(ScheduleService.buildPublicLink(data));
       })
