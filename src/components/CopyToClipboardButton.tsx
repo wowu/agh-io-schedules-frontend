@@ -1,6 +1,6 @@
 import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
-import React, { useState } from 'react';
+import { Button, Row, Col } from 'antd';
+import { useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 export default function CopyToClipboardButton(props: any) {
@@ -12,12 +12,16 @@ export default function CopyToClipboardButton(props: any) {
         {copied ? (
           <>
             <CheckOutlined />
-            Copied!
+            Skopiowane!
           </>
         ) : (
           <>
-            <CopyOutlined />
-            Copy link to clipboard
+            <Row gutter={8}>
+              <Col>
+                <CopyOutlined />
+              </Col>
+              <Col>Skopiuj do schowka</Col>
+            </Row>
           </>
         )}
       </Button>

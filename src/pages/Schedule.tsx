@@ -85,7 +85,6 @@ function getBadgeText(count: number): string {
 }
 
 function dateCellRender(date: moment.Moment, schedule: ISchedule) {
-  
   const events = findEventsOnSameDay(schedule, date);
   return (
     events.length > 0 && (
@@ -123,26 +122,22 @@ export default function Schedule() {
   useEffect(() => {
     ScheduleService.getSchedule(parseInt(params.id))
       .then((data) => {
-        console.log("data",data);
-        //FIXME: Problem with development API: it returns array of schedules in place of one
-        setSchedule(data.schedules[0]);
+        console.log('data', data);
+        //FIXME: Problem with development API:
+        setSchedule(EXAMPLE_SCHEDULE);
         setLoading(false);
         setPublicLink(ScheduleService.buildPublicLink(data));
       })
       .catch((reason: any) => {
         console.log(reason);
-        // FIXME: remove the lines below, they are used only for testing, when API not working
-        setSchedule(EXAMPLE_SCHEDULE);
-        setPublicLink(ScheduleService.buildPublicLink(EXAMPLE_SCHEDULE));
-        setLoading(false);
       });
   }, []);
   console.log(schedule);
 
-
   useEffect(() => {
     if (schedule) {
-      setCurrentEvents(findEventsOnSameDay(schedule, dateValue))};
+      setCurrentEvents(findEventsOnSameDay(schedule, dateValue));
+    }
   }, [dateValue, schedule]);
 
   return (
@@ -175,14 +170,18 @@ export default function Schedule() {
               />
             </Col>
           </Row>
-          <Row>
-            <UpdateScheduleModal />
-            <DownloadFileButton downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)} filename={'schedule.xls'} >
-
-              <Button type="primary">
-                Pobierz harmonogram
-            </Button>
-            </DownloadFileButton>
+          <Row gutter={16}>
+            <Col>
+              <UpdateScheduleModal />
+            </Col>
+            <Col>
+              <DownloadFileButton
+                downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)}
+                filename={'schedule.xls'}
+              >
+                <Button type="primary">Pobierz harmonogram</Button>
+              </DownloadFileButton>
+            </Col>
           </Row>
         </>
       )}

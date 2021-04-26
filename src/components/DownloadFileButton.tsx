@@ -1,17 +1,19 @@
-import { createRef } from 'react'
-import { ScheduleService } from '../services/ScheduleService'
+import { createRef } from 'react';
+import { ScheduleService } from '../services/ScheduleService';
 
 export interface DownloadFileButtonProps {
-  filename: string,
-  downloadHandler: Function,
-  children: JSX.Element
+  filename: string;
+  downloadHandler: Function;
+  children: JSX.Element;
 }
 
 export function DownloadFileButton(props: DownloadFileButtonProps) {
-  const link = createRef<any>()
+  const link = createRef<any>();
 
   const handleAction = async () => {
-    if (link.current.href) { return }
+    if (link.current.href) {
+      return;
+    }
 
     try {
       const blob = await props.downloadHandler();
@@ -25,11 +27,13 @@ export function DownloadFileButton(props: DownloadFileButtonProps) {
       console.log(error);
       return;
     }
-  }
+  };
 
   return (
     <>
-      <a role='button' ref={link} onClick={handleAction}>{props.children}</a>
+      <a role="button" ref={link} onClick={handleAction}>
+        {props.children}
+      </a>
     </>
-  )
+  );
 }
