@@ -15,6 +15,7 @@ import PrivateRoute from './components/PrivateRoute';
 import { AuthService } from './services/AuthService';
 import AppMenu from './components/AppMenu';
 import history from './history';
+import Users from './pages/Users';
 
 const { Header, Content, Footer } = Layout;
 
@@ -60,6 +61,9 @@ function App() {
                   </PrivateRoute>
                   <PrivateRoute path="/emails">
                     <LecturerEmails />
+                  </PrivateRoute>
+                  <PrivateRoute path="/users">
+                    <Users />
                   </PrivateRoute>
                   <PrivateRoute path="/notification-settings">
                     <NotificationSettings />
