@@ -3,7 +3,6 @@ import { InboxOutlined } from '@ant-design/icons';
 import Dragger from 'antd/es/upload/Dragger';
 import CenteredHeader from '../components/CenteredHeader';
 import React, { useState } from 'react';
-import { ApiAdapter } from '../services/ApiAdapter';
 import { ScheduleService } from '../services/ScheduleService';
 import ImportSuccess from '../components/ImportSuccess';
 import ImportCollisions from '../components/ImportCollisions';
@@ -80,7 +79,7 @@ export default function ImportForm() {
       const { response, data } = await ScheduleService.sendNewSchedules(formData, false); //TODO: failure param only for development
       if (response.ok) {
         onUploadSuccess(data);
-      } else if (response.status == 400) {
+      } else if (response.status === 400) {
         onUploadCollisions(data);
       } else {
         onOtherError(response);
@@ -96,7 +95,7 @@ export default function ImportForm() {
     onRemove: (file: any) => {
       setFiles((prevFiles: any) => {
         const index = prevFiles.indexOf(file);
-        return prevFiles.filter((el: any) => el != file);
+        return prevFiles.filter((el: any) => el !== file);
       });
     },
     beforeUpload: (file: File) => {

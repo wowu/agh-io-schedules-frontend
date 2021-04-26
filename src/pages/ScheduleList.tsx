@@ -34,7 +34,7 @@ export default function ScheduleList() {
       await getScheduleList();
     }
     setSchedules((oldSchedules: any) =>
-      oldSchedules.filter((schedule: any) => schedule.id != scheduleId)
+      oldSchedules.filter((schedule: any) => schedule.id !== scheduleId)
     ); //TODO Delete this line in production version. Only for mock API.
   };
 

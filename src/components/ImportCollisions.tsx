@@ -1,5 +1,4 @@
 import { Alert, Col, List, Row } from 'antd';
-import ReactJson from 'react-json-view';
 import React from 'react';
 
 function conflictedEvents(conflictedEvents: []) {

@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Router, Switch, Route } from 'react-router-dom';
-import { Layout } from 'antd';
+import { ConfigProvider, Layout } from 'antd';
 import styled from 'styled-components';
-
+import plPL from 'antd/lib/locale/pl_PL';
 import Home from './pages/Home';
 import ScheduleList from './pages/ScheduleList';
 import ImportForm from './pages/ImportForm';
 import LoginForm from './pages/LoginForm';
 import Schedule from './pages/Schedule';
+import LecturerEmails from './pages/LecturerEmails';
 import NotificationSettings from './pages/NotificationSettings';
 import { UserContext } from './contexts/user';
 import PrivateRoute from './components/PrivateRoute';
@@ -35,43 +36,48 @@ function App() {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <Router history={history}>
-        <Layout>
-          <Header>
-            <AppMenu />
-          </Header>
+      <ConfigProvider locale={plPL}>
+        <Router history={history}>
+          <Layout>
+            <Header>
+              <AppMenu />
+            </Header>
 
-          <Container>
-            <AppContent>
-              <Switch>
-                <PrivateRoute exact path="/">
-                  <Home />
-                </PrivateRoute>
-                <PrivateRoute path="/schedules">
-                  <ScheduleList />
-                </PrivateRoute>
-                <PrivateRoute path="/import">
-                  <ImportForm />
-                </PrivateRoute>
-                <PrivateRoute path="/schedule/:id">
-                  <Schedule />
-                </PrivateRoute>
-                <PrivateRoute path="/notification-settings">
-                  <NotificationSettings />
-                </PrivateRoute>
+            <Container>
+              <AppContent>
+                <Switch>
+                  <PrivateRoute exact path="/">
+                    <Home />
+                  </PrivateRoute>
+                  <PrivateRoute path="/schedules">
+                    <ScheduleList />
+                  </PrivateRoute>
+                  <PrivateRoute path="/import">
+                    <ImportForm />
+                  </PrivateRoute>
+                  <PrivateRoute path="/schedule/:id">
+                    <Schedule />
+                  </PrivateRoute>
+                  <PrivateRoute path="/emails">
+                    <LecturerEmails />
+                  </PrivateRoute>
+                  <PrivateRoute path="/notification-settings">
+                    <NotificationSettings />
+                  </PrivateRoute>
 
-                <Route path="/login">
-                  <LoginForm />
-                </Route>
-              </Switch>
-            </AppContent>
-          </Container>
+                  <Route path="/login">
+                    <LoginForm />
+                  </Route>
+                </Switch>
+              </AppContent>
+            </Container>
 
-          <Footer style={{ textAlign: 'center' }}>
-            Schedules &copy; {new Date().getFullYear()} Game of Threads, AGH
-          </Footer>
-        </Layout>
-      </Router>
+            <Footer style={{ textAlign: 'center' }}>
+              Schedules &copy; {new Date().getFullYear()} Game of Threads, AGH
+            </Footer>
+          </Layout>
+        </Router>
+      </ConfigProvider>
     </UserContext.Provider>
   );
 }
