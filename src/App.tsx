@@ -53,7 +53,7 @@ function App() {
                 <PrivateRoute path="/import">
                   <ImportForm />
                 </PrivateRoute>
-                <PrivateRoute path="/schedule">
+                <PrivateRoute path="/schedule/:id">
                   <Schedule />
                 </PrivateRoute>
                 <PrivateRoute path="/notification-settings">
