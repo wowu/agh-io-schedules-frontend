@@ -13,11 +13,11 @@ export function DownloadFileButton(props: DownloadFileButtonProps) {
     if (link.current.href) {
       return;
     }
-    
+
     try {
       const blob = await props.downloadHandler();
       const href = window.URL.createObjectURL(blob);
-      
+
       link.current.download = props.filename;
       link.current.href = href;
 

@@ -114,7 +114,7 @@ export default function Schedule() {
               </DownloadFileButton>
             </Col>
             <Col>
-              <Input addonBefore={"Publiczny link do harmonogramu"} value={publicLink} />
+              <Input addonBefore={'Publiczny link do harmonogramu'} value={publicLink} />
             </Col>
             <Col>
               <CopyToClipboardButton content={publicLink} />
