@@ -20,7 +20,6 @@ export default function CopyToClipboardButton(props: any) {
               <Col>
                 <CopyOutlined />
               </Col>
-              <Col>Skopiuj do schowka</Col>
             </Row>
           </>
         )}

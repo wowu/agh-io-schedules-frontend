@@ -1,6 +1,6 @@
 import CenteredHeader from '../components/CenteredHeader';
 import { useState, useEffect } from 'react';
-import { Badge, Calendar, Col, List, Row, Spin, Button } from 'antd';
+import { Badge, Calendar, Col, List, Row, Spin, Button, Input } from 'antd';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
@@ -67,7 +67,6 @@ export default function Schedule() {
         console.log(reason);
       });
   }, [params.id]);
-  console.log(schedule);
 
   useEffect(() => {
     if (schedule) {
@@ -83,9 +82,6 @@ export default function Schedule() {
         </Row>
       ) : (
         <>
-          <Row justify={'end'}>
-            <CopyToClipboardButton content={publicLink} />
-          </Row>
           <CenteredHeader title={schedule.name} subtitle={schedule.description} />
 
           <Row gutter={[16, 16]} justify="space-between">
@@ -116,6 +112,12 @@ export default function Schedule() {
               >
                 <Button type="primary">Pobierz harmonogram</Button>
               </DownloadFileButton>
+            </Col>
+            <Col>
+              <Input addonBefore={"Publiczny link do harmonogramu"} value={publicLink} />
+            </Col>
+            <Col>
+              <CopyToClipboardButton content={publicLink} />
             </Col>
           </Row>
         </>

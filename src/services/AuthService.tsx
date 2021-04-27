@@ -1,4 +1,5 @@
 export const API_URL = process.env.REACT_APP_API_URL;
+export const APP_URL = process.env.REACT_APP_URL;
 
 export enum AuthResponse {
   Success = 0,
