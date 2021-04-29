@@ -6,7 +6,7 @@ export default function Home() {
 
   return (
     <>
-      <CenteredHeader title={'Strona główna'} />
+      <CenteredHeader title="Strona Główna" />
       <code>{JSON.stringify(user)}</code>
     </>
   );

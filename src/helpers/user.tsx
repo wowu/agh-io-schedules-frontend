@@ -10,10 +10,12 @@ type TokenUser = {
 };
 
 class User {
+  id: number;
   email: string;
   scope: 'ADMIN' | 'LECTURER';
 
   constructor(decodedToken: TokenUser) {
+    this.id = decodedToken.userId;
     this.email = decodedToken.sub;
     this.scope = decodedToken.scope;
   }

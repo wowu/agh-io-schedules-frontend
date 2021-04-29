@@ -43,6 +43,9 @@ function AppMenu() {
               </Menu.Item>
             </>
           )}
+          <Menu.Item key="account">
+            <Link to="/account">Ustawienia</Link>
+          </Menu.Item>
           <Menu.Item key="logout" style={{ float: 'right' }}>
             <a onClick={handleLogout}>Wyloguj się</a>
           </Menu.Item>
