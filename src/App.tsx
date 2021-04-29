@@ -9,8 +9,7 @@ import ImportForm from './pages/ImportForm';
 import LoginForm from './pages/LoginForm';
 import Schedule from './pages/Schedule';
 import LecturerEmails from './pages/LecturerEmails';
-import NotificationSettings from './pages/NotificationSettings';
-import { UserContext } from './contexts/user';
+import { TokenContext } from './contexts/token';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthService } from './services/AuthService';
 import AppMenu from './components/AppMenu';
@@ -33,10 +32,10 @@ const AppContent = styled.div`
 `;
 
 function App() {
-  const [user, setUser] = useState(AuthService.getCurrentUser());
+  const [token, setToken] = useState(AuthService.getToken());
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <TokenContext.Provider value={{ token, setToken }}>
       <ConfigProvider locale={plPL}>
         <Router history={history}>
           <Layout>
@@ -65,9 +64,6 @@ function App() {
                   <PrivateRoute path="/users">
                     <Users />
                   </PrivateRoute>
-                  <PrivateRoute path="/notification-settings">
-                    <NotificationSettings />
-                  </PrivateRoute>
 
                   <Route path="/login">
                     <LoginForm />
@@ -82,7 +78,7 @@ function App() {
           </Layout>
         </Router>
       </ConfigProvider>
-    </UserContext.Provider>
+    </TokenContext.Provider>
   );
 }
 

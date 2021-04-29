@@ -1,6 +1,11 @@
 export const API_URL = process.env.REACT_APP_API_URL;
 export const APP_URL = process.env.REACT_APP_URL;
 
+export type Token = {
+  token: string;
+  refreshToken: string;
+};
+
 export enum AuthResponse {
   Success = 0,
   WrongPassword = 1,
@@ -33,13 +38,13 @@ export class AuthService {
       }
     }
 
-    localStorage.setItem('user', JSON.stringify(data));
+    localStorage.setItem('token', JSON.stringify(data));
 
     return AuthResponse.Success;
   }
 
   static async refreshToken(): Promise<RefreshResponse> {
-    const user = this.getCurrentUser();
+    const user = this.getToken();
     if (!user) {
       return RefreshResponse.NotLoggedIn;
     }
@@ -60,19 +65,19 @@ export class AuthService {
       return RefreshResponse.UnknownError;
     }
 
-    localStorage.setItem('user', JSON.stringify(data));
+    localStorage.setItem('token', JSON.stringify(data));
     return RefreshResponse.Success;
   }
 
   static logout() {
-    localStorage.removeItem('user');
+    localStorage.removeItem('token');
   }
 
-  static getCurrentUser(): null | any {
-    const storedUser = localStorage.getItem('user');
+  static getToken(): Token | null {
+    const storedToken = localStorage.getItem('token');
 
-    if (storedUser) {
-      return JSON.parse(storedUser);
+    if (storedToken) {
+      return JSON.parse(storedToken);
     } else {
       return null;
     }
