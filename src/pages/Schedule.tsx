@@ -8,6 +8,7 @@ import UpdateScheduleModal from '../components/UpdateScheduleModal';
 import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
 import { DownloadFileButton } from '../components/DownloadFileButton';
+import UpdateScheduleMetadataModal from '../components/UpdateScheduleMetadataModal';
 
 function getBadgeText(count: number): string {
   switch (count) {
@@ -56,7 +57,7 @@ export default function Schedule() {
   const [currentEvents, setCurrentEvents] = useState<Array<Event>>([]);
   const [publicLink, setPublicLink] = useState<string>('');
 
-  useEffect(() => {
+  function loadSchedule() {
     ScheduleService.getSchedule(parseInt(params.id))
       .then((data) => {
         setSchedule(data);
@@ -66,6 +67,10 @@ export default function Schedule() {
       .catch((reason: any) => {
         console.log(reason);
       });
+  }
+
+  useEffect(() => {
+    loadSchedule();
   }, [params.id]);
 
   useEffect(() => {
@@ -83,6 +88,11 @@ export default function Schedule() {
         </Row>
       ) : (
         <>
+          <Row justify={'end'} gutter={16}>
+            <Col>
+              <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
+            </Col>
+          </Row>
           <CenteredHeader title={schedule.name} subtitle={schedule.description} />
 
           <Row gutter={[16, 16]} justify="space-between">
