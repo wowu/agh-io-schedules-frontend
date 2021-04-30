@@ -4,11 +4,11 @@ import { Button, Form, Input, Row, Alert, Col } from 'antd';
 import CenteredHeader from '../components/CenteredHeader';
 import { AuthService, AuthResponse } from '../services/AuthService';
 import { useHistory } from 'react-router-dom';
-import { UserContext } from '../contexts/user';
+import { TokenContext } from '../contexts/token';
 
 export default function LoginForm() {
   const history = useHistory();
-  const { setUser } = useContext(UserContext);
+  const { setToken } = useContext(TokenContext);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -22,7 +22,7 @@ export default function LoginForm() {
 
     switch (authResponse) {
       case AuthResponse.Success:
-        setUser(AuthService.getCurrentUser());
+        setToken(AuthService.getToken());
         history.push('/');
         break;
       case AuthResponse.WrongPassword:

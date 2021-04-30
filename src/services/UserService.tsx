@@ -9,19 +9,28 @@ export type User = {
 
 type Response<T> = {
   response: any;
-  data: {
-    users: T;
-  };
+  data: T;
 };
 
 export class UserService {
-  static async getUsers(): Promise<Response<User[]>> {
+  static async getUsers(): Promise<Response<{ users: User[] }>> {
     try {
       const response = await ApiAdapter.get('/api/users/');
       let data = await response.json();
       return Promise.resolve({ response, data });
     } catch (error) {
-      console.log('getUsers: ', error);
+      console.error('getUsers: ', error);
+      return Promise.reject(error);
+    }
+  }
+
+  static async getUser(id: number): Promise<Response<User>> {
+    try {
+      const response = await ApiAdapter.get(`/api/users/${id}`);
+      let data = await response.json();
+      return Promise.resolve({ response, data });
+    } catch (error) {
+      console.error('getUser: ', error);
       return Promise.reject(error);
     }
   }
@@ -38,7 +47,7 @@ export class UserService {
       let data = await response.json();
       return Promise.resolve({ response, data });
     } catch (error) {
-      console.log('createUser: ', error);
+      console.error('createUser: ', error);
       return Promise.reject(error);
     }
   }
@@ -59,7 +68,23 @@ export class UserService {
       let data = await response.json();
       return Promise.resolve({ response, data });
     } catch (error) {
-      console.log('createUser: ', error);
+      console.error('createUser: ', error);
+      return Promise.reject(error);
+    }
+  }
+
+  static async changePassword(id: number, newPassword: string): Promise<Response<User>> {
+    try {
+      const response = await ApiAdapter.put(
+        `/api/users/${id}`,
+        objectToFormData({
+          password: newPassword,
+        })
+      );
+      let data = await response.json();
+      return Promise.resolve({ response, data });
+    } catch (error) {
+      console.error('changePassword: ', error);
       return Promise.reject(error);
     }
   }
@@ -69,7 +94,7 @@ export class UserService {
       const response = await ApiAdapter.delete(`/api/users/${id}`);
       return Promise.resolve(response);
     } catch (error) {
-      console.log('removeUser: ', error);
+      console.error('removeUser: ', error);
       return Promise.reject(error);
     }
   }

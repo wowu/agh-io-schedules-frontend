@@ -9,13 +9,13 @@ import ImportForm from './pages/ImportForm';
 import LoginForm from './pages/LoginForm';
 import Schedule from './pages/Schedule';
 import LecturerEmails from './pages/LecturerEmails';
-import NotificationSettings from './pages/NotificationSettings';
-import { UserContext } from './contexts/user';
+import { TokenContext } from './contexts/token';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthService } from './services/AuthService';
 import AppMenu from './components/AppMenu';
 import history from './history';
 import Users from './pages/Users';
+import Account from './pages/Account';
 
 const { Header, Content, Footer } = Layout;
 
@@ -33,10 +33,10 @@ const AppContent = styled.div`
 `;
 
 function App() {
-  const [user, setUser] = useState(AuthService.getCurrentUser());
+  const [token, setToken] = useState(AuthService.getToken());
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <TokenContext.Provider value={{ token, setToken }}>
       <ConfigProvider locale={plPL}>
         <Router history={history}>
           <Layout>
@@ -65,8 +65,8 @@ function App() {
                   <PrivateRoute path="/users">
                     <Users />
                   </PrivateRoute>
-                  <PrivateRoute path="/notification-settings">
-                    <NotificationSettings />
+                  <PrivateRoute path="/account">
+                    <Account />
                   </PrivateRoute>
 
                   <Route path="/login">
@@ -82,7 +82,7 @@ function App() {
           </Layout>
         </Router>
       </ConfigProvider>
-    </UserContext.Provider>
+    </TokenContext.Provider>
   );
 }
 

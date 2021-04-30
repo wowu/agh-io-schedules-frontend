@@ -83,12 +83,12 @@ export class ApiAdapter {
   }
 
   private static async authAndFetch(request: Request): Promise<Response> {
-    const user = AuthService.getCurrentUser();
-    if (user === null) {
+    const token = AuthService.getToken();
+    if (token === null) {
       history.push('/login');
       return Promise.reject('Not logged in');
     }
-    request.headers.set('Authorization', `Bearer ${user.token}`);
+    request.headers.set('Authorization', `Bearer ${token.token}`);
     return fetch(request);
   }
 }

@@ -14,9 +14,9 @@ function getBadgeText(count: number): string {
     case 0:
       return '';
     case 1:
-      return '1 event';
+      return '1';
     default:
-      return `${count} events`;
+      return `${count}`;
   }
 }
 
@@ -24,26 +24,27 @@ function dateCellRender(date: moment.Moment, schedule: ISchedule) {
   const events = findEventsOnSameDay(schedule, date);
   return (
     events.length > 0 && (
+      <Row justify={'center'} align={'middle'}>
+        <Badge count={getBadgeText(events.length)} style={{ backgroundColor: '#52c41a' }} />
+      </Row>
+    )
+  );
+}
+
+function monthCellRender(date: moment.Moment, schedule: ISchedule) {
+  const events = findEventsOnSameMonth(schedule, date);
+  return (
+    events.length > 0 && (
       <Badge count={getBadgeText(events.length)} style={{ backgroundColor: '#52c41a' }} />
     )
   );
 }
 
-function getMonthData(date: moment.Moment) {
-  return '';
-}
-
-function monthCellRender(value: moment.Moment) {
-  const num = getMonthData(value);
-  return num ? (
-    <div className="notes-month">
-      <section>{num}</section>
-    </div>
-  ) : null;
-}
-
 function findEventsOnSameDay(schedule: ISchedule, date: moment.Moment): Array<Event> {
   return schedule.events.filter((e: Event) => moment(e.beginTime).isSame(date, 'day'));
+}
+function findEventsOnSameMonth(schedule: ISchedule, date: moment.Moment): Array<Event> {
+  return schedule.events.filter((e: Event) => moment(e.beginTime).isSame(date, 'month'));
 }
 
 export default function Schedule() {
@@ -58,7 +59,6 @@ export default function Schedule() {
   useEffect(() => {
     ScheduleService.getSchedule(parseInt(params.id))
       .then((data) => {
-        console.log('data', data);
         setSchedule(data);
         setLoading(false);
         setPublicLink(ScheduleService.buildPublicLink(data));
@@ -71,6 +71,7 @@ export default function Schedule() {
   useEffect(() => {
     if (schedule) {
       setCurrentEvents(findEventsOnSameDay(schedule, dateValue));
+      console.log(dateValue);
     }
   }, [dateValue, schedule]);
 
@@ -88,7 +89,7 @@ export default function Schedule() {
             <Col span={24} xl={12}>
               <Calendar
                 dateCellRender={(date: moment.Moment) => dateCellRender(date, schedule)}
-                monthCellRender={monthCellRender}
+                monthCellRender={(date: moment.Moment) => monthCellRender(date, schedule)}
                 value={dateValue}
                 onChange={(date) => setDateValue(date)}
               />
