@@ -1,4 +1,16 @@
-import { Button, Checkbox, Col, Form, Input, notification, Row, Spin } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Col,
+  Divider,
+  Form,
+  Input,
+  notification,
+  Row,
+  Space,
+  Spin,
+  Typography,
+} from 'antd';
 import React, { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
 import PasswordForm from '../components/PasswordForm';
@@ -6,6 +18,7 @@ import SettingsForm from '../components/SettingsForm';
 import { useUser } from '../helpers/user';
 import { AuthService } from '../services/AuthService';
 import { User, UserService } from '../services/UserService';
+import Title from 'antd/es/typography/Title';
 
 export default function Account() {
   const user = useUser();
@@ -55,8 +68,11 @@ export default function Account() {
           ) : (
             <Spin size="large" />
           )}
+          <Divider />
 
-          <CenteredHeader title="Zmień hasło" />
+          <Row justify={'center'}>
+            <Title level={5}>Zmień hasło</Title>
+          </Row>
 
           <PasswordForm loading={changePasswordLoading} onSave={changePassword} />
         </Col>

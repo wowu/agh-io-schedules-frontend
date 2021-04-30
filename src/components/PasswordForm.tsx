@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, Space } from 'antd';
+import { Button, Checkbox, Form, Input, Row, Space } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React, { useState } from 'react';
 
@@ -29,9 +29,11 @@ export default function PasswordForm(props: PasswordFormProps) {
         </Form.Item>
 
         <Form.Item>
-          <Button onClick={handleSave} loading={props.loading} type="primary" disabled={disabled}>
-            Zmień hasło
-          </Button>
+          <Row justify={'center'}>
+            <Button onClick={handleSave} loading={props.loading} type="primary" disabled={disabled}>
+              Zmień hasło
+            </Button>
+          </Row>
         </Form.Item>
       </Form>
     </>

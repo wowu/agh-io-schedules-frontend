@@ -1,4 +1,4 @@
-import { Button, Checkbox, Space } from 'antd';
+import { Button, Checkbox, Col, Row, Space } from 'antd';
 import React, { useState } from 'react';
 
 type SettingsFormProps = {
@@ -16,17 +16,25 @@ export default function SettingsForm(props: SettingsFormProps) {
 
   return (
     <>
-      <Space direction="vertical" size="large">
+      {/*<Col xs={24}>*/}
+      {/*<Space direction="vertical" size="large">*/}
+
+      <Row>
         <Checkbox
           checked={activeSubscription}
           onChange={(e) => setActiveSubscription(e.target.checked)}
         >
           Powiadomienia mailowe
         </Checkbox>
+      </Row>
+      <br />
+      <Row justify={'center'}>
         <Button onClick={handleSave} loading={props.loading} type="primary">
           Zapisz
         </Button>
-      </Space>
+      </Row>
+      {/*</Space>*/}
+      {/*</Col>*/}
     </>
   );
 }
