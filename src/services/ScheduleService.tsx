@@ -1,5 +1,5 @@
 import { ApiAdapter } from './ApiAdapter';
-import { API_URL } from './AuthService';
+import { APP_URL } from './AuthService';
 
 export interface Event {
   id: number;
@@ -39,7 +39,7 @@ export class ScheduleService {
   }
 
   static buildPublicLink(schedule: Schedule): string {
-    return `${API_URL!}/api/public/schedules/${schedule.publicUUID}`;
+    return `${APP_URL!}/public/schedule/${schedule.publicUUID}`;
   }
 
   static async getSchedule(id: number): Promise<any> {

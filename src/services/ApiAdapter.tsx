@@ -10,7 +10,6 @@ export class ApiAdapter {
   static async put(resource: string, formData: FormData = new FormData()): Promise<Response> {
     const request = new Request(`${API_URL}${resource}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'multipart/form-data' },
       body: formData,
       redirect: 'follow',
     });
@@ -23,7 +22,7 @@ export class ApiAdapter {
   ): Promise<Response> {
     const request = new Request(`${API_URL}${resource}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data', invalid: 'true' },
+      headers: { invalid: 'true' },
       body: formData,
       redirect: 'follow',
     });
@@ -33,7 +32,6 @@ export class ApiAdapter {
   static async post(resource: string, formData: FormData = new FormData()): Promise<Response> {
     const request = new Request(`${API_URL}${resource}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data' },
       body: formData,
       redirect: 'follow',
     });
@@ -85,12 +83,12 @@ export class ApiAdapter {
   }
 
   private static async authAndFetch(request: Request): Promise<Response> {
-    const user = AuthService.getCurrentUser();
-    if (user === null) {
+    const token = AuthService.getToken();
+    if (token === null) {
       history.push('/login');
       return Promise.reject('Not logged in');
     }
-    request.headers.set('Authorization', `Bearer ${user.token}`);
+    request.headers.set('Authorization', `Bearer ${token.token}`);
     return fetch(request);
   }
 }

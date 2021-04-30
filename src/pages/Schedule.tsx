@@ -1,6 +1,6 @@
 import CenteredHeader from '../components/CenteredHeader';
-import React, { useState, useEffect } from 'react';
-import { Badge, Calendar, Col, List, Row, Spin, Button } from 'antd';
+import { useState, useEffect } from 'react';
+import { Badge, Calendar, Col, List, Row, Spin, Button, Input } from 'antd';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
@@ -15,9 +15,9 @@ function getBadgeText(count: number): string {
     case 0:
       return '';
     case 1:
-      return '1 event';
+      return '1';
     default:
-      return `${count} events`;
+      return `${count}`;
   }
 }
 
@@ -25,26 +25,27 @@ function dateCellRender(date: moment.Moment, schedule: ISchedule) {
   const events = findEventsOnSameDay(schedule, date);
   return (
     events.length > 0 && (
+      <Row justify={'center'} align={'middle'}>
+        <Badge count={getBadgeText(events.length)} style={{ backgroundColor: '#52c41a' }} />
+      </Row>
+    )
+  );
+}
+
+function monthCellRender(date: moment.Moment, schedule: ISchedule) {
+  const events = findEventsOnSameMonth(schedule, date);
+  return (
+    events.length > 0 && (
       <Badge count={getBadgeText(events.length)} style={{ backgroundColor: '#52c41a' }} />
     )
   );
 }
 
-function getMonthData(date: moment.Moment) {
-  return '';
-}
-
-function monthCellRender(value: moment.Moment) {
-  const num = getMonthData(value);
-  return num ? (
-    <div className="notes-month">
-      <section>{num}</section>
-    </div>
-  ) : null;
-}
-
 function findEventsOnSameDay(schedule: ISchedule, date: moment.Moment): Array<Event> {
   return schedule.events.filter((e: Event) => moment(e.beginTime).isSame(date, 'day'));
+}
+function findEventsOnSameMonth(schedule: ISchedule, date: moment.Moment): Array<Event> {
+  return schedule.events.filter((e: Event) => moment(e.beginTime).isSame(date, 'month'));
 }
 
 export default function Schedule() {
@@ -59,7 +60,6 @@ export default function Schedule() {
   function loadSchedule() {
     ScheduleService.getSchedule(parseInt(params.id))
       .then((data) => {
-        console.log('data', data);
         setSchedule(data);
         setLoading(false);
         setPublicLink(ScheduleService.buildPublicLink(data));
@@ -72,11 +72,11 @@ export default function Schedule() {
   useEffect(() => {
     loadSchedule();
   }, [params.id]);
-  console.log(schedule);
 
   useEffect(() => {
     if (schedule) {
       setCurrentEvents(findEventsOnSameDay(schedule, dateValue));
+      console.log(dateValue);
     }
   }, [dateValue, schedule]);
 
@@ -102,7 +102,7 @@ export default function Schedule() {
             <Col span={24} xl={12}>
               <Calendar
                 dateCellRender={(date: moment.Moment) => dateCellRender(date, schedule)}
-                monthCellRender={monthCellRender}
+                monthCellRender={(date: moment.Moment) => monthCellRender(date, schedule)}
                 value={dateValue}
                 onChange={(date) => setDateValue(date)}
               />
@@ -126,6 +126,12 @@ export default function Schedule() {
               >
                 <Button type="primary">Pobierz harmonogram</Button>
               </DownloadFileButton>
+            </Col>
+            <Col>
+              <Input addonBefore={'Publiczny link do harmonogramu'} value={publicLink} />
+            </Col>
+            <Col>
+              <CopyToClipboardButton content={publicLink} />
             </Col>
           </Row>
         </>
