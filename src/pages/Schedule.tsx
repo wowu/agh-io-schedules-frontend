@@ -90,9 +90,6 @@ export default function Schedule() {
         <>
           <Row justify={'end'} gutter={16}>
             <Col>
-              <CopyToClipboardButton content={publicLink} />
-            </Col>
-            <Col>
               <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
             </Col>
           </Row>
