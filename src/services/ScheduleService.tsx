@@ -111,7 +111,7 @@ export class ScheduleService {
 
   static async updateScheduleMetadata(fields: FormData, id: number) {
     try {
-      const response = await ApiAdapter.post(`/api/schedules/${id}/file`, fields);
+      const response = await ApiAdapter.post(`/api/schedules/${id}`, fields);
       const data = await response.json();
       return Promise.resolve({ response, data })
     } catch (error) {
