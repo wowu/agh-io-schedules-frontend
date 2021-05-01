@@ -10,6 +10,7 @@ interface UserFormProps {
   title: string;
   user?: User;
   visible: boolean;
+  fieldsToEdit: string[];
   onSubmit: (values: UserFormValues) => void;
   onCancel: () => void;
 }
@@ -37,12 +38,12 @@ export default function UserForm(props: UserFormProps) {
       }}
     >
       <Form id="addEmail" layout="vertical" form={form} initialValues={props.user}>
-        <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
+        {props.fieldsToEdit.includes('email') && <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
           <Input placeholder="kowalski@example.com" />
-        </Form.Item>
-        <Form.Item valuePropName="checked" name="activeSubscription">
+        </Form.Item>}
+        {props.fieldsToEdit.includes('activeSubscription') && <Form.Item valuePropName="checked" name="activeSubscription">
           <Checkbox>Włączone powiadomienia</Checkbox>
-        </Form.Item>
+        </Form.Item>}
       </Form>
     </Modal>
   );

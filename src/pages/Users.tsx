@@ -44,7 +44,7 @@ export default function Users() {
     <>
       <CenteredHeader title={'Użytkownicy'} />
 
-      <UsersTable loading={loading} users={users} onRemove={onRemove} onEdit={onEdit} />
+      <UsersTable loading={loading} users={users} onRemove={onRemove} onEdit={onEdit} fieldsToShow={['email', 'activeSubscription']} />
 
       <br />
 
@@ -58,6 +58,7 @@ export default function Users() {
           onSubmit={onCreateFormSubmit}
           title="Dodaj użytkownika"
           onCancel={() => setCreateModalVisible(false)}
+          fieldsToEdit={['email', 'activeSubscription']}
         />
       </Row>
     </>

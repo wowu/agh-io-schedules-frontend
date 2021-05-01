@@ -1,13 +1,14 @@
-import { Col, Row, Space, Table, Tag } from "antd";
-import { User } from "../services/UserService";
-import UserEdit from "./UserEdit";
-import { UserFormValues } from "./UserForm";
+import { Col, Row, Space, Table, Tag } from 'antd';
+import { User } from '../services/UserService';
+import UserEdit from './UserEdit';
+import { UserFormValues } from './UserForm';
 
 export interface UsersTableProps {
   users: User[];
   loading: boolean;
+  fieldsToShow: string[];
   onRemove: (User: User) => void;
-  onEdit: (User: User, values: UserFormValues) => void;
+  onEdit?: (User: User, values: UserFormValues) => void;
 }
 
 export default function UsersTable(props: UsersTableProps) {
@@ -17,24 +18,30 @@ export default function UsersTable(props: UsersTableProps) {
       dataIndex: 'email',
     },
     {
-      title: 'Powiadomienia',
-      dataIndex: 'activeSubscription',
-      render: (_text: string, record: User) =>
-        record.activeSubscription ? <Tag color="green">TAK</Tag> : <Tag color="red">NIE</Tag>,
-    },
-    {
       title: 'Akcje',
       key: 'actions',
       render: (_text: string, record: User) => (
         <>
           <Space size="middle">
-            <UserEdit onEdit={props.onEdit} user={record} />
+            { props.onEdit && <UserEdit onEdit={props.onEdit} user={record} fieldsToEdit={props.fieldsToShow}/>}
             <a onClick={() => props.onRemove(record)}>Usuń</a>
           </Space>
         </>
       ),
     },
   ];
+
+  if (props.fieldsToShow.includes('activeSubscription')) {
+    columns.splice(1, 0, {
+      title: 'Powiadomienia',
+      key: 'activeSubscription',
+      render: (_text: string, record: User) =>
+        record.activeSubscription ? <Tag color="green">TAK</Tag> : <Tag color="green">Nie</Tag>,
+    });
+  }
+
+  console.log("users", props.users);
+  
 
   return (
     <Row justify={'center'}>

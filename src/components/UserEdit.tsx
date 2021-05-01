@@ -4,6 +4,7 @@ import UserForm, { UserFormValues } from "./UserForm";
 
 export interface UserEditProps {
   user: User;
+  fieldsToEdit: string[];
   onEdit: (user: User, values: UserFormValues) => void;
 }
 
@@ -24,6 +25,7 @@ export default function UserEdit(props: UserEditProps) {
         onSubmit={onEdit}
         user={props.user}
         title="Edytuj użytkownika"
+        fieldsToEdit={props.fieldsToEdit}
         onCancel={() => setVisible(false)}
       />
     </>
