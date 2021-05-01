@@ -1,6 +1,6 @@
 import CenteredHeader from '../components/CenteredHeader';
 import { useState, useEffect } from 'react';
-import { Badge, Calendar, Col, List, Row, Spin, Button, Input } from 'antd';
+import { Badge, Calendar, Col, List, Row, Spin, Button, Input, notification } from 'antd';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
@@ -9,7 +9,7 @@ import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
 import { DownloadFileButton } from '../components/DownloadFileButton';
 import UpdateScheduleMetadataModal from '../components/UpdateScheduleMetadataModal';
-import { useUser } from '../helpers/user';
+import PublicSubscribeForm, { PublicSubscribeFormValues } from '../components/PublicSubscribeForm';
 
 function getBadgeText(count: number): string {
   switch (count) {
@@ -51,12 +51,12 @@ function findEventsOnSameMonth(schedule: ISchedule, date: moment.Moment): Array<
 
 export default function Schedule() {
   const { id, publicUUID } = useParams<any>();
-  const user = useUser();
   const [schedule, setSchedule] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
   const [dateValue, setDateValue] = useState<moment.Moment>(moment());
   const [currentEvents, setCurrentEvents] = useState<Array<Event>>([]);
   const [publicLink, setPublicLink] = useState<string>('');
+  const [errorSubscribing, setErrorSubscribing] = useState<boolean>(false);
 
   let isPublic = false;
   if (publicUUID) {
@@ -66,7 +66,8 @@ export default function Schedule() {
   function loadSchedule() {
     let promise;
     if (isPublic) {
-      promise = ScheduleService.getPublicSchedule(publicUUID);
+      promise = ScheduleService.getSchedule(1);
+      // promise = ScheduleService.getPublicSchedule(publicUUID);
     } else if (id) {
       promise = ScheduleService.getSchedule(parseInt(id));
     } else {
@@ -94,6 +95,24 @@ export default function Schedule() {
       console.log(dateValue);
     }
   }, [dateValue, schedule]);
+
+  function handlePublicSubcriptionSubmit(values: PublicSubscribeFormValues) {
+    console.log(values);
+    ScheduleService.addPublicSubscriber(values.email, publicUUID)
+      .then((data) => {
+        notification.info({
+          message: 'Jesteś zapisany na ten harmonogram',
+          duration: 3,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        notification.warn({
+          message: 'Wystąpił błąd przy zapisywaniu',
+          duration: 3,
+        });
+      });
+  }
 
   return (
     <>
@@ -150,6 +169,11 @@ export default function Schedule() {
               </Col>
             </Row>
           )}
+          {isPublic && <Row justify="center">
+            <Col>
+              <PublicSubscribeForm onSubmit={handlePublicSubcriptionSubmit} />
+            </Col>
+          </Row>}
         </>
       )}
     </>
