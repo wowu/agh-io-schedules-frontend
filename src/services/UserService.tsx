@@ -77,7 +77,12 @@ export class UserService {
         })
       );
       let data = await response.json();
-      return Promise.resolve({ response, data });
+
+      let error;
+      if (data.error) error = data.error;
+      if (data.ERROR) error = data.ERROR;
+
+      return Promise.resolve({ response, data, error });
     } catch (error) {
       console.error('createUser: ', error);
       return Promise.reject(error);
@@ -93,7 +98,12 @@ export class UserService {
         })
       );
       let data = await response.json();
-      return Promise.resolve({ response, data });
+
+      let error;
+      if (data.error) error = data.error;
+      if (data.ERROR) error = data.ERROR;
+
+      return Promise.resolve({ response, data, error });
     } catch (error) {
       console.error('changePassword: ', error);
       return Promise.reject(error);
