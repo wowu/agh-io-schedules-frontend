@@ -10,6 +10,7 @@ export type User = {
 type Response<T> = {
   response: any;
   data: T;
+  error?: string;
 };
 
 export class UserService {
@@ -35,17 +36,27 @@ export class UserService {
     }
   }
 
-  static async createUser(email: string, activeSubscription: boolean): Promise<Response<User>> {
+  static async createUser(
+    email: string,
+    password: string,
+    activeSubscription: boolean
+  ): Promise<Response<User>> {
     try {
       const response = await ApiAdapter.post(
         '/api/users/',
         objectToFormData({
           email,
+          password,
           activeSubscription,
         })
       );
       let data = await response.json();
-      return Promise.resolve({ response, data });
+
+      let error;
+      if (data.error) error = data.error;
+      if (data.ERROR) error = data.ERROR;
+
+      return Promise.resolve({ response, data, error });
     } catch (error) {
       console.error('createUser: ', error);
       return Promise.reject(error);

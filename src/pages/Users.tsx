@@ -1,4 +1,4 @@
-import { Button, Col, Row, Space, Table, Tag } from 'antd';
+import { Button, Col, notification, Row, Space, Table, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
 import UserForm, { UserFormValues } from '../components/UserForm';
@@ -22,12 +22,21 @@ export default function Users() {
     fetchUsers();
   }, []);
 
-  const onCreateFormSubmit = async (values: UserFormValues) => {
-    setCreateModalVisible(false);
+  const onCreateFormSubmit = async (values: UserFormValues): Promise<boolean> => {
+    const { response, error } = await UserService.createUser(
+      values.email,
+      values.password,
+      values.activeSubscription
+    );
 
-    await UserService.createUser(values.email, values.activeSubscription);
-
-    fetchUsers();
+    if (response.ok) {
+      setCreateModalVisible(false);
+      fetchUsers();
+      return true;
+    } else {
+      notification['error']({ message: 'Błąd', description: error });
+      return false;
+    }
   };
 
   const onRemove = async (User: User) => {
@@ -55,7 +64,7 @@ export default function Users() {
       <br />
 
       <Row justify={'center'}>
-        <Button danger type="primary" onClick={() => setCreateModalVisible(true)}>
+        <Button type="primary" onClick={() => setCreateModalVisible(true)}>
           Dodaj użytkownika
         </Button>
 
@@ -64,7 +73,7 @@ export default function Users() {
           onSubmit={onCreateFormSubmit}
           title="Dodaj użytkownika"
           onCancel={() => setCreateModalVisible(false)}
-          fieldsToEdit={['email', 'activeSubscription']}
+          fieldsToEdit={['email', 'activeSubscription', 'password']}
         />
       </Row>
     </>

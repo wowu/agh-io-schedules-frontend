@@ -50,12 +50,12 @@ export class ApiAdapter {
     let options: any = {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-    }
+    };
     if (formData instanceof FormData) {
       options = {
         method: 'DELETE',
         body: formData,
-      }
+      };
     }
     const request = new Request(`${API_URL}${resource}`, options);
     return this.call(request);
