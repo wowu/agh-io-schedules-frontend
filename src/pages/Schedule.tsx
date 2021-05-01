@@ -81,6 +81,10 @@ export default function Schedule() {
       console.log(dateValue);
     }
   }, [dateValue, schedule]);
+  
+  function getScheduleFilename() {
+    return schedule.name.replace(/ /g, '_') + '.xls';
+  }
 
   return (
     <>
@@ -121,7 +125,7 @@ export default function Schedule() {
             <Col>
               <DownloadFileButton
                 downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)}
-                filename={'schedule.xls'}
+                filename={getScheduleFilename()}
               >
                 <Button type="primary">Pobierz harmonogram</Button>
               </DownloadFileButton>
