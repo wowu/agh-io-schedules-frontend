@@ -66,8 +66,7 @@ export default function Schedule() {
   function loadSchedule() {
     let promise;
     if (isPublic) {
-      promise = ScheduleService.getSchedule(1);
-      // promise = ScheduleService.getPublicSchedule(publicUUID);
+      promise = ScheduleService.getPublicSchedule(publicUUID);
     } else if (id) {
       promise = ScheduleService.getSchedule(parseInt(id));
     } else {
