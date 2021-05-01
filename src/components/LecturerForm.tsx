@@ -1,4 +1,5 @@
 import { Modal, Form, Input, Checkbox } from 'antd';
+import { useEffect, useState } from 'react';
 import { Lecturer } from '../services/LecturerEmailsService';
 
 export interface LecturerFormValues {
@@ -19,6 +20,13 @@ interface LecturerFormProps {
 export default function LecturerForm(props: LecturerFormProps) {
   const [form] = Form.useForm();
 
+  useEffect(() => {
+    form.setFieldsValue({
+      activeSubscription: false,
+      ...props.lecturer,
+    });
+  }, [props.lecturer]);
+
   return (
     <Modal
       visible={props.visible}
@@ -38,7 +46,7 @@ export default function LecturerForm(props: LecturerFormProps) {
           });
       }}
     >
-      <Form id="addEmail" layout="vertical" form={form} initialValues={props.lecturer}>
+      <Form id="addEmail" layout="vertical" form={form}>
         <Form.Item name="name" label="Imię" rules={[{ required: true }]}>
           <Input placeholder="Jan" />
         </Form.Item>
