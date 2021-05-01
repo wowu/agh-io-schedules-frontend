@@ -1,11 +1,10 @@
 import { Button, Col, Row, Space, Table, Tag } from 'antd';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { ScheduleService } from '../services/ScheduleService';
 import { User, UserService } from '../services/UserService';
 import CenteredHeader from './CenteredHeader';
 import UserForm, { UserFormValues } from './UserForm';
 import UsersTable from './UserTable';
-
 
 export default function ScheduleSubscribersManagement(props: any) {
   const [subscribers, setSubscribers] = useState<User[]>([]);
@@ -33,34 +32,38 @@ export default function ScheduleSubscribersManagement(props: any) {
   };
 
   const onRemove = async (User: User) => {
-    await ScheduleService.removeSubscriber(User.email, props.scheduleId);
+    await ScheduleService.removeSubscriber(User.id, props.scheduleId);
     fetchSubscribers();
   };
 
-  console.log("subsctibers", subscribers);
-  
-  
+  console.log('subscribers', subscribers);
+
   return (
     <>
-      <CenteredHeader title={'Uczęstnicy'} />
+      <CenteredHeader title={'Uczestnicy'} />
 
-      <UsersTable loading={loading} users={subscribers} onRemove={onRemove} fieldsToShow={['email']} />
+      <UsersTable
+        loading={loading}
+        users={subscribers}
+        onRemove={onRemove}
+        fieldsToShow={['email']}
+      />
 
       <br />
 
       <Row justify={'center'}>
         <Button type="primary" onClick={() => setCreateModalVisible(true)}>
-          Dodaj uczęstnika
+          Dodaj uczestnika
         </Button>
 
         <UserForm
           visible={createModalVisible}
           onSubmit={onCreateFormSubmit}
-          title="Dodaj uczęstnika"
+          title="Dodaj uczestnika"
           onCancel={() => setCreateModalVisible(false)}
-          fieldsToEdit = {['email']}
+          fieldsToEdit={['email']}
         />
       </Row>
     </>
-  )
+  );
 }

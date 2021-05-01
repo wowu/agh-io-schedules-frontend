@@ -44,12 +44,18 @@ export default function Users() {
     <>
       <CenteredHeader title={'Użytkownicy'} />
 
-      <UsersTable loading={loading} users={users} onRemove={onRemove} onEdit={onEdit} fieldsToShow={['email', 'activeSubscription']} />
+      <UsersTable
+        loading={loading}
+        users={users}
+        onRemove={onRemove}
+        onEdit={onEdit}
+        fieldsToShow={['email', 'activeSubscription']}
+      />
 
       <br />
 
       <Row justify={'center'}>
-        <Button type="primary" onClick={() => setCreateModalVisible(true)}>
+        <Button danger type="primary" onClick={() => setCreateModalVisible(true)}>
           Dodaj użytkownika
         </Button>
 

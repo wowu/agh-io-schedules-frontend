@@ -1,4 +1,4 @@
-import { Col, Row, Space, Table, Tag } from 'antd';
+import { Button, Col, Row, Space, Table, Tag } from 'antd';
 import { User } from '../services/UserService';
 import UserEdit from './UserEdit';
 import { UserFormValues } from './UserForm';
@@ -23,8 +23,12 @@ export default function UsersTable(props: UsersTableProps) {
       render: (_text: string, record: User) => (
         <>
           <Space size="middle">
-            { props.onEdit && <UserEdit onEdit={props.onEdit} user={record} fieldsToEdit={props.fieldsToShow}/>}
-            <a onClick={() => props.onRemove(record)}>Usuń</a>
+            {props.onEdit && (
+              <UserEdit onEdit={props.onEdit} user={record} fieldsToEdit={props.fieldsToShow} />
+            )}
+            <Button danger onClick={() => props.onRemove(record)}>
+              Usuń
+            </Button>
           </Space>
         </>
       ),
@@ -40,8 +44,7 @@ export default function UsersTable(props: UsersTableProps) {
     });
   }
 
-  console.log("users", props.users);
-  
+  console.log('users', props.users);
 
   return (
     <Row justify={'center'}>

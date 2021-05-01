@@ -4,7 +4,7 @@ import { Badge, Calendar, Col, List, Row, Spin, Button, Input } from 'antd';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
-import Users from './Users'
+import Users from './Users';
 import UpdateScheduleModal from '../components/UpdateScheduleModal';
 import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
@@ -133,9 +133,9 @@ export default function Schedule() {
               <CopyToClipboardButton content={publicLink} />
             </Col>
           </Row>
-          <Row justify={"center"}>
+          <Row justify={'center'}>
             <Col span={24}>
-             <ScheduleSubscribersManagement scheduleId={schedule.id}/>
+              <ScheduleSubscribersManagement scheduleId={schedule.id} />
             </Col>
           </Row>
         </>
