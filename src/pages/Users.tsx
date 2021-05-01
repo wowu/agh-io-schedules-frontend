@@ -2,77 +2,8 @@ import { Button, Col, Row, Space, Table, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
 import UserForm, { UserFormValues } from '../components/UserForm';
+import UsersTable from '../components/UserTable';
 import { User, UserService } from '../services/UserService';
-
-interface UserEditProps {
-  user: User;
-  onEdit: (user: User, values: UserFormValues) => void;
-}
-
-function UserEdit(props: UserEditProps) {
-  const [visible, setVisible] = useState<boolean>(false);
-
-  const onEdit = (values: UserFormValues) => {
-    setVisible(false);
-    props.onEdit(props.user, values);
-  };
-
-  return (
-    <>
-      <a onClick={() => setVisible(true)}>Edytuj</a>
-
-      <UserForm
-        visible={visible}
-        onSubmit={onEdit}
-        user={props.user}
-        title="Edytuj użytkownika"
-        onCancel={() => setVisible(false)}
-      />
-    </>
-  );
-}
-
-interface UsersTableProps {
-  users: User[];
-  loading: boolean;
-  onRemove: (User: User) => void;
-  onEdit: (User: User, values: UserFormValues) => void;
-}
-
-function UsersTable(props: UsersTableProps) {
-  const columns = [
-    {
-      title: 'Email',
-      dataIndex: 'email',
-    },
-    {
-      title: 'Powiadomienia',
-      dataIndex: 'activeSubscription',
-      render: (_text: string, record: User) =>
-        record.activeSubscription ? <Tag color="green">TAK</Tag> : <Tag color="red">NIE</Tag>,
-    },
-    {
-      title: 'Akcje',
-      key: 'actions',
-      render: (_text: string, record: User) => (
-        <>
-          <Space size="middle">
-            <UserEdit onEdit={props.onEdit} user={record} />
-            <a onClick={() => props.onRemove(record)}>Usuń</a>
-          </Space>
-        </>
-      ),
-    },
-  ];
-
-  return (
-    <Row justify={'center'}>
-      <Col span={24} lg={18} xl={14}>
-        <Table loading={props.loading} dataSource={props.users} columns={columns} />
-      </Col>
-    </Row>
-  );
-}
 
 export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
@@ -113,12 +44,18 @@ export default function Users() {
     <>
       <CenteredHeader title={'Użytkownicy'} />
 
-      <UsersTable loading={loading} users={users} onRemove={onRemove} onEdit={onEdit} />
+      <UsersTable
+        loading={loading}
+        users={users}
+        onRemove={onRemove}
+        onEdit={onEdit}
+        fieldsToShow={['email', 'activeSubscription']}
+      />
 
       <br />
 
       <Row justify={'center'}>
-        <Button type="primary" onClick={() => setCreateModalVisible(true)}>
+        <Button danger type="primary" onClick={() => setCreateModalVisible(true)}>
           Dodaj użytkownika
         </Button>
 
@@ -127,6 +64,7 @@ export default function Users() {
           onSubmit={onCreateFormSubmit}
           title="Dodaj użytkownika"
           onCancel={() => setCreateModalVisible(false)}
+          fieldsToEdit={['email', 'activeSubscription']}
         />
       </Row>
     </>

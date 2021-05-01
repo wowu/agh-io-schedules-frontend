@@ -27,6 +27,40 @@ export interface Schedule {
 }
 
 export class ScheduleService {
+  static async removeSubscriber(sub_id: number, id: any) {
+    try {
+      const response = await ApiAdapter.delete(`/api/schedules/${id}/subscribers/${sub_id}`);
+      return Promise.resolve({ response });
+    } catch (error) {
+      console.error('removeSubscriber: ', error);
+      return Promise.reject(error);
+    }
+  }
+
+  static async addSubscriber(email: string, id: any) {
+    try {
+      const fields = new FormData();
+      fields.append('email', email);
+      const response = await ApiAdapter.post(`/api/schedules/${id}/subscribers`, fields);
+      let data = await response.json();
+      return Promise.resolve({ response, data });
+    } catch (error) {
+      console.error('addSubscriber: ', error);
+      return Promise.reject(error);
+    }
+  }
+
+  static async getSubscribers(id: any) {
+    try {
+      const response = await ApiAdapter.get(`/api/schedules/${id}/subscribers`);
+      let data = await response.json();
+      return Promise.resolve({ response, data });
+    } catch (error) {
+      console.error('getSubscribers: ', error);
+      return Promise.reject(error);
+    }
+  }
+
   static async downloadSchedule(id: any): Promise<any> {
     try {
       const response = await ApiAdapter.get(`/api/schedules/${id}/file`);
@@ -111,12 +145,12 @@ export class ScheduleService {
 
   static async updateScheduleMetadata(fields: FormData, id: number) {
     try {
-      const response = await ApiAdapter.post(`/api/schedules/${id}`, fields);
-      const data = await response.json();
-      return Promise.resolve({ response, data })
+      const response = await ApiAdapter.put(`/api/schedules/${id}`, fields);
+      // const data = await response.json();
+      return Promise.resolve({ response });
     } catch (error) {
       console.log('updateScheduleMetadata: error');
-      return Promise.reject({ error, data: {} });
+      return Promise.reject({ error });
     }
   }
 

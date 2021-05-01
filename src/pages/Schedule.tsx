@@ -4,11 +4,13 @@ import { Badge, Calendar, Col, List, Row, Spin, Button, Input } from 'antd';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
+import Users from './Users';
 import UpdateScheduleModal from '../components/UpdateScheduleModal';
 import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
 import { DownloadFileButton } from '../components/DownloadFileButton';
 import UpdateScheduleMetadataModal from '../components/UpdateScheduleMetadataModal';
+import ScheduleSubscribersManagement from '../components/ScheduleSubscribersTable';
 
 function getBadgeText(count: number): string {
   switch (count) {
@@ -129,6 +131,11 @@ export default function Schedule() {
             </Col>
             <Col>
               <CopyToClipboardButton content={publicLink} />
+            </Col>
+          </Row>
+          <Row justify={'center'}>
+            <Col span={24}>
+              <ScheduleSubscribersManagement scheduleId={schedule.id} />
             </Col>
           </Row>
         </>
