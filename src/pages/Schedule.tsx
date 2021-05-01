@@ -58,7 +58,7 @@ export default function Schedule() {
   const [currentEvents, setCurrentEvents] = useState<Array<Event>>([]);
   const [publicLink, setPublicLink] = useState<string>('');
 
-  let isPublic = false
+  let isPublic = false;
   if (publicUUID) {
     isPublic = true;
   }
@@ -69,10 +69,12 @@ export default function Schedule() {
       promise = ScheduleService.getPublicSchedule(publicUUID);
     } else if (id) {
       promise = ScheduleService.getSchedule(parseInt(id));
-    } else { return; }
+    } else {
+      return;
+    }
 
     promise
-      .then((data) => {      
+      .then((data) => {
         setSchedule(data);
         setLoading(false);
         setPublicLink(ScheduleService.buildPublicLink(data));
@@ -101,11 +103,13 @@ export default function Schedule() {
         </Row>
       ) : (
         <>
-          { !isPublic && <Row justify={'end'} gutter={16}>
-            <Col>
-              <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
-            </Col>
-          </Row>}
+          {!isPublic && (
+            <Row justify={'end'} gutter={16}>
+              <Col>
+                <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
+              </Col>
+            </Row>
+          )}
           <CenteredHeader title={schedule.name} subtitle={schedule.description} />
 
           <Row gutter={[16, 16]} justify="space-between">
@@ -125,7 +129,7 @@ export default function Schedule() {
               />
             </Col>
           </Row>
-          { !isPublic &&
+          {!isPublic && (
             <Row gutter={16}>
               <Col>
                 <UpdateScheduleModal />
@@ -144,7 +148,8 @@ export default function Schedule() {
               <Col>
                 <CopyToClipboardButton content={publicLink} />
               </Col>
-            </Row>}
+            </Row>
+          )}
         </>
       )}
     </>

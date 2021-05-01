@@ -27,10 +27,11 @@ export interface Schedule {
 }
 
 export class ScheduleService {
-
   static async getPublicSchedule(publicUUID: any): Promise<any> {
     try {
-      const response = await ApiAdapter.get(`/api/public/schedules/${publicUUID}`, {tryAuthorize: false});
+      const response = await ApiAdapter.get(`/api/public/schedules/${publicUUID}`, {
+        tryAuthorize: false,
+      });
       let data = await response.json();
       return Promise.resolve(data);
     } catch (error) {
@@ -41,7 +42,7 @@ export class ScheduleService {
 
   static async downloadSchedule(id: any): Promise<any> {
     try {
-      const response = await ApiAdapter.get(`/api/schedules/${id}/file`, {tryAuthorize: false});
+      const response = await ApiAdapter.get(`/api/schedules/${id}/file`, { tryAuthorize: false });
       let blob = await response.blob();
       return Promise.resolve(blob);
     } catch (error) {
@@ -125,7 +126,7 @@ export class ScheduleService {
     try {
       const response = await ApiAdapter.post(`/api/schedules/${id}`, fields);
       const data = await response.json();
-      return Promise.resolve({ response, data })
+      return Promise.resolve({ response, data });
     } catch (error) {
       console.log('updateScheduleMetadata: error');
       return Promise.reject({ error, data: {} });
