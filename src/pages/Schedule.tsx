@@ -9,6 +9,7 @@ import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
 import { DownloadFileButton } from '../components/DownloadFileButton';
 import UpdateScheduleMetadataModal from '../components/UpdateScheduleMetadataModal';
+import { useUser } from '../helpers/user';
 
 function getBadgeText(count: number): string {
   switch (count) {
@@ -49,17 +50,29 @@ function findEventsOnSameMonth(schedule: ISchedule, date: moment.Moment): Array<
 }
 
 export default function Schedule() {
-  const params = useParams<any>();
-
+  const { id, publicUUID } = useParams<any>();
+  const user = useUser();
   const [schedule, setSchedule] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
   const [dateValue, setDateValue] = useState<moment.Moment>(moment());
   const [currentEvents, setCurrentEvents] = useState<Array<Event>>([]);
   const [publicLink, setPublicLink] = useState<string>('');
 
+  let isPublic = false
+  if (publicUUID) {
+    isPublic = true;
+  }
+
   function loadSchedule() {
-    ScheduleService.getSchedule(parseInt(params.id))
-      .then((data) => {
+    let promise;
+    if (isPublic) {
+      promise = ScheduleService.getPublicSchedule(publicUUID);
+    } else if (id) {
+      promise = ScheduleService.getSchedule(parseInt(id));
+    } else { return; }
+
+    promise
+      .then((data) => {      
         setSchedule(data);
         setLoading(false);
         setPublicLink(ScheduleService.buildPublicLink(data));
@@ -71,7 +84,7 @@ export default function Schedule() {
 
   useEffect(() => {
     loadSchedule();
-  }, [params.id]);
+  }, [id]);
 
   useEffect(() => {
     if (schedule) {
@@ -88,11 +101,11 @@ export default function Schedule() {
         </Row>
       ) : (
         <>
-          <Row justify={'end'} gutter={16}>
+          { !isPublic && <Row justify={'end'} gutter={16}>
             <Col>
               <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
             </Col>
-          </Row>
+          </Row>}
           <CenteredHeader title={schedule.name} subtitle={schedule.description} />
 
           <Row gutter={[16, 16]} justify="space-between">
@@ -112,25 +125,26 @@ export default function Schedule() {
               />
             </Col>
           </Row>
-          <Row gutter={16}>
-            <Col>
-              <UpdateScheduleModal />
-            </Col>
-            <Col>
-              <DownloadFileButton
-                downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)}
-                filename={'schedule.xls'}
-              >
-                <Button type="primary">Pobierz harmonogram</Button>
-              </DownloadFileButton>
-            </Col>
-            <Col>
-              <Input addonBefore={'Publiczny link do harmonogramu'} value={publicLink} />
-            </Col>
-            <Col>
-              <CopyToClipboardButton content={publicLink} />
-            </Col>
-          </Row>
+          { !isPublic &&
+            <Row gutter={16}>
+              <Col>
+                <UpdateScheduleModal />
+              </Col>
+              <Col>
+                <DownloadFileButton
+                  downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)}
+                  filename={'schedule.xls'}
+                >
+                  <Button type="primary">Pobierz harmonogram</Button>
+                </DownloadFileButton>
+              </Col>
+              <Col>
+                <Input addonBefore={'Publiczny link do harmonogramu'} value={publicLink} />
+              </Col>
+              <Col>
+                <CopyToClipboardButton content={publicLink} />
+              </Col>
+            </Row>}
         </>
       )}
     </>

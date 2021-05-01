@@ -27,9 +27,21 @@ export interface Schedule {
 }
 
 export class ScheduleService {
+
+  static async getPublicSchedule(publicUUID: any): Promise<any> {
+    try {
+      const response = await ApiAdapter.get(`/api/public/schedules/${publicUUID}`, {tryAuthorize: false});
+      let data = await response.json();
+      return Promise.resolve(data);
+    } catch (error) {
+      console.log('downloadSchedule: ', error);
+      return Promise.reject(error);
+    }
+  }
+
   static async downloadSchedule(id: any): Promise<any> {
     try {
-      const response = await ApiAdapter.get(`/api/schedules/${id}/file`);
+      const response = await ApiAdapter.get(`/api/schedules/${id}/file`, {tryAuthorize: false});
       let blob = await response.blob();
       return Promise.resolve(blob);
     } catch (error) {
