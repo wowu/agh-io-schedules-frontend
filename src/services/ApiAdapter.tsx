@@ -50,11 +50,18 @@ export class ApiAdapter {
     return this.call(request, options);
   }
 
-  static async delete(resource: string): Promise<Response> {
-    const request = new Request(`${API_URL}${resource}`, {
+  static async delete(resource: string, formData: any = undefined): Promise<Response> {
+    let options: any = {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-    });
+    }
+    if (formData instanceof FormData) {
+      options = {
+        method: 'DELETE',
+        body: formData,
+      }
+    }
+    const request = new Request(`${API_URL}${resource}`, options);
     return this.call(request);
   }
 

@@ -4,12 +4,14 @@ import { Badge, Calendar, Col, List, Row, Spin, Button, Input, notification } fr
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
+import Users from './Users';
 import UpdateScheduleModal from '../components/UpdateScheduleModal';
 import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
 import { DownloadFileButton } from '../components/DownloadFileButton';
 import UpdateScheduleMetadataModal from '../components/UpdateScheduleMetadataModal';
 import PublicSubscribeForm, { PublicSubscribeFormValues } from '../components/PublicSubscribeForm';
+import ScheduleSubscribersManagement from '../components/ScheduleSubscribersTable';
 
 function getBadgeText(count: number): string {
   switch (count) {
@@ -148,31 +150,38 @@ export default function Schedule() {
             </Col>
           </Row>
           {!isPublic && (
-            <Row gutter={16}>
-              <Col>
-                <UpdateScheduleModal />
-              </Col>
-              <Col>
-                <DownloadFileButton
-                  downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)}
-                  filename={'schedule.xls'}
-                >
-                  <Button type="primary">Pobierz harmonogram</Button>
-                </DownloadFileButton>
-              </Col>
-              <Col>
-                <Input addonBefore={'Publiczny link do harmonogramu'} value={publicLink} />
-              </Col>
-              <Col>
-                <CopyToClipboardButton content={publicLink} />
-              </Col>
-            </Row>
+            <>
+              <Row gutter={16}>
+                <Col>
+                  <UpdateScheduleModal />
+                </Col>
+                <Col>
+                  <DownloadFileButton
+                    downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)}
+                    filename={'schedule.xls'}
+                  >
+                    <Button type="primary">Pobierz harmonogram</Button>
+                  </DownloadFileButton>
+                </Col>
+                <Col>
+                  <Input addonBefore={'Publiczny link do harmonogramu'} value={publicLink} />
+                </Col>
+                <Col>
+                  <CopyToClipboardButton content={publicLink} />
+                </Col>
+              </Row>
+              <Row justify={'center'}>
+                <Col span={24}>
+                  <ScheduleSubscribersManagement scheduleId={schedule.id} />
+                </Col>
+              </Row>
+            </>
           )}
           {isPublic && <Row justify="center">
             <Col>
               <PublicSubscribeForm onSubmit={handlePublicSubcriptionSubmit} />
             </Col>
-          </Row>}
+          </Row >}
         </>
       )}
     </>

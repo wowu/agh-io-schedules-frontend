@@ -91,7 +91,7 @@ export default function LecturerEmails() {
     setLoading(true);
     const { data } = await LecturerEmailsService.getLecturers();
     const { lecturers } = data;
-    setLecturers(lecturers);
+    setLecturers(lecturers.sort((a, b) => a.id - b.id));
     setLoading(false);
   };
 

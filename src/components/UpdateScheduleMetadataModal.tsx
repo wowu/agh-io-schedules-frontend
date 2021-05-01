@@ -1,5 +1,5 @@
 import { EditOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, Modal, Row } from 'antd';
+import { Button, Col, Input, Modal, Row } from 'antd';
 import React, { useState } from 'react';
 import { Schedule, ScheduleService } from '../services/ScheduleService';
 
@@ -54,12 +54,12 @@ export default function UpdateScheduleMetadataModal(props: UpdateScheduleMetadat
               value={name}
               onChange={(e) => setName(e.target.value)}
               style={{ marginBottom: 16 }}
-            ></Input>
+            />
             <Input
               addonBefore={'Opis'}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-            ></Input>
+            />
           </Col>
         </>
       </Modal>

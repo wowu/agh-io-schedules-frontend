@@ -58,8 +58,8 @@ export default function ScheduleList() {
                     <Popconfirm
                       title={
                         <span>
-                          Czy na pewno chcesz usunąć ten harmonogram? <br></br>Ta operacja jest
-                          nieodwracalna!
+                          Czy na pewno chcesz usunąć ten harmonogram? <br />
+                          Ta operacja jest nieodwracalna!
                         </span>
                       }
                       onConfirm={() => confirmRemove(item.id)}
