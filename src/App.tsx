@@ -48,9 +48,6 @@ function App() {
               <AppContent>
                 <Switch>
                   <PrivateRoute exact path="/">
-                    <Home />
-                  </PrivateRoute>
-                  <PrivateRoute path="/schedules">
                     <ScheduleList />
                   </PrivateRoute>
                   <PrivateRoute path="/import">
