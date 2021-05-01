@@ -27,6 +27,19 @@ export interface Schedule {
 }
 
 export class ScheduleService {
+  static async getSubscribers(id: any) {
+    try {
+      const response = await ApiAdapter.get(`/api/schedules/${id}/subscribers`);
+      let data = await response.json();
+      console.log(data);
+      
+      return Promise.resolve({ response, data });
+    } catch (error) {
+      console.error('getSubscribers: ', error);
+      return Promise.reject(error);
+    }
+  }
+
   static async downloadSchedule(id: any): Promise<any> {
     try {
       const response = await ApiAdapter.get(`/api/schedules/${id}/file`);
