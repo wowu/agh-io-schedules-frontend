@@ -22,19 +22,14 @@ function AppMenu() {
     <Menu theme="dark" mode="horizontal" selectable={false}>
       {user && (
         <>
-          <Menu.Item key="home">
-            <Link to="/">Strona główna</Link>
-          </Menu.Item>
-          {user.isAdmin && (
-            <Menu.Item key="import">
-              <Link to="/import">Wyślij</Link>
-            </Menu.Item>
-          )}
           <Menu.Item key="schedules">
-            <Link to="/schedules">Harmonogramy</Link>
+            <Link to="/">Harmonogramy</Link>
           </Menu.Item>
           {user.isAdmin && (
             <>
+              <Menu.Item key="import">
+                <Link to="/import">Wyślij nowy</Link>
+              </Menu.Item>
               <Menu.Item key="emails">
                 <Link to="/emails">Emaile prowadzących</Link>
               </Menu.Item>

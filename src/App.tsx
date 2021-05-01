@@ -3,7 +3,6 @@ import { Router, Switch, Route } from 'react-router-dom';
 import { ConfigProvider, Layout } from 'antd';
 import styled from 'styled-components';
 import plPL from 'antd/lib/locale/pl_PL';
-import Home from './pages/Home';
 import ScheduleList from './pages/ScheduleList';
 import ImportForm from './pages/ImportForm';
 import LoginForm from './pages/LoginForm';
@@ -48,9 +47,6 @@ function App() {
               <AppContent>
                 <Switch>
                   <PrivateRoute exact path="/">
-                    <Home />
-                  </PrivateRoute>
-                  <PrivateRoute path="/schedules">
                     <ScheduleList />
                   </PrivateRoute>
                   <PrivateRoute path="/import">
