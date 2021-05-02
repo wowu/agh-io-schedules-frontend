@@ -14,6 +14,7 @@ type Response<T> = {
   data: {
     lecturers: T;
   };
+  error?: string;
 };
 
 export class LecturerEmailsService {
@@ -45,7 +46,12 @@ export class LecturerEmailsService {
         })
       );
       let data = await response.json();
-      return Promise.resolve({ response, data });
+
+      let error;
+      if (data.error) error = data.error;
+      if (data.ERROR) error = data.ERROR;
+
+      return Promise.resolve({ response, data, error });
     } catch (error) {
       console.log('createLecturer: ', error);
       return Promise.reject(error);
@@ -70,7 +76,12 @@ export class LecturerEmailsService {
         })
       );
       let data = await response.json();
-      return Promise.resolve({ response, data });
+
+      let error;
+      if (data.error) error = data.error;
+      if (data.ERROR) error = data.ERROR;
+
+      return Promise.resolve({ response, data, error });
     } catch (error) {
       console.log('createLecturer: ', error);
       return Promise.reject(error);

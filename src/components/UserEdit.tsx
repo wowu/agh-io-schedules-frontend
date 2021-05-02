@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { User } from "../services/UserService";
-import UserForm, { UserFormValues } from "./UserForm";
+import { useState } from 'react';
+import { User } from '../services/UserService';
+import UserForm, { UserFormValues } from './UserForm';
 
 export interface UserEditProps {
   user: User;
@@ -11,9 +11,10 @@ export interface UserEditProps {
 export default function UserEdit(props: UserEditProps) {
   const [visible, setVisible] = useState<boolean>(false);
 
-  const onEdit = (values: UserFormValues) => {
+  const onEdit = (values: UserFormValues): Promise<boolean> => {
     setVisible(false);
     props.onEdit(props.user, values);
+    return Promise.resolve(true);
   };
 
   return (
