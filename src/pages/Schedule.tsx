@@ -83,7 +83,7 @@ export default function Schedule() {
   }, [dateValue, schedule]);
   
   function getScheduleFilename() {
-    return schedule.name.replace(/ /g, '_') + '.xls';
+    return schedule.name.replace(/ /g, '_') + '.xlsx';
   }
 
   return (
