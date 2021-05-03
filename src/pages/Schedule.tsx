@@ -11,6 +11,7 @@ import { DownloadFileButton } from '../components/DownloadFileButton';
 import UpdateScheduleMetadataModal from '../components/UpdateScheduleMetadataModal';
 import PublicSubscribeForm, { PublicSubscribeFormValues } from '../components/PublicSubscribeForm';
 import ScheduleSubscribersManagement from '../components/ScheduleSubscribersTable';
+import { useUser } from '../helpers/user';
 
 function getBadgeText(count: number): string {
   switch (count) {
@@ -51,6 +52,8 @@ function findEventsOnSameMonth(schedule: ISchedule, date: moment.Moment): Array<
 }
 
 export default function Schedule() {
+  const user = useUser();
+
   const { id, publicUUID } = useParams<any>();
   const [schedule, setSchedule] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -98,6 +101,7 @@ export default function Schedule() {
   function getScheduleFilename() {
     return schedule.name.replace(/ /g, '_') + '.xlsx';
   }
+  console.log(user);
 
   function handlePublicSubscriptionSubmit(values: PublicSubscribeFormValues) {
     console.log(values);
@@ -125,7 +129,7 @@ export default function Schedule() {
         </Row>
       ) : (
         <>
-          {!isPublic && (
+          {!isPublic && user && user?.isAdmin && (
             <Row justify={'end'} gutter={16}>
               <Col>
                 <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
@@ -151,11 +155,11 @@ export default function Schedule() {
               />
             </Col>
           </Row>
-          {!isPublic && (
+          {!isPublic && user && user?.isAdmin && (
             <>
               <Row gutter={16}>
                 <Col>
-                  <UpdateScheduleModal />
+                  <UpdateScheduleModal schedule={schedule} />
                 </Col>
                 <Col>
                   <DownloadFileButton
@@ -166,7 +170,7 @@ export default function Schedule() {
                   </DownloadFileButton>
                 </Col>
                 <Col>
-                  <Input addonBefore={'Publiczny link do harmonogramu'} value={publicLink} />
+                  <Input addonBefore={'Publiczny link'} value={publicLink} />
                 </Col>
                 <Col>
                   <CopyToClipboardButton content={publicLink} />

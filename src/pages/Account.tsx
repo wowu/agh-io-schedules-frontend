@@ -18,8 +18,9 @@ export default function Account() {
     (async () => {
       const { data: account } = await UserService.getUser(user!.id);
       setAccount(account);
+      console.log(user);
     })();
-  }, [user]);
+  }, []);
 
   const updateSubscription = async (activeSubscription: boolean) => {
     if (!account) return;

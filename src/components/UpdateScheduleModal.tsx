@@ -1,8 +1,8 @@
 import { Modal, Button, Alert } from 'antd';
 import Dragger from 'antd/es/upload/Dragger';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
-import { ScheduleService } from '../services/ScheduleService';
+import { Schedule, ScheduleService } from '../services/ScheduleService';
 import ImportCollisions from '../components/ImportCollisions';
 import ImportError from '../components/ImportError';
 import ImportNetworkFailure from '../components/ImportNetworkFailure';
@@ -14,12 +14,17 @@ enum UpdateFileStatus {
   error,
   networkFailure,
 }
+interface UpdateScheduleModalProps {
+  schedule: Schedule;
+}
 
-export default function UpdateScheduleModal() {
+export default function UpdateScheduleModal(props: UpdateScheduleModalProps) {
   const [uploading, setUploading] = useState<boolean>(false);
   const [updateFile, setUpdateFile] = useState<any>([]);
-  let [setUpdateSuccessData] = useState<any>();
-  let [updateCollisionsData, setUpdateCollisionsData] = useState<any>();
+  let [updateSuccessData, setUpdateSuccessData] = useState<any>();
+  let [updateCollisionsData, setUpdateCollisionsData] = useState<any>({
+    schedulesWithConflicts: [],
+  });
   let [updateStatus, setUpdateStatus] = useState<UpdateFileStatus>(UpdateFileStatus.default);
   let [updateResponse, setUpdateResponse] = useState<{ status: number; statusText: string }>({
     status: -1,
@@ -57,20 +62,12 @@ export default function UpdateScheduleModal() {
     setUpdateFile([]);
   };
 
-  const scheduleDataRequiredToUpload = {
-    id: 1,
-  };
-
   const uploadNewSchedule = async () => {
     const formData = new FormData();
-    formData.append('files[]', updateFile[0]);
+    formData.append('file', updateFile[0]);
     setUploading(true);
     try {
-      const { response, data } = await ScheduleService.updateSchedule(
-        formData,
-        scheduleDataRequiredToUpload.id,
-        false
-      ); //TODO: failure param only for development
+      const { response, data } = await ScheduleService.updateSchedule(formData, props.schedule.id);
       if (response.ok) {
         onUploadSuccess(data);
       } else if (response.status === 400) {
@@ -79,14 +76,21 @@ export default function UpdateScheduleModal() {
         onOtherError(response);
       }
     } catch (error) {
+      console.log(error);
       onNetworkFailure(error.error);
     } finally {
       setUploading(false);
     }
   };
 
+  const hideModal = () => {
+    setUpdateVisible(false);
+    setUpdateCollisionsData({ schedulesWithConflicts: [] });
+  };
+
   const showModal = () => {
     setUpdateVisible(true);
+    setUpdateCollisionsData({ schedulesWithConflicts: [] });
   };
 
   const showMessage = () => {
@@ -163,9 +167,14 @@ export default function UpdateScheduleModal() {
   return (
     <>
       <Button type="primary" onClick={showModal}>
-        Wyślij nową wersję harmonogramu
+        Wyślij nową wersję
       </Button>
-      <Modal visible={updateVisible} title="Zaktualizuj plik harmonogramu" footer={updateButtons()}>
+      <Modal
+        onCancel={hideModal}
+        visible={updateVisible}
+        title="Zaktualizuj plik harmonogramu"
+        footer={updateButtons()}
+      >
         <>
           {updateStatus !== UpdateFileStatus.success && (
             <Dragger {...draggerProps}>

@@ -2,6 +2,7 @@ import { Alert, Col, Row } from 'antd';
 import React from 'react';
 
 export default function ImportError(error: { message: string }) {
+  console.log(error);
   return (
     <>
       <Row>
