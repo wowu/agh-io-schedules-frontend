@@ -18,7 +18,7 @@ enum UpdateFileStatus {
 export default function UpdateScheduleModal() {
   const [uploading, setUploading] = useState<boolean>(false);
   const [updateFile, setUpdateFile] = useState<any>([]);
-  let [updateSuccessData, setUpdateSuccessData] = useState<any>();
+  let [setUpdateSuccessData] = useState<any>();
   let [updateCollisionsData, setUpdateCollisionsData] = useState<any>();
   let [updateStatus, setUpdateStatus] = useState<UpdateFileStatus>(UpdateFileStatus.default);
   let [updateResponse, setUpdateResponse] = useState<{ status: number; statusText: string }>({
