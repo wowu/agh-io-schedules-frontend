@@ -1,4 +1,4 @@
-import { Button, Col, Row, Space, Table, Tag } from 'antd';
+import { Button, Col, notification, Row, Space, Table, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
 import LecturerForm, { LecturerFormValues } from '../components/LecturerForm';
@@ -102,12 +102,16 @@ export default function LecturerEmails() {
   const onCreateFormSubmit = async (values: LecturerFormValues) => {
     setCreateModalVisible(false);
 
-    await LecturerEmailsService.createLecturer(
+    const { response, error } = await LecturerEmailsService.createLecturer(
       values.name,
       values.surname,
       values.email,
       values.activeSubscription
     );
+
+    if (!response.ok) {
+      notification['error']({ message: 'Błąd', description: error });
+    }
 
     fetchLecturers();
   };
@@ -118,13 +122,18 @@ export default function LecturerEmails() {
   };
 
   const onEdit = async (lecturer: Lecturer, values: LecturerFormValues) => {
-    await LecturerEmailsService.updateLecturer(
+    const { response, error } = await LecturerEmailsService.updateLecturer(
       lecturer.id,
       values.name,
       values.surname,
       values.email,
       values.activeSubscription
     );
+
+    if (!response.ok) {
+      notification['error']({ message: 'Błąd', description: error });
+    }
+
     fetchLecturers();
   };
 

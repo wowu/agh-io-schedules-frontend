@@ -26,9 +26,7 @@ export default function UsersTable(props: UsersTableProps) {
             {props.onEdit && (
               <UserEdit onEdit={props.onEdit} user={record} fieldsToEdit={props.fieldsToShow} />
             )}
-            <Button danger onClick={() => props.onRemove(record)}>
-              Usuń
-            </Button>
+            <a onClick={() => props.onRemove(record)}>Usuń</a>
           </Space>
         </>
       ),
@@ -40,7 +38,7 @@ export default function UsersTable(props: UsersTableProps) {
       title: 'Powiadomienia',
       key: 'activeSubscription',
       render: (_text: string, record: User) =>
-        record.activeSubscription ? <Tag color="green">TAK</Tag> : <Tag color="green">Nie</Tag>,
+        record.activeSubscription ? <Tag color="green">TAK</Tag> : <Tag color="red">Nie</Tag>,
     });
   }
 

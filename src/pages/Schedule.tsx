@@ -97,6 +97,10 @@ export default function Schedule() {
     }
   }, [dateValue, schedule]);
 
+  function getScheduleFilename() {
+    return schedule.name.replace(/ /g, '_') + '.xlsx';
+  }
+
   function handlePublicSubscriptionSubmit(values: PublicSubscribeFormValues) {
     console.log(values);
     ScheduleService.addPublicSubscriber(values.email, publicUUID)
@@ -158,7 +162,7 @@ export default function Schedule() {
                 <Col>
                   <DownloadFileButton
                     downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)}
-                    filename={'schedule.xls'}
+                    filename={getScheduleFilename()}
                   >
                     <Button type="primary">Pobierz harmonogram</Button>
                   </DownloadFileButton>

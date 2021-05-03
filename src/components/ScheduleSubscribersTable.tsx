@@ -23,12 +23,14 @@ export default function ScheduleSubscribersManagement(props: any) {
     fetchSubscribers();
   }, []);
 
-  const onCreateFormSubmit = async (values: UserFormValues) => {
+  const onCreateFormSubmit = async (values: UserFormValues): Promise<boolean> => {
     setCreateModalVisible(false);
 
     await ScheduleService.addSubscriber(values.email, props.scheduleId);
 
     fetchSubscribers();
+
+    return true;
   };
 
   const onRemove = async (User: User) => {
