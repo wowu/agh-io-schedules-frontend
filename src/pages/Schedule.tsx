@@ -97,12 +97,12 @@ export default function Schedule() {
     }
   }, [dateValue, schedule]);
 
-  function handlePublicSubcriptionSubmit(values: PublicSubscribeFormValues) {
+  function handlePublicSubscriptionSubmit(values: PublicSubscribeFormValues) {
     console.log(values);
     ScheduleService.addPublicSubscriber(values.email, publicUUID)
       .then((data) => {
         notification.info({
-          message: 'Jesteś zapisany na ten harmonogram',
+          message: 'Zostałeś zapisany na powiadomienia o wydarzeniach',
           duration: 3,
         });
       })
@@ -177,11 +177,13 @@ export default function Schedule() {
               </Row>
             </>
           )}
-          {isPublic && <Row justify="center">
-            <Col>
-              <PublicSubscribeForm onSubmit={handlePublicSubcriptionSubmit} />
-            </Col>
-          </Row >}
+          {isPublic && (
+            <Row justify="center">
+              <Col>
+                <PublicSubscribeForm onSubmit={handlePublicSubscriptionSubmit} />
+              </Col>
+            </Row>
+          )}
         </>
       )}
     </>

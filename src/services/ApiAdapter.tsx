@@ -11,13 +11,17 @@ export interface ApiAdapterOptions {
 }
 
 export class ApiAdapter {
-  static async put(resource: string, formData: FormData = new FormData()): Promise<Response> {
+  static async put(
+    resource: string,
+    formData: FormData = new FormData(),
+    options: ApiAdapterOptions = {}
+  ): Promise<Response> {
     const request = new Request(`${API_URL}${resource}`, {
       method: 'PUT',
       body: formData,
       redirect: 'follow',
     });
-    return this.call(request);
+    return this.call(request, options);
   }
 
   static async postErrors(
@@ -33,13 +37,17 @@ export class ApiAdapter {
     return this.call(request);
   }
 
-  static async post(resource: string, formData: FormData = new FormData()): Promise<Response> {
+  static async post(
+    resource: string,
+    formData: FormData = new FormData(),
+    options: ApiAdapterOptions = {}
+  ): Promise<Response> {
     const request = new Request(`${API_URL}${resource}`, {
       method: 'POST',
       body: formData,
       redirect: 'follow',
     });
-    return this.call(request);
+    return this.call(request, options);
   }
 
   static async get(resource: string, options: ApiAdapterOptions = {}): Promise<Response> {
@@ -54,12 +62,12 @@ export class ApiAdapter {
     let options: any = {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-    }
+    };
     if (formData instanceof FormData) {
       options = {
         method: 'DELETE',
         body: formData,
-      }
+      };
     }
     const request = new Request(`${API_URL}${resource}`, options);
     return this.call(request);

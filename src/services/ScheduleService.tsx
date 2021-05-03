@@ -27,12 +27,17 @@ export interface Schedule {
 }
 
 export class ScheduleService {
-
   static async addPublicSubscriber(email: string, publicUUID: string) {
     try {
       const fields = new FormData();
       fields.append('email', email);
-      const response = await ApiAdapter.post(`/api/public/schedules/${publicUUID}/subscribe`, fields);
+      const response = await ApiAdapter.post(
+        `/api/public/schedules/${publicUUID}/subscribe`,
+        fields,
+        {
+          tryAuthorize: false,
+        }
+      );
       let data = await response.json();
       return Promise.resolve({ response, data });
     } catch (error) {
