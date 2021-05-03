@@ -129,7 +129,7 @@ export default function Schedule() {
         </Row>
       ) : (
         <>
-          {!isPublic && user && user?.isAdmin && (
+          {!isPublic && user?.isAdmin && (
             <Row justify={'end'} gutter={16}>
               <Col>
                 <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
@@ -155,7 +155,7 @@ export default function Schedule() {
               />
             </Col>
           </Row>
-          {!isPublic && user && user?.isAdmin && (
+          {!isPublic && user?.isAdmin && (
             <>
               <Row gutter={16}>
                 <Col>
