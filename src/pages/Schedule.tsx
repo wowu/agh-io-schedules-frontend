@@ -1,10 +1,9 @@
 import CenteredHeader from '../components/CenteredHeader';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Badge, Calendar, Col, List, Row, Spin, Button, Input } from 'antd';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
-import Users from './Users';
 import UpdateScheduleModal from '../components/UpdateScheduleModal';
 import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
@@ -59,7 +58,7 @@ export default function Schedule() {
   const [currentEvents, setCurrentEvents] = useState<Array<Event>>([]);
   const [publicLink, setPublicLink] = useState<string>('');
 
-  function loadSchedule() {
+  const loadSchedule = useCallback(() => {
     ScheduleService.getSchedule(parseInt(params.id))
       .then((data) => {
         setSchedule(data);
@@ -69,11 +68,11 @@ export default function Schedule() {
       .catch((reason: any) => {
         console.log(reason);
       });
-  }
+  }, [params.id]);
 
   useEffect(() => {
     loadSchedule();
-  }, [params.id]);
+  }, [params.id, loadSchedule]);
 
   useEffect(() => {
     if (schedule) {
@@ -81,7 +80,7 @@ export default function Schedule() {
       console.log(dateValue);
     }
   }, [dateValue, schedule]);
-  
+
   function getScheduleFilename() {
     return schedule.name.replace(/ /g, '_') + '.xlsx';
   }

@@ -1,22 +1,9 @@
-import {
-  Button,
-  Checkbox,
-  Col,
-  Divider,
-  Form,
-  Input,
-  notification,
-  Row,
-  Space,
-  Spin,
-  Typography,
-} from 'antd';
+import { Col, Divider, notification, Row, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
 import PasswordForm from '../components/PasswordForm';
 import SettingsForm from '../components/SettingsForm';
 import { useUser } from '../helpers/user';
-import { AuthService } from '../services/AuthService';
 import { User, UserService } from '../services/UserService';
 import Title from 'antd/es/typography/Title';
 
@@ -24,7 +11,6 @@ export default function Account() {
   const user = useUser();
   const [account, setAccount] = useState<User>();
 
-  const [form] = Form.useForm();
   const [settingsLoading, setSettingsLoading] = useState<boolean>(false);
   const [changePasswordLoading, setChangePasswordLoading] = useState<boolean>(false);
 
@@ -33,7 +19,7 @@ export default function Account() {
       const { data: account } = await UserService.getUser(user!.id);
       setAccount(account);
     })();
-  }, []);
+  }, [user]);
 
   const updateSubscription = async (activeSubscription: boolean) => {
     if (!account) return;

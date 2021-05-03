@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Row, Space } from 'antd';
+import { Button, Checkbox, Row } from 'antd';
 import React, { useState } from 'react';
 
 type SettingsFormProps = {

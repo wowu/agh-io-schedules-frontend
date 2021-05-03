@@ -26,7 +26,7 @@ export default function UserForm(props: UserFormProps) {
       activeSubscription: false,
       ...props.user,
     });
-  }, [props.user]);
+  }, [props.user, form]);
 
   return (
     <Modal

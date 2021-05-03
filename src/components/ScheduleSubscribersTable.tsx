@@ -1,7 +1,7 @@
-import { Button, Col, Row, Space, Table, Tag } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Button, Row } from 'antd';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ScheduleService } from '../services/ScheduleService';
-import { User, UserService } from '../services/UserService';
+import { User } from '../services/UserService';
 import CenteredHeader from './CenteredHeader';
 import UserForm, { UserFormValues } from './UserForm';
 import UsersTable from './UserTable';
@@ -11,17 +11,17 @@ export default function ScheduleSubscribersManagement(props: any) {
   const [loading, setLoading] = useState<boolean>(true);
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
 
-  const fetchSubscribers = async () => {
+  const fetchSubscribers = useCallback(async () => {
     setLoading(true);
     const { data } = await ScheduleService.getSubscribers(props.scheduleId);
     const { subscribers } = data;
     setSubscribers(subscribers);
     setLoading(false);
-  };
+  }, [props.scheduleId]);
 
   useEffect(() => {
     fetchSubscribers();
-  }, []);
+  }, [fetchSubscribers]);
 
   const onCreateFormSubmit = async (values: UserFormValues): Promise<boolean> => {
     setCreateModalVisible(false);

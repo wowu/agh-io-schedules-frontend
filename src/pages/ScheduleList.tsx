@@ -3,10 +3,10 @@ import { Button, Col, List, Popconfirm, Row, Spin } from 'antd';
 import CenteredHeader from '../components/CenteredHeader';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ScheduleService } from '../services/ScheduleService';
+import { Schedule, ScheduleService } from '../services/ScheduleService';
 
 export default function ScheduleList() {
-  let [schedules, setSchedules] = useState<any>([]);
+  let [schedules, setSchedules] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const getScheduleList = async () => {
@@ -14,7 +14,7 @@ export default function ScheduleList() {
 
     setSchedules(
       data.schedules.sort(
-        (a: any, b: any) =>
+        (a: Schedule, b: Schedule) =>
           new Date(b.firstEventDate).getTime() - new Date(a.firstEventDate).getTime()
       )
     );
@@ -52,7 +52,8 @@ export default function ScheduleList() {
             <List
               itemLayout="horizontal"
               dataSource={schedules}
-              renderItem={(item: any) => (
+              rowKey="id"
+              renderItem={(item: Schedule) => (
                 <List.Item
                   actions={[
                     <Popconfirm

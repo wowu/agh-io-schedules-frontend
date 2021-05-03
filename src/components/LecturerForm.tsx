@@ -1,5 +1,5 @@
 import { Modal, Form, Input, Checkbox } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Lecturer } from '../services/LecturerEmailsService';
 
 export interface LecturerFormValues {
@@ -25,7 +25,7 @@ export default function LecturerForm(props: LecturerFormProps) {
       activeSubscription: false,
       ...props.lecturer,
     });
-  }, [props.lecturer]);
+  }, [props.lecturer, form]);
 
   return (
     <Modal

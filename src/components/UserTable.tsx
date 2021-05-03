@@ -1,4 +1,4 @@
-import { Button, Col, Row, Space, Table, Tag } from 'antd';
+import { Col, Row, Space, Table, Tag } from 'antd';
 import { User } from '../services/UserService';
 import UserEdit from './UserEdit';
 import { UserFormValues } from './UserForm';
@@ -47,7 +47,7 @@ export default function UsersTable(props: UsersTableProps) {
   return (
     <Row justify={'center'}>
       <Col span={24} lg={18} xl={14}>
-        <Table loading={props.loading} dataSource={props.users} columns={columns} />
+        <Table loading={props.loading} rowKey="id" dataSource={props.users} columns={columns} />
       </Col>
     </Row>
   );
