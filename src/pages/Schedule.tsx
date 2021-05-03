@@ -1,14 +1,16 @@
 import CenteredHeader from '../components/CenteredHeader';
-import { useState, useEffect, useCallback } from 'react';
-import { Badge, Calendar, Col, List, Row, Spin, Button, Input } from 'antd';
+import { useState, useEffect } from 'react';
+import { Badge, Calendar, Col, List, Row, Spin, Button, Input, notification } from 'antd';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
+import Users from './Users';
 import UpdateScheduleModal from '../components/UpdateScheduleModal';
 import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
 import { DownloadFileButton } from '../components/DownloadFileButton';
 import UpdateScheduleMetadataModal from '../components/UpdateScheduleMetadataModal';
+import PublicSubscribeForm, { PublicSubscribeFormValues } from '../components/PublicSubscribeForm';
 import ScheduleSubscribersManagement from '../components/ScheduleSubscribersTable';
 
 function getBadgeText(count: number): string {
@@ -50,16 +52,30 @@ function findEventsOnSameMonth(schedule: ISchedule, date: moment.Moment): Array<
 }
 
 export default function Schedule() {
-  const params = useParams<any>();
-
+  const { id, publicUUID } = useParams<any>();
   const [schedule, setSchedule] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
   const [dateValue, setDateValue] = useState<moment.Moment>(moment());
   const [currentEvents, setCurrentEvents] = useState<Array<Event>>([]);
   const [publicLink, setPublicLink] = useState<string>('');
+  const [errorSubscribing, setErrorSubscribing] = useState<boolean>(false);
 
-  const loadSchedule = useCallback(() => {
-    ScheduleService.getSchedule(parseInt(params.id))
+  let isPublic = false;
+  if (publicUUID) {
+    isPublic = true;
+  }
+
+  function loadSchedule() {
+    let promise;
+    if (isPublic) {
+      promise = ScheduleService.getPublicSchedule(publicUUID);
+    } else if (id) {
+      promise = ScheduleService.getSchedule(parseInt(id));
+    } else {
+      return;
+    }
+
+    promise
       .then((data) => {
         setSchedule(data);
         setLoading(false);
@@ -68,11 +84,11 @@ export default function Schedule() {
       .catch((reason: any) => {
         console.log(reason);
       });
-  }, [params.id]);
+  }
 
   useEffect(() => {
     loadSchedule();
-  }, [params.id, loadSchedule]);
+  }, [id]);
 
   useEffect(() => {
     if (schedule) {
@@ -85,6 +101,24 @@ export default function Schedule() {
     return schedule.name.replace(/ /g, '_') + '.xlsx';
   }
 
+  function handlePublicSubscriptionSubmit(values: PublicSubscribeFormValues) {
+    console.log(values);
+    ScheduleService.addPublicSubscriber(values.email, publicUUID)
+      .then((data) => {
+        notification.info({
+          message: 'Zostałeś zapisany na powiadomienia o wydarzeniach',
+          duration: 3,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        notification.warn({
+          message: 'Wystąpił błąd przy zapisywaniu',
+          duration: 3,
+        });
+      });
+  }
+
   return (
     <>
       {loading ? (
@@ -93,11 +127,13 @@ export default function Schedule() {
         </Row>
       ) : (
         <>
-          <Row justify={'end'} gutter={16}>
-            <Col>
-              <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
-            </Col>
-          </Row>
+          {!isPublic && (
+            <Row justify={'end'} gutter={16}>
+              <Col>
+                <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
+              </Col>
+            </Row>
+          )}
           <CenteredHeader title={schedule.name} subtitle={schedule.description} />
 
           <Row gutter={[16, 16]} justify="space-between">
@@ -117,30 +153,41 @@ export default function Schedule() {
               />
             </Col>
           </Row>
-          <Row gutter={16}>
-            <Col>
-              <UpdateScheduleModal />
-            </Col>
-            <Col>
-              <DownloadFileButton
-                downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)}
-                filename={getScheduleFilename()}
-              >
-                <Button type="primary">Pobierz harmonogram</Button>
-              </DownloadFileButton>
-            </Col>
-            <Col>
-              <Input addonBefore={'Publiczny link do harmonogramu'} value={publicLink} />
-            </Col>
-            <Col>
-              <CopyToClipboardButton content={publicLink} />
-            </Col>
-          </Row>
-          <Row justify={'center'}>
-            <Col span={24}>
-              <ScheduleSubscribersManagement scheduleId={schedule.id} />
-            </Col>
-          </Row>
+          {!isPublic && (
+            <>
+              <Row gutter={16}>
+                <Col>
+                  <UpdateScheduleModal />
+                </Col>
+                <Col>
+                  <DownloadFileButton
+                    downloadHandler={() => ScheduleService.downloadSchedule(schedule.id)}
+                    filename={getScheduleFilename()}
+                  >
+                    <Button type="primary">Pobierz harmonogram</Button>
+                  </DownloadFileButton>
+                </Col>
+                <Col>
+                  <Input addonBefore={'Publiczny link do harmonogramu'} value={publicLink} />
+                </Col>
+                <Col>
+                  <CopyToClipboardButton content={publicLink} />
+                </Col>
+              </Row>
+              <Row justify={'center'}>
+                <Col span={24}>
+                  <ScheduleSubscribersManagement scheduleId={schedule.id} />
+                </Col>
+              </Row>
+            </>
+          )}
+          {isPublic && (
+            <Row justify="center">
+              <Col>
+                <PublicSubscribeForm onSubmit={handlePublicSubscriptionSubmit} />
+              </Col>
+            </Row>
+          )}
         </>
       )}
     </>

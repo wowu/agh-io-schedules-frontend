@@ -64,7 +64,9 @@ function App() {
                   <PrivateRoute path="/account">
                     <Account />
                   </PrivateRoute>
-
+                  <Route path="/public/schedule/:publicUUID">
+                    <Schedule />
+                  </Route>
                   <Route path="/login">
                     <LoginForm />
                   </Route>

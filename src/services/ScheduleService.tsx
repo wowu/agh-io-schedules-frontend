@@ -27,6 +27,24 @@ export interface Schedule {
 }
 
 export class ScheduleService {
+  static async addPublicSubscriber(email: string, publicUUID: string) {
+    try {
+      const fields = new FormData();
+      fields.append('email', email);
+      const response = await ApiAdapter.post(
+        `/api/public/schedules/${publicUUID}/subscribe`,
+        fields,
+        {
+          tryAuthorize: false,
+        }
+      );
+      let data = await response.json();
+      return Promise.resolve({ response, data });
+    } catch (error) {
+      console.error('addPublicSubscriber: ', error);
+    }
+  }
+
   static async removeSubscriber(sub_id: number, id: any) {
     try {
       const response = await ApiAdapter.delete(`/api/schedules/${id}/subscribers/${sub_id}`);
@@ -50,6 +68,17 @@ export class ScheduleService {
     }
   }
 
+  static async getPublicSchedule(publicUUID: string): Promise<any> {
+    try {
+      const response = await ApiAdapter.get(`/api/public/schedules/${publicUUID}`, {
+        tryAuthorize: false,
+      });
+      let data = await response.json();
+      return Promise.resolve(data);
+    } catch (error) {
+      console.log('downloadSchedule: ', error);
+    }
+  }
   static async getSubscribers(id: any) {
     try {
       const response = await ApiAdapter.get(`/api/schedules/${id}/subscribers`);
@@ -63,7 +92,7 @@ export class ScheduleService {
 
   static async downloadSchedule(id: any): Promise<any> {
     try {
-      const response = await ApiAdapter.get(`/api/schedules/${id}/file`);
+      const response = await ApiAdapter.get(`/api/schedules/${id}/file`, { tryAuthorize: false });
       let blob = await response.blob();
       return Promise.resolve(blob);
     } catch (error) {
@@ -146,7 +175,6 @@ export class ScheduleService {
   static async updateScheduleMetadata(fields: FormData, id: number) {
     try {
       const response = await ApiAdapter.put(`/api/schedules/${id}`, fields);
-      // const data = await response.json();
       return Promise.resolve({ response });
     } catch (error) {
       console.log('updateScheduleMetadata: error');

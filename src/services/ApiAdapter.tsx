@@ -6,14 +6,22 @@ export enum ApiError {
   Unknown = 1,
 }
 
+export interface ApiAdapterOptions {
+  tryAuthorize?: boolean;
+}
+
 export class ApiAdapter {
-  static async put(resource: string, formData: FormData = new FormData()): Promise<Response> {
+  static async put(
+    resource: string,
+    formData: FormData = new FormData(),
+    options: ApiAdapterOptions = {}
+  ): Promise<Response> {
     const request = new Request(`${API_URL}${resource}`, {
       method: 'PUT',
       body: formData,
       redirect: 'follow',
     });
-    return this.call(request);
+    return this.call(request, options);
   }
 
   static async postErrors(
@@ -29,21 +37,25 @@ export class ApiAdapter {
     return this.call(request);
   }
 
-  static async post(resource: string, formData: FormData = new FormData()): Promise<Response> {
+  static async post(
+    resource: string,
+    formData: FormData = new FormData(),
+    options: ApiAdapterOptions = {}
+  ): Promise<Response> {
     const request = new Request(`${API_URL}${resource}`, {
       method: 'POST',
       body: formData,
       redirect: 'follow',
     });
-    return this.call(request);
+    return this.call(request, options);
   }
 
-  static async get(resource: string): Promise<Response> {
+  static async get(resource: string, options: ApiAdapterOptions = {}): Promise<Response> {
     const request = new Request(`${API_URL}${resource}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
-    return this.call(request);
+    return this.call(request, options);
   }
 
   static async delete(resource: string, formData: any = undefined): Promise<Response> {
@@ -61,11 +73,14 @@ export class ApiAdapter {
     return this.call(request);
   }
 
-  private static async call(request: Request): Promise<Response> {
+  private static async call(request: Request, options: ApiAdapterOptions = {}): Promise<Response> {
     let response;
-
+    const { tryAuthorize } = options;
     try {
-      response = await this.authAndFetch(request);
+      if (tryAuthorize !== false) {
+        request = this.auth(request);
+      }
+      response = await fetch(request);
     } catch (error) {
       console.log('call: ', error);
       return Promise.reject(error);
@@ -74,8 +89,9 @@ export class ApiAdapter {
     if (response && response.status === 401) {
       const refreshResponse = await AuthService.refreshToken();
       switch (refreshResponse) {
-        case RefreshResponse.Success:
-          return this.authAndFetch(request);
+        case RefreshResponse.Success: {
+          return fetch(this.auth(request));
+        }
         case RefreshResponse.Expired:
         case RefreshResponse.NotLoggedIn: {
           history.push('/login');
@@ -89,13 +105,13 @@ export class ApiAdapter {
     return response;
   }
 
-  private static async authAndFetch(request: Request): Promise<Response> {
+  private static auth(request: Request): Request {
     const token = AuthService.getToken();
     if (token === null) {
       history.push('/login');
-      return Promise.reject('Not logged in');
+      return request;
     }
     request.headers.set('Authorization', `Bearer ${token.token}`);
-    return fetch(request);
+    return request;
   }
 }
