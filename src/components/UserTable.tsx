@@ -38,7 +38,7 @@ export default function UsersTable(props: UsersTableProps) {
       title: 'Powiadomienia',
       key: 'activeSubscription',
       render: (_text: string, record: User) =>
-        record.activeSubscription ? <Tag color="green">TAK</Tag> : <Tag color="red">Nie</Tag>,
+        record.activeSubscription ? <Tag color="green">Tak</Tag> : <Tag color="red">Nie</Tag>,
     });
   }
 

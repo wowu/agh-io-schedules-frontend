@@ -38,12 +38,12 @@ export default function UpdateScheduleMetadataModal(props: UpdateScheduleMetadat
           <Col>
             <EditOutlined />
           </Col>
-          <Col>Edytuj metadane</Col>
+          <Col>Edytuj harmonogram</Col>
         </Row>
       </Button>
       <Modal
         visible={visible}
-        title="Zaktualizuj metadane"
+        title="Edytuj harmonogram"
         onCancel={hideModal}
         footer={<Button onClick={save}>Zapisz</Button>}
       >

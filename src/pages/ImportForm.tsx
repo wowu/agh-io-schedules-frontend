@@ -76,7 +76,7 @@ export default function ImportForm() {
     });
     setUploading(true);
     try {
-      const { response, data } = await ScheduleService.sendNewSchedules(formData, false); //TODO: failure param only for development
+      const { response, data } = await ScheduleService.sendNewSchedules(formData);
       if (response.ok) {
         onUploadSuccess(data);
       } else if (response.status === 400) {

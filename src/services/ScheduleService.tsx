@@ -128,14 +128,9 @@ export class ScheduleService {
     }
   }
 
-  static async sendNewSchedules(files: FormData, failure: boolean = false): Promise<any> {
+  static async sendNewSchedules(files: FormData): Promise<any> {
     try {
-      let response;
-      if (failure) {
-        response = await ApiAdapter.postErrors('/api/schedules/', files); //TODO: Remove on production - only for testing purposes
-      } else {
-        response = await ApiAdapter.post('/api/schedules/', files);
-      }
+      let response = await ApiAdapter.post('/api/schedules/', files);
 
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.indexOf('application/json') !== -1) {
@@ -150,14 +145,9 @@ export class ScheduleService {
     }
   }
 
-  static async updateSchedule(files: FormData, id = 1, failure: boolean = false): Promise<any> {
+  static async updateSchedule(files: FormData, id: number): Promise<any> {
     try {
-      let response;
-      if (failure) {
-        response = await ApiAdapter.postErrors(`/api/schedules/${id}/file`, files); //TODO: Remove on production - only for testing purposes
-      } else {
-        response = await ApiAdapter.post(`/api/schedules/${id}/file`, files);
-      }
+      let response = await ApiAdapter.post(`/api/schedules/${id}/file`, files);
 
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.indexOf('application/json') !== -1) {
