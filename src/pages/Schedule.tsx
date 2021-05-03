@@ -1,10 +1,9 @@
 import CenteredHeader from '../components/CenteredHeader';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Badge, Calendar, Col, List, Row, Spin, Button, Input, notification } from 'antd';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
-import Users from './Users';
 import UpdateScheduleModal from '../components/UpdateScheduleModal';
 import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
@@ -58,14 +57,13 @@ export default function Schedule() {
   const [dateValue, setDateValue] = useState<moment.Moment>(moment());
   const [currentEvents, setCurrentEvents] = useState<Array<Event>>([]);
   const [publicLink, setPublicLink] = useState<string>('');
-  const [errorSubscribing, setErrorSubscribing] = useState<boolean>(false);
 
   let isPublic = false;
   if (publicUUID) {
     isPublic = true;
   }
 
-  function loadSchedule() {
+  const loadSchedule = useCallback(() => {
     let promise;
     if (isPublic) {
       promise = ScheduleService.getPublicSchedule(publicUUID);
@@ -84,11 +82,11 @@ export default function Schedule() {
       .catch((reason: any) => {
         console.log(reason);
       });
-  }
+  }, [id, publicUUID, isPublic]);
 
   useEffect(() => {
     loadSchedule();
-  }, [id]);
+  }, [loadSchedule]);
 
   useEffect(() => {
     if (schedule) {
