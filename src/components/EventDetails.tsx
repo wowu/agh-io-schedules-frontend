@@ -13,8 +13,6 @@ export default function EventDetails(props: EventProps) {
     const end = moment(props.event.endTime);
     return begin.format('dddd, MMMM D \u00B7 HH:MM') + ' - ' + end.format('HH:MM');
   }
-  console.log(props.event);
-  
 
   return (
     <>
