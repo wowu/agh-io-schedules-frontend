@@ -1,6 +1,18 @@
 import CenteredHeader from '../components/CenteredHeader';
 import { useState, useEffect, useCallback } from 'react';
-import { Badge, Calendar, Col, List, Row, Spin, Button, Input, notification } from 'antd';
+import {
+  Badge,
+  Calendar,
+  Col,
+  List,
+  Row,
+  Spin,
+  Button,
+  Input,
+  notification,
+  Tabs,
+  Space,
+} from 'antd';
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
@@ -47,8 +59,13 @@ function monthCellRender(date: moment.Moment, schedule: ISchedule) {
 function findEventsOnSameDay(schedule: ISchedule, date: moment.Moment): Array<Event> {
   return schedule.events.filter((e: Event) => moment(e.beginTime).isSame(date, 'day'));
 }
+
 function findEventsOnSameMonth(schedule: ISchedule, date: moment.Moment): Array<Event> {
   return schedule.events.filter((e: Event) => moment(e.beginTime).isSame(date, 'month'));
+}
+
+function getAllEvents(schedule: ISchedule): Array<Event> {
+  return schedule.events;
 }
 
 export default function Schedule() {
@@ -56,6 +73,7 @@ export default function Schedule() {
 
   const { id, publicUUID } = useParams<any>();
   const [schedule, setSchedule] = useState<any>();
+  const [events, setEvents] = useState<Array<Event>>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [dateValue, setDateValue] = useState<moment.Moment>(moment());
   const [currentEvents, setCurrentEvents] = useState<Array<Event>>([]);
@@ -79,6 +97,7 @@ export default function Schedule() {
     promise
       .then((data) => {
         setSchedule(data);
+        console.log(data);
         setLoading(false);
         setPublicLink(ScheduleService.buildPublicLink(data));
       })
@@ -94,14 +113,29 @@ export default function Schedule() {
   useEffect(() => {
     if (schedule) {
       setCurrentEvents(findEventsOnSameDay(schedule, dateValue));
-      console.log(dateValue);
     }
   }, [dateValue, schedule]);
+
+  useEffect(() => {
+    if (schedule) {
+      setEvents(getAllEvents(schedule));
+    } else {
+      setEvents([]);
+    }
+  }, [schedule]);
+
+  useEffect(() => {
+    if (events.length > 0) {
+      events.sort((a: Event, b: Event): number => {
+        return moment(a.beginTime).unix() - moment(b.beginTime).unix();
+      });
+      setDateValue(moment(events[0].beginTime));
+    }
+  }, [events]);
 
   function getScheduleFilename() {
     return schedule.name.replace(/ /g, '_') + '.xlsx';
   }
-  console.log(user);
 
   function handlePublicSubscriptionSubmit(values: PublicSubscribeFormValues) {
     console.log(values);
@@ -139,20 +173,47 @@ export default function Schedule() {
           <CenteredHeader title={schedule.name} subtitle={schedule.description} />
 
           <Row gutter={[16, 16]} justify="space-between">
-            <Col span={24} xl={12}>
-              <Calendar
-                dateCellRender={(date: moment.Moment) => dateCellRender(date, schedule)}
-                monthCellRender={(date: moment.Moment) => monthCellRender(date, schedule)}
-                value={dateValue}
-                onChange={(date) => setDateValue(date)}
-              />
-            </Col>
-            <Col span={24} xl={11}>
-              <List
-                itemLayout="horizontal"
-                dataSource={currentEvents}
-                renderItem={(item) => <EventListItem item={item} />}
-              />
+            <Col span={24} xl={24}>
+              <Tabs>
+                <Tabs.TabPane tab="Widok kalendarza" key="1">
+                  <Row justify="space-between">
+                    <Col span={24} xl={12}>
+                      <Calendar
+                        dateCellRender={(date: moment.Moment) => dateCellRender(date, schedule)}
+                        monthCellRender={(date: moment.Moment) => monthCellRender(date, schedule)}
+                        value={dateValue}
+                        onChange={(date) => {
+                          setDateValue(date);
+                        }}
+                      />
+                    </Col>
+                    <Col span={24} xl={11}>
+                      <List
+                        itemLayout="horizontal"
+                        dataSource={currentEvents}
+                        renderItem={(item) => <EventListItem item={item} />}
+                      />
+                    </Col>
+                  </Row>
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Lista wydarzeń" key="2">
+                  <Row justify="space-around">
+                    <Col span={24} xl={12}>
+                      <List
+                        pagination={{
+                          onChange: (page) => {
+                            console.log(page);
+                          },
+                          pageSize: 8,
+                        }}
+                        itemLayout="horizontal"
+                        dataSource={events}
+                        renderItem={(item) => <EventListItem item={item} />}
+                      />
+                    </Col>
+                  </Row>
+                </Tabs.TabPane>
+              </Tabs>
             </Col>
           </Row>
           {!isPublic && user?.isAdmin && (

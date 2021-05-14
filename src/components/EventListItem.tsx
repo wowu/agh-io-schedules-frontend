@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Event } from '../services/ScheduleService';
 import EventDetails from './EventDetails';
+import moment from 'moment';
 
 export interface EventListItemProps {
   item: Event;
@@ -10,6 +11,18 @@ export interface EventListItemProps {
 
 function getLecturerFullName(event: Event) {
   return event.lecturerName + ' ' + event.lecturerSurname;
+}
+
+function getTime(event: Event) {
+  const begin = moment(event.beginTime);
+  const end = moment(event.endTime);
+  if (end.diff(begin, 'days') < 1) {
+    return `${begin.format('dddd, MMMM D \u00B7 HH:MM')} - ${end.format('HH:MM')}`;
+  } else {
+    return `${begin.format('dddd, MMMM D \u00B7 HH:MM')} - ${end.format(
+      'dddd, MMMM D \u00B7 HH:MM'
+    )}`;
+  }
 }
 
 export default function EventListItem(props: EventListItemProps) {
@@ -31,8 +44,12 @@ export default function EventListItem(props: EventListItemProps) {
     <>
       <List.Item actions={[<Button onClick={showModal}>Szczegóły</Button>]}>
         <List.Item.Meta
-          title={<Link to="#">{props.item.eventName}</Link>}
-          description={<Row>{getLecturerFullName(props.item)}</Row>}
+          title={
+            <Row justify={'space-between'}>
+              <div>{props.item.eventName}</div> <div>{getTime(props.item)}</div>
+            </Row>
+          }
+          description={<Row>{getLecturerFullName(props.item)} </Row>}
         />
       </List.Item>
       <Modal
