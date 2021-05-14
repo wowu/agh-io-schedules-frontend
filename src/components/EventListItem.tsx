@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Event } from '../services/ScheduleService';
 import EventDetails from './EventDetails';
-import moment from "moment";
+import moment from 'moment';
 
 export interface EventListItemProps {
   item: Event;
@@ -14,12 +14,14 @@ function getLecturerFullName(event: Event) {
 }
 
 function getTime(event: Event) {
-  const begin = moment(event.beginTime)
-  const end = moment(event.endTime)
-  if(end.diff(begin, 'days') < 1) {
-    return `${begin.format('dddd, MMMM D \u00B7 HH:MM')} - ${end.format('HH:MM')}`
-  }else{
-    return `${begin.format('dddd, MMMM D \u00B7 HH:MM')} - ${end.format('dddd, MMMM D \u00B7 HH:MM')}`
+  const begin = moment(event.beginTime);
+  const end = moment(event.endTime);
+  if (end.diff(begin, 'days') < 1) {
+    return `${begin.format('dddd, MMMM D \u00B7 HH:MM')} - ${end.format('HH:MM')}`;
+  } else {
+    return `${begin.format('dddd, MMMM D \u00B7 HH:MM')} - ${end.format(
+      'dddd, MMMM D \u00B7 HH:MM'
+    )}`;
   }
 }
 
@@ -42,7 +44,11 @@ export default function EventListItem(props: EventListItemProps) {
     <>
       <List.Item actions={[<Button onClick={showModal}>Szczegóły</Button>]}>
         <List.Item.Meta
-          title={<Row justify={"space-between"}><div>{props.item.eventName}</div> <div>{getTime(props.item)}</div></Row>}
+          title={
+            <Row justify={'space-between'}>
+              <div>{props.item.eventName}</div> <div>{getTime(props.item)}</div>
+            </Row>
+          }
           description={<Row>{getLecturerFullName(props.item)} </Row>}
         />
       </List.Item>

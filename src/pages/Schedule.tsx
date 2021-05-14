@@ -1,17 +1,29 @@
 import CenteredHeader from '../components/CenteredHeader';
-import {useState, useEffect, useCallback} from 'react';
-import {Badge, Calendar, Col, List, Row, Spin, Button, Input, notification, Tabs, Space} from 'antd';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  Badge,
+  Calendar,
+  Col,
+  List,
+  Row,
+  Spin,
+  Button,
+  Input,
+  notification,
+  Tabs,
+  Space,
+} from 'antd';
 import moment from 'moment';
-import {useParams} from 'react-router-dom';
-import {Schedule as ISchedule, Event, ScheduleService} from '../services/ScheduleService';
+import { useParams } from 'react-router-dom';
+import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
 import UpdateScheduleModal from '../components/UpdateScheduleModal';
 import EventListItem from '../components/EventListItem';
 import CopyToClipboardButton from '../components/CopyToClipboardButton';
-import {DownloadFileButton} from '../components/DownloadFileButton';
+import { DownloadFileButton } from '../components/DownloadFileButton';
 import UpdateScheduleMetadataModal from '../components/UpdateScheduleMetadataModal';
-import PublicSubscribeForm, {PublicSubscribeFormValues} from '../components/PublicSubscribeForm';
+import PublicSubscribeForm, { PublicSubscribeFormValues } from '../components/PublicSubscribeForm';
 import ScheduleSubscribersManagement from '../components/ScheduleSubscribersTable';
-import {useUser} from '../helpers/user';
+import { useUser } from '../helpers/user';
 
 function getBadgeText(count: number): string {
   switch (count) {
@@ -29,7 +41,7 @@ function dateCellRender(date: moment.Moment, schedule: ISchedule) {
   return (
     events.length > 0 && (
       <Row justify={'center'} align={'middle'}>
-        <Badge count={getBadgeText(events.length)} style={{backgroundColor: '#52c41a'}}/>
+        <Badge count={getBadgeText(events.length)} style={{ backgroundColor: '#52c41a' }} />
       </Row>
     )
   );
@@ -39,7 +51,7 @@ function monthCellRender(date: moment.Moment, schedule: ISchedule) {
   const events = findEventsOnSameMonth(schedule, date);
   return (
     events.length > 0 && (
-      <Badge count={getBadgeText(events.length)} style={{backgroundColor: '#52c41a'}}/>
+      <Badge count={getBadgeText(events.length)} style={{ backgroundColor: '#52c41a' }} />
     )
   );
 }
@@ -59,7 +71,7 @@ function getAllEvents(schedule: ISchedule): Array<Event> {
 export default function Schedule() {
   const user = useUser();
 
-  const {id, publicUUID} = useParams<any>();
+  const { id, publicUUID } = useParams<any>();
   const [schedule, setSchedule] = useState<any>();
   const [events, setEvents] = useState<Array<Event>>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -106,21 +118,19 @@ export default function Schedule() {
 
   useEffect(() => {
     if (schedule) {
-      setEvents(getAllEvents(schedule))
-    }
-    else{
-      setEvents([])
+      setEvents(getAllEvents(schedule));
+    } else {
+      setEvents([]);
     }
   }, [schedule]);
 
-
   useEffect(() => {
-      if(events.length > 0) {
-        events.sort((a: Event, b: Event): number => {
-          return moment(a.beginTime).unix() - moment(b.beginTime).unix();
-        })
-        setDateValue(moment(events[0].beginTime))
-      }
+    if (events.length > 0) {
+      events.sort((a: Event, b: Event): number => {
+        return moment(a.beginTime).unix() - moment(b.beginTime).unix();
+      });
+      setDateValue(moment(events[0].beginTime));
+    }
   }, [events]);
 
   function getScheduleFilename() {
@@ -149,71 +159,68 @@ export default function Schedule() {
     <>
       {loading ? (
         <Row justify={'center'}>
-          <Spin size="large"/>
+          <Spin size="large" />
         </Row>
       ) : (
         <>
           {!isPublic && user?.isAdmin && (
             <Row justify={'end'} gutter={16}>
               <Col>
-                <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule}/>
+                <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
               </Col>
             </Row>
           )}
-          <CenteredHeader title={schedule.name} subtitle={schedule.description}/>
-
+          <CenteredHeader title={schedule.name} subtitle={schedule.description} />
 
           <Row gutter={[16, 16]} justify="space-between">
-
             <Col span={24} xl={24}>
-            <Tabs>
-              <Tabs.TabPane tab="Widok kalendarza" key="1">
-
-                <Row justify="space-between">
-                <Col span={24} xl={12}>
-                  <Calendar
-                    dateCellRender={(date: moment.Moment) => dateCellRender(date, schedule)}
-                    monthCellRender={(date: moment.Moment) => monthCellRender(date, schedule)}
-                    value={dateValue}
-                    onChange={(date) => {setDateValue(date)}}
-                  />
-                </Col>
-                <Col span={24} xl={11}>
-                  <List
-                    itemLayout="horizontal"
-                    dataSource={currentEvents}
-                    renderItem={(item) => <EventListItem item={item}/>}
-                  />
-                </Col>
-                </Row>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Lista wydarzeń" key="2">
-                <Row justify="space-around">
-                <Col span={24} xl={12}>
-                  <List
-                    pagination={{
-                      onChange: page => {
-                        console.log(page);
-                      },
-                      pageSize: 8,
-                    }}
-                    itemLayout="horizontal"
-                    dataSource={events}
-                    renderItem={(item) => <EventListItem item={item}/>}
-                  />
-                </Col>
+              <Tabs>
+                <Tabs.TabPane tab="Widok kalendarza" key="1">
+                  <Row justify="space-between">
+                    <Col span={24} xl={12}>
+                      <Calendar
+                        dateCellRender={(date: moment.Moment) => dateCellRender(date, schedule)}
+                        monthCellRender={(date: moment.Moment) => monthCellRender(date, schedule)}
+                        value={dateValue}
+                        onChange={(date) => {
+                          setDateValue(date);
+                        }}
+                      />
+                    </Col>
+                    <Col span={24} xl={11}>
+                      <List
+                        itemLayout="horizontal"
+                        dataSource={currentEvents}
+                        renderItem={(item) => <EventListItem item={item} />}
+                      />
+                    </Col>
                   </Row>
-              </Tabs.TabPane>
-            </Tabs>
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Lista wydarzeń" key="2">
+                  <Row justify="space-around">
+                    <Col span={24} xl={12}>
+                      <List
+                        pagination={{
+                          onChange: (page) => {
+                            console.log(page);
+                          },
+                          pageSize: 8,
+                        }}
+                        itemLayout="horizontal"
+                        dataSource={events}
+                        renderItem={(item) => <EventListItem item={item} />}
+                      />
+                    </Col>
+                  </Row>
+                </Tabs.TabPane>
+              </Tabs>
             </Col>
-
-
           </Row>
           {!isPublic && user?.isAdmin && (
             <>
               <Row gutter={16}>
                 <Col>
-                  <UpdateScheduleModal schedule={schedule}/>
+                  <UpdateScheduleModal schedule={schedule} />
                 </Col>
                 <Col>
                   <DownloadFileButton
@@ -224,15 +231,15 @@ export default function Schedule() {
                   </DownloadFileButton>
                 </Col>
                 <Col>
-                  <Input addonBefore={'Publiczny link'} value={publicLink}/>
+                  <Input addonBefore={'Publiczny link'} value={publicLink} />
                 </Col>
                 <Col>
-                  <CopyToClipboardButton content={publicLink}/>
+                  <CopyToClipboardButton content={publicLink} />
                 </Col>
               </Row>
               <Row justify={'center'}>
                 <Col span={24}>
-                  <ScheduleSubscribersManagement scheduleId={schedule.id}/>
+                  <ScheduleSubscribersManagement scheduleId={schedule.id} />
                 </Col>
               </Row>
             </>
@@ -240,7 +247,7 @@ export default function Schedule() {
           {isPublic && (
             <Row justify="center">
               <Col>
-                <PublicSubscribeForm onSubmit={handlePublicSubscriptionSubmit}/>
+                <PublicSubscribeForm onSubmit={handlePublicSubscriptionSubmit} />
               </Col>
             </Row>
           )}
