@@ -1,12 +1,16 @@
 import { objectToFormData } from '../helpers/form';
 import { ApiAdapter } from './ApiAdapter';
 
+import { Schedule } from './ScheduleService';
 export type Lecturer = {
   id: number;
   name: string;
   surname: string;
   email: string;
-  activeSubscription: boolean;
+  // TODO: remove activeSubscription after FE stops using it
+  activeSubscription?: boolean;
+  eventsCount: number;
+  schedules: Schedule[];
 };
 
 type Response<T> = {
