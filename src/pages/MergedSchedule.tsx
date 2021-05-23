@@ -1,14 +1,6 @@
 import CenteredHeader from '../components/CenteredHeader';
 import { useState, useEffect, useCallback } from 'react';
-import {
-  Badge,
-  Calendar,
-  Col,
-  List,
-  Row,
-  Spin,
-  Tabs,
-} from 'antd';
+import { Badge, Calendar, Col, List, Row, Spin, Tabs } from 'antd';
 import moment from 'moment';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
 import EventListItem from '../components/EventListItem';
@@ -113,7 +105,10 @@ export default function MergedSchedule() {
         </Row>
       ) : (
         <>
-          <CenteredHeader title="Mój harmonogram" subtitle="Wydarzenia ze wszystkich harmonogramów" />
+          <CenteredHeader
+            title="Mój harmonogram"
+            subtitle="Wydarzenia ze wszystkich harmonogramów"
+          />
 
           <Row gutter={[16, 16]} justify="space-between">
             <Col span={24} xl={24}>
