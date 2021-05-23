@@ -19,6 +19,7 @@ export interface Schedule {
   id: number;
   name: string;
   description: string;
+  notifications: boolean;
   eventCount: number;
   firstEventDate: string;
   lastEventDate: string;
