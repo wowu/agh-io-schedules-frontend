@@ -16,9 +16,6 @@ export default function SettingsForm(props: SettingsFormProps) {
 
   return (
     <>
-      {/*<Col xs={24}>*/}
-      {/*<Space direction="vertical" size="large">*/}
-
       <Row>
         <Checkbox
           checked={activeSubscription}
@@ -33,8 +30,6 @@ export default function SettingsForm(props: SettingsFormProps) {
           Zapisz
         </Button>
       </Row>
-      {/*</Space>*/}
-      {/*</Col>*/}
     </>
   );
 }

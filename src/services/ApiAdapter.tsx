@@ -13,12 +13,12 @@ export interface ApiAdapterOptions {
 export class ApiAdapter {
   static async put(
     resource: string,
-    formData: FormData = new FormData(),
+    body: FormData | string = new FormData(),
     options: ApiAdapterOptions = {}
   ): Promise<Response> {
     const request = new Request(`${API_URL}${resource}`, {
       method: 'PUT',
-      body: formData,
+      body: body,
       redirect: 'follow',
     });
     return this.call(request, options);

@@ -18,19 +18,19 @@ enum ImportStatus {
 }
 
 export default function ImportForm() {
-  let [files, setFiles] = useState<any>([]);
-  let [uploading, setUploading] = useState<boolean>(false);
-  let [importStatus, setImportStatus] = useState<ImportStatus>(ImportStatus.default);
+  const [files, setFiles] = useState<any>([]);
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [importStatus, setImportStatus] = useState<ImportStatus>(ImportStatus.default);
 
-  let [successData, setSuccessData] = useState<{ uploaded: [] }>({ uploaded: [] });
-  let [collisionsData, setCollisionsData] = useState<{ schedulesWithConflicts: [] }>({
+  const [successData, setSuccessData] = useState<{ uploaded: [] }>({ uploaded: [] });
+  const [collisionsData, setCollisionsData] = useState<{ schedulesWithConflicts: [] }>({
     schedulesWithConflicts: [],
   });
-  let [response, setResponse] = useState<{ status: number; statusText: string }>({
+  const [response, setResponse] = useState<{ status: number; statusText: string }>({
     status: -1,
     statusText: '',
   });
-  let [error, setError] = useState<{ message: string }>({ message: '' });
+  const [error, setError] = useState<{ message: string }>({ message: '' });
 
   const showMessage = () => {
     switch (importStatus) {
@@ -91,14 +91,14 @@ export default function ImportForm() {
     }
   };
 
-  let draggerProps = {
+  const draggerProps = {
     onRemove: (file: any) => {
       setFiles((prevFiles: any) => {
         return prevFiles.filter((el: any) => el !== file);
       });
     },
     beforeUpload: (file: File) => {
-      setFiles((prevFiles: Array<File>) => [...prevFiles, file]);
+      setFiles((prevFiles: File[]) => [...prevFiles, file]);
       return false;
     },
     multiple: true,
