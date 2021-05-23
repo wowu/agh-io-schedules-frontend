@@ -64,7 +64,7 @@ export default function NotificationPicker(props: NotificationsPickerProps) {
 
   const tableStyle = (): CSSProperties => {
     if (props.disabled) {
-      return { opacity: 0.3, pointerEvents: "none" };
+      return { opacity: 0.3, pointerEvents: 'none' };
     } else {
       return {};
     }
