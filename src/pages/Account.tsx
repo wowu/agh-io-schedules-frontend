@@ -1,20 +1,19 @@
-import { Col, Divider, notification, Row, Spin } from 'antd';
+import { Checkbox, Col, Divider, notification, Row } from 'antd';
+import Title from 'antd/es/typography/Title';
 import React, { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
-import PasswordForm from '../components/PasswordForm';
-import SettingsForm from '../components/SettingsForm';
-import { useUser } from '../helpers/user';
-import { User, UserService } from '../services/UserService';
-import Title from 'antd/es/typography/Title';
-import { Notification, NotificationService } from '../services/NotificationService';
 import NotificationPicker from '../components/NotificationsPicker';
+import PasswordForm from '../components/PasswordForm';
+import { useUser } from '../helpers/user';
+import { Notification, NotificationService } from '../services/NotificationService';
+import { User, UserService } from '../services/UserService';
 
 export default function Account() {
   const user = useUser();
   const [account, setAccount] = useState<User>();
 
-  // const [settingsLoading, setSettingsLoading] = useState<boolean>(false);
   const [changePasswordLoading, setChangePasswordLoading] = useState<boolean>(false);
+  const [useDefaultNotifications, setUseDefaultNotifications] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const fetchAccount = async () => {
@@ -23,23 +22,20 @@ export default function Account() {
   };
 
   const fetchNotifications = async () => {
-    const notifications = await NotificationService.getGlobalNotifications();
-    setNotifications(notifications);
+    if (user?.isAdmin) {
+      const notifications = await NotificationService.getGlobalNotifications();
+      setNotifications(notifications);
+    } else {
+      const userNotifications = await NotificationService.getUserNotifications();
+      setNotifications(userNotifications?.notifications || []);
+      setUseDefaultNotifications(userNotifications.default);
+    }
   };
 
   useEffect(() => {
     fetchAccount();
     fetchNotifications();
   }, []);
-
-  // const updateSubscription = async (activeSubscription: boolean) => {
-  //   if (!account) return;
-
-  //   setSettingsLoading(true);
-  //   await UserService.updateUser(account.id, account.email, activeSubscription);
-  //   notification['success']({ message: 'Zapisano ustawienia' });
-  //   setSettingsLoading(false);
-  // };
 
   const changePassword = async (password: string) => {
     if (!account) return;
@@ -61,12 +57,25 @@ export default function Account() {
   };
 
   const handleNotificationDelete = (notification: Notification) => {
+    const notificationsWithoutDeleted = notifications.filter((n) => n !== notification);
+
     if (user?.isAdmin) {
-      const notificationsWithoutDeleted = notifications.filter((n) => n !== notification);
       NotificationService.setGlobalNotifications(notificationsWithoutDeleted);
     } else {
-      alert('not implemented');
+      NotificationService.setUserNotifications({
+        default: useDefaultNotifications,
+        notifications: notificationsWithoutDeleted,
+      });
     }
+
+    fetchNotifications();
+  };
+
+  const handleDefaultChange = (value: boolean) => {
+    NotificationService.setUserNotifications({
+      default: useDefaultNotifications,
+      notifications: notifications,
+    });
 
     fetchNotifications();
   };
@@ -100,23 +109,24 @@ export default function Account() {
                 Wybierz jak wcześnie będziesz otrzymywać informacje o Twoich wydarzeniach. Możesz
                 dodać dowolną liczbę powiadomień.
               </p>
+
+              <br />
+
+              <Row justify={'center'}>
+                <Checkbox
+                  onChange={(e) => handleDefaultChange(e.target.checked)}
+                  checked={useDefaultNotifications}
+                >
+                  Użyj domyślnych powiadomień systemu
+                </Checkbox>
+              </Row>
             </>
           )}
 
           <br />
 
-          {/* {account ? (
-            <SettingsForm
-              currentActiveSubscription={account.activeSubscription}
-              notifications={notifications}
-              onSave={updateSubscription}
-              loading={settingsLoading}
-            />
-          ) : (
-            <Spin size="large" />
-          )} */}
-
           <NotificationPicker
+            disabled={useDefaultNotifications}
             notifications={notifications}
             onCreate={handleNotificationCreate}
             onDelete={handleNotificationDelete}

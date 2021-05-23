@@ -1,4 +1,5 @@
 import { Button, InputNumber, List, Select, Space, Table } from 'antd';
+import { CSSProperties } from 'react';
 import { useState } from 'react';
 import { Notification } from '../services/NotificationService';
 
@@ -28,6 +29,7 @@ const Add = (props: AddProps) => {
 };
 
 type NotificationsPickerProps = {
+  disabled: boolean;
   notifications: Notification[];
   onCreate: (notification: Notification) => void;
   onDelete: (notification: Notification) => void;
@@ -60,9 +62,18 @@ export default function NotificationPicker(props: NotificationsPickerProps) {
     },
   ];
 
+  const tableStyle = (): CSSProperties => {
+    if (props.disabled) {
+      return { opacity: 0.3, pointerEvents: 'none' };
+    } else {
+      return {};
+    }
+  };
+
   return (
     <div>
       <Table
+        style={tableStyle()}
         pagination={false}
         footer={() => <Add onCreate={props.onCreate} />}
         columns={columns}
