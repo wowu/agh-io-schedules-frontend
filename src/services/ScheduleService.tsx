@@ -23,7 +23,7 @@ export interface Schedule {
   firstEventDate: string;
   lastEventDate: string;
   publicUUID: string;
-  events: Array<Event>;
+  events: Event[];
 }
 
 export class ScheduleService {
@@ -38,7 +38,7 @@ export class ScheduleService {
           tryAuthorize: false,
         }
       );
-      let data = await response.json();
+      const data = await response.json();
       return Promise.resolve({ response, data });
     } catch (error) {
       console.error('addPublicSubscriber: ', error);
@@ -60,7 +60,7 @@ export class ScheduleService {
       const fields = new FormData();
       fields.append('email', email);
       const response = await ApiAdapter.post(`/api/schedules/${id}/subscribers`, fields);
-      let data = await response.json();
+      const data = await response.json();
       return Promise.resolve({ response, data });
     } catch (error) {
       console.error('addSubscriber: ', error);
@@ -73,7 +73,7 @@ export class ScheduleService {
       const response = await ApiAdapter.get(`/api/public/schedules/${publicUUID}`, {
         tryAuthorize: false,
       });
-      let data = await response.json();
+      const data = await response.json();
       return Promise.resolve(data);
     } catch (error) {
       console.log('downloadSchedule: ', error);
@@ -82,7 +82,7 @@ export class ScheduleService {
   static async getSubscribers(id: any) {
     try {
       const response = await ApiAdapter.get(`/api/schedules/${id}/subscribers`);
-      let data = await response.json();
+      const data = await response.json();
       return Promise.resolve({ response, data });
     } catch (error) {
       console.error('getSubscribers: ', error);
@@ -93,7 +93,7 @@ export class ScheduleService {
   static async downloadSchedule(id: any): Promise<any> {
     try {
       const response = await ApiAdapter.get(`/api/schedules/${id}/file`, { tryAuthorize: false });
-      let blob = await response.blob();
+      const blob = await response.blob();
       return Promise.resolve(blob);
     } catch (error) {
       console.log('downloadSchedule: ', error);
@@ -108,7 +108,7 @@ export class ScheduleService {
   static async getSchedule(id: number): Promise<any> {
     try {
       const response = await ApiAdapter.get(`/api/schedules/${id}`);
-      let json = await response.json();
+      const json = await response.json();
       return Promise.resolve(json);
     } catch (error) {
       console.log('getAll: ', error);
@@ -119,7 +119,7 @@ export class ScheduleService {
   static async getListSchedules(): Promise<{ response: any; data: { schedules: [] } }> {
     try {
       const response = await ApiAdapter.get('/api/schedules/');
-      let data = await response.json();
+      const data = await response.json();
       console.log(data);
       return Promise.resolve({ response, data });
     } catch (error) {
@@ -130,9 +130,10 @@ export class ScheduleService {
 
   static async sendNewSchedules(files: FormData): Promise<any> {
     try {
-      let response = await ApiAdapter.post('/api/schedules/', files);
+      const response = await ApiAdapter.post('/api/schedules/', files);
 
       const contentType = response.headers.get('content-type');
+
       if (contentType && contentType.indexOf('application/json') !== -1) {
         const data = await response.json();
         return Promise.resolve({ response, data });
@@ -147,9 +148,10 @@ export class ScheduleService {
 
   static async updateSchedule(files: FormData, id: number): Promise<any> {
     try {
-      let response = await ApiAdapter.post(`/api/schedules/${id}/file`, files);
+      const response = await ApiAdapter.post(`/api/schedules/${id}/file`, files);
 
       const contentType = response.headers.get('content-type');
+
       if (contentType && contentType.indexOf('application/json') !== -1) {
         const data = await response.json();
         return Promise.resolve({ response, data });
@@ -182,7 +184,7 @@ export class ScheduleService {
     }
   }
 
-  private static arrayOrElseEmptyArray(json: any): Array<any> {
+  private static arrayOrElseEmptyArray(json: any): any[] {
     if (!Array.isArray(json)) {
       json = [];
     }

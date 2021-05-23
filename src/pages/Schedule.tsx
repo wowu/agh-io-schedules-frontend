@@ -56,15 +56,15 @@ function monthCellRender(date: moment.Moment, schedule: ISchedule) {
   );
 }
 
-function findEventsOnSameDay(schedule: ISchedule, date: moment.Moment): Array<Event> {
+function findEventsOnSameDay(schedule: ISchedule, date: moment.Moment): Event[] {
   return schedule.events.filter((e: Event) => moment(e.beginTime).isSame(date, 'day'));
 }
 
-function findEventsOnSameMonth(schedule: ISchedule, date: moment.Moment): Array<Event> {
+function findEventsOnSameMonth(schedule: ISchedule, date: moment.Moment): Event[] {
   return schedule.events.filter((e: Event) => moment(e.beginTime).isSame(date, 'month'));
 }
 
-function getAllEvents(schedule: ISchedule): Array<Event> {
+function getAllEvents(schedule: ISchedule): Event[] {
   return schedule.events;
 }
 
@@ -73,10 +73,10 @@ export default function Schedule() {
 
   const { id, publicUUID } = useParams<any>();
   const [schedule, setSchedule] = useState<any>();
-  const [events, setEvents] = useState<Array<Event>>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [dateValue, setDateValue] = useState<moment.Moment>(moment());
-  const [currentEvents, setCurrentEvents] = useState<Array<Event>>([]);
+  const [currentEvents, setCurrentEvents] = useState<Event[]>([]);
   const [publicLink, setPublicLink] = useState<string>('');
 
   let isPublic = false;

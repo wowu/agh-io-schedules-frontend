@@ -17,7 +17,7 @@ export class UserService {
   static async getUsers(): Promise<Response<{ users: User[] }>> {
     try {
       const response = await ApiAdapter.get('/api/users/');
-      let data = await response.json();
+      const data = await response.json();
       return Promise.resolve({ response, data });
     } catch (error) {
       console.error('getUsers: ', error);
@@ -28,7 +28,7 @@ export class UserService {
   static async getUser(id: number): Promise<Response<User>> {
     try {
       const response = await ApiAdapter.get(`/api/users/${id}`);
-      let data = await response.json();
+      const data = await response.json();
       return Promise.resolve({ response, data });
     } catch (error) {
       console.error('getUser: ', error);
@@ -50,7 +50,7 @@ export class UserService {
           activeSubscription,
         })
       );
-      let data = await response.json();
+      const data = await response.json();
 
       let error;
       if (data.error) error = data.error;
@@ -76,7 +76,7 @@ export class UserService {
           activeSubscription,
         })
       );
-      let data = await response.json();
+      const data = await response.json();
 
       let error;
       if (data.error) error = data.error;
@@ -97,7 +97,7 @@ export class UserService {
           password: newPassword,
         })
       );
-      let data = await response.json();
+      const data = await response.json();
 
       let error;
       if (data.error) error = data.error;

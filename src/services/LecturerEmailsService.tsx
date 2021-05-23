@@ -21,7 +21,7 @@ export class LecturerEmailsService {
   static async getLecturers(): Promise<Response<Lecturer[]>> {
     try {
       const response = await ApiAdapter.get('/api/lecturers/');
-      let data = await response.json();
+      const data = await response.json();
       return Promise.resolve({ response, data });
     } catch (error) {
       console.log('getEmails: ', error);
@@ -45,7 +45,7 @@ export class LecturerEmailsService {
           activeSubscription,
         })
       );
-      let data = await response.json();
+      const data = await response.json();
 
       let error;
       if (data.error) error = data.error;
@@ -75,7 +75,7 @@ export class LecturerEmailsService {
           activeSubscription,
         })
       );
-      let data = await response.json();
+      const data = await response.json();
 
       let error;
       if (data.error) error = data.error;

@@ -21,17 +21,17 @@ interface UpdateScheduleModalProps {
 export default function UpdateScheduleModal(props: UpdateScheduleModalProps) {
   const [uploading, setUploading] = useState<boolean>(false);
   const [updateFile, setUpdateFile] = useState<any>([]);
-  let [updateSuccessData, setUpdateSuccessData] = useState<any>();
-  let [updateCollisionsData, setUpdateCollisionsData] = useState<any>({
+  const [updateSuccessData, setUpdateSuccessData] = useState<any>();
+  const [updateCollisionsData, setUpdateCollisionsData] = useState<any>({
     schedulesWithConflicts: [],
   });
-  let [updateStatus, setUpdateStatus] = useState<UpdateFileStatus>(UpdateFileStatus.default);
-  let [updateResponse, setUpdateResponse] = useState<{ status: number; statusText: string }>({
+  const [updateStatus, setUpdateStatus] = useState<UpdateFileStatus>(UpdateFileStatus.default);
+  const [updateResponse, setUpdateResponse] = useState<{ status: number; statusText: string }>({
     status: -1,
     statusText: '',
   });
   const [updateVisible, setUpdateVisible] = useState<boolean>(false);
-  let [updateError, setUpdateError] = useState<{ message: string }>({ message: '' });
+  const [updateError, setUpdateError] = useState<{ message: string }>({ message: '' });
 
   const handleUploadedSuccess = () => {
     setUpdateFile([]);
@@ -149,7 +149,7 @@ export default function UpdateScheduleModal(props: UpdateScheduleModalProps) {
     }
   };
 
-  let draggerProps = {
+  const draggerProps = {
     onRemove: (file: any) => {
       setUpdateFile([]);
     },
