@@ -27,6 +27,10 @@ export interface Schedule {
   events: Event[];
 }
 
+export type MergedSchedule = {
+  events: Event[];
+};
+
 export class ScheduleService {
   static async addPublicSubscriber(email: string, publicUUID: string) {
     try {
@@ -111,6 +115,22 @@ export class ScheduleService {
       const response = await ApiAdapter.get(`/api/schedules/${id}`);
       const json = await response.json();
       return Promise.resolve(json);
+    } catch (error) {
+      console.log('getAll: ', error);
+      return Promise.reject(error);
+    }
+  }
+
+  static async getMergedSchedule(): Promise<MergedSchedule> {
+    try {
+      const response = await ApiAdapter.get(`/api/me/schedules`);
+      const data = await response.json();
+
+      const schedules: Schedule[] = data.schedules;
+
+      const events = schedules.flatMap((schedule) => schedule.events);
+
+      return Promise.resolve({ events });
     } catch (error) {
       console.log('getAll: ', error);
       return Promise.reject(error);

@@ -15,6 +15,7 @@ import AppMenu from './components/AppMenu';
 import history from './history';
 import Users from './pages/Users';
 import Account from './pages/Account';
+import MergedSchedule from './pages/MergedSchedule';
 
 const { Header, Content, Footer } = Layout;
 
@@ -48,6 +49,9 @@ function App() {
                 <Switch>
                   <PrivateRoute exact path="/">
                     <ScheduleList />
+                  </PrivateRoute>
+                  <PrivateRoute path="/merged">
+                    <MergedSchedule />
                   </PrivateRoute>
                   <PrivateRoute path="/import">
                     <ImportForm />
