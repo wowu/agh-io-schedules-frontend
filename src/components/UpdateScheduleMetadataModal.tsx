@@ -1,5 +1,5 @@
 import { EditOutlined } from '@ant-design/icons';
-import { Button, Col, Input, Modal, Row } from 'antd';
+import { Button, Col, Divider, Input, Modal, Row, Switch } from 'antd';
 import React, { useState } from 'react';
 import { Schedule, ScheduleService } from '../services/ScheduleService';
 
@@ -12,6 +12,7 @@ export default function UpdateScheduleMetadataModal(props: UpdateScheduleMetadat
   const [visible, setVisible] = useState<boolean>(false);
   const [name, setName] = useState<string>(props.schedule.name);
   const [description, setDescription] = useState<string>(props.schedule.description);
+  const [notifications, setNotifications] = useState<boolean>(props.schedule.notifications);
 
   function showModal() {
     setVisible(true);
@@ -26,6 +27,7 @@ export default function UpdateScheduleMetadataModal(props: UpdateScheduleMetadat
     const fields = new FormData();
     fields.append('name', name);
     fields.append('description', description);
+    fields.append('notifications', String(notifications));
     ScheduleService.updateScheduleMetadata(fields, props.schedule.id)
       .then((_data) => props.updateCallback())
       .catch((error) => console.log(error));
@@ -60,6 +62,14 @@ export default function UpdateScheduleMetadataModal(props: UpdateScheduleMetadat
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
+            <Divider />
+            <Row justify={'space-between'}>
+              Powiadomienia o zdarzeniach
+              <Switch
+                checked={notifications}
+                onChange={(checked: boolean) => setNotifications(checked)}
+              />
+            </Row>
           </Col>
         </>
       </Modal>
