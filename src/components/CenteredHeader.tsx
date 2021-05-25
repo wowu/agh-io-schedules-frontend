@@ -6,11 +6,9 @@ interface CenteredHeaderProps {
 
 export default function CenteredHeader(props: CenteredHeaderProps) {
   return (
-    <Row justify={'center'}>
-      <Col>
-        <PageHeader className="site-page-header" title={props.title} />
-        {props.subtitle && <Typography.Paragraph>{props.subtitle}</Typography.Paragraph>}
-      </Col>
+    <Row justify={'center'} align="middle" style={{ flexDirection: 'column' }}>
+      <PageHeader className="site-page-header" title={props.title} />
+      {props.subtitle && <Typography.Paragraph>{props.subtitle}</Typography.Paragraph>}
     </Row>
   );
 }

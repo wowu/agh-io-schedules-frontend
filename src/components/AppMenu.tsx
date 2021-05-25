@@ -25,6 +25,13 @@ function AppMenu() {
           <Menu.Item key="schedules">
             <Link to="/">Harmonogramy</Link>
           </Menu.Item>
+          {!user.isAdmin && (
+            <>
+              <Menu.Item key="merged">
+                <Link to="/merged">Mój Harmonogram</Link>
+              </Menu.Item>
+            </>
+          )}
           {user.isAdmin && (
             <>
               <Menu.Item key="import">

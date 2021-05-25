@@ -27,6 +27,10 @@ export interface Schedule {
   events: Event[];
 }
 
+export type MergedSchedule = {
+  events: Event[];
+};
+
 export class ScheduleService {
   static async addPublicSubscriber(email: string, publicUUID: string) {
     try {
@@ -112,7 +116,79 @@ export class ScheduleService {
       const json = await response.json();
       return Promise.resolve(json);
     } catch (error) {
-      console.log('getAll: ', error);
+      console.log('getSchedule: ', error);
+      return Promise.reject(error);
+    }
+  }
+
+  static async getMergedSchedule(): Promise<MergedSchedule> {
+    try {
+      const response = await ApiAdapter.get(`/api/me/schedules`);
+      const data = await response.json();
+
+      const schedules: Schedule[] = data.schedules;
+
+      // const events = schedules.flatMap((schedule) => schedule.events);
+
+      // TODO: remove this when api is working
+      const events = [
+        {
+          beginTime: '2021-04-19T12:00:00.000Z',
+          endTime: '2021-04-19T15:00:00.000Z',
+          eventName: 'Wykład z kododawania',
+          form: 'local',
+          groupName: 'wszyscy',
+          hours: 4,
+          id: 1,
+          lecturerName: 'Jan',
+          lecturerSurname: 'Nowak',
+          room: '3.21',
+          type: 'lecture',
+        },
+        {
+          beginTime: '2021-04-19T16:00:00.000Z',
+          endTime: '2021-04-19T19:00:00.000Z',
+          eventName: 'Wykład z kododawania 2',
+          form: 'local',
+          groupName: 'wszyscy',
+          hours: 4,
+          id: 2,
+          lecturerName: 'Jan',
+          lecturerSurname: 'Nowak',
+          room: '3.21',
+          type: 'lecture',
+        },
+        {
+          beginTime: '2021-04-19T12:00:00.000Z',
+          endTime: '2021-04-19T15:00:00.000Z',
+          eventName: 'Wykład z kododawania',
+          form: 'local',
+          groupName: 'wszyscy',
+          hours: 4,
+          id: 1,
+          lecturerName: 'Jan',
+          lecturerSurname: 'Nowak',
+          room: '3.21',
+          type: 'lecture',
+        },
+        {
+          beginTime: '2021-04-19T16:00:00.000Z',
+          endTime: '2021-04-19T19:00:00.000Z',
+          eventName: 'Wykład z kododawania 2',
+          form: 'local',
+          groupName: 'wszyscy',
+          hours: 4,
+          id: 2,
+          lecturerName: 'Jan',
+          lecturerSurname: 'Nowak',
+          room: '3.21',
+          type: 'lecture',
+        },
+      ];
+
+      return Promise.resolve({ events });
+    } catch (error) {
+      console.log('getMergedSchedule: ', error);
       return Promise.reject(error);
     }
   }
