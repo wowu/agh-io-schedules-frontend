@@ -116,7 +116,7 @@ export class ScheduleService {
       const json = await response.json();
       return Promise.resolve(json);
     } catch (error) {
-      console.log('getAll: ', error);
+      console.log('getSchedule: ', error);
       return Promise.reject(error);
     }
   }
@@ -188,7 +188,7 @@ export class ScheduleService {
 
       return Promise.resolve({ events });
     } catch (error) {
-      console.log('getAll: ', error);
+      console.log('getMergedSchedule: ', error);
       return Promise.reject(error);
     }
   }
