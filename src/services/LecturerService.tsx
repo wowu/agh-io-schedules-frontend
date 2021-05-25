@@ -17,26 +17,29 @@ export class LecturerService {
 
   static prepareTimelineData(lecturers: Lecturer[]) {
     const timeFormat = 'DD MM YYYY'
-    const data: any[] = []
+    const data: { date: number; val: number; }[] = []
     lecturers.forEach((lecturer) => {
-      const eventsMap = new Map();
+      const eventsMap = new Map<string, number>();
       lecturer.schedules.forEach((schedule) => {
         schedule.events.forEach(event => {
           const date = moment(event.beginTime).format(timeFormat)
-          if (!eventsMap.has(date)) {
-            eventsMap.set(date, 1);
+          console.log(date);
+          if (eventsMap.has(date)) {
+            eventsMap.set(date, eventsMap.get(date)! + 1)
           } else {
-            eventsMap.set(date, eventsMap.get(date) + 1)
+            eventsMap.set(date, 1)
           }
         });
       });
-      eventsMap.forEach(([date, count]) => {
+      console.log(eventsMap);
+      eventsMap.forEach(((count, date) => {
         data.push({
-          date: moment(date, timeFormat).milliseconds(),
+          date: moment(date, timeFormat).valueOf(),
           val: count
         })
-      });
+      }));
     });
     return data;
   }
+
 }
