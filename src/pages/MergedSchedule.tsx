@@ -7,6 +7,7 @@ import EventListItem from '../components/EventListItem';
 import { useUser } from '../helpers/user';
 import { useParams } from 'react-router-dom';
 import LecturersBarChart from '../components/LecturersTimelineChart';
+import { Lecturer, LecturerEmailsService } from '../services/LecturerEmailsService';
 
 function getBadgeText(count: number): string {
   switch (count) {
@@ -55,6 +56,7 @@ export default function MergedSchedule() {
   const user = useUser();
   const { lecturerId } = useParams<any>();
 
+  const [lecturer, setLecturer] = useState<Lecturer | null>();
   const [schedule, setSchedule] = useState<any>();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -72,6 +74,21 @@ export default function MergedSchedule() {
         console.log(reason);
       });
   }, [lecturerId]);
+
+  const loadLecturer = useCallback(() => {
+    LecturerEmailsService.getLecturer(lecturerId)
+      .then((data) => {
+        setLecturer(data);
+        console.log(data);
+      })
+      .catch((reason: any) => {
+        console.log(reason);
+      });
+  }, [lecturerId]);
+
+  useEffect(() => {
+    loadLecturer();
+  }, [loadLecturer]);
 
   useEffect(() => {
     loadSchedule();
@@ -109,7 +126,7 @@ export default function MergedSchedule() {
       ) : (
         <>
           <CenteredHeader
-            title="Mój harmonogram"
+            title={lecturer ? `${lecturer.name} ${lecturer.surname}` : 'Mój harmonogram'}
             subtitle="Wydarzenia ze wszystkich harmonogramów"
           />
 

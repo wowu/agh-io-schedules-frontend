@@ -12,8 +12,6 @@ export type LecturerPieDataPoint = {
   value: number;
 };
 
-export const DATE_FORMAT = 'DD MM YYYY';
-
 export class StatsService {
   static prepareTimelineData(events: Event[]): LecturerBarDataPoint[] {
     const dateFormat = 'MMMM D, YYYY';
@@ -32,6 +30,9 @@ export class StatsService {
         date,
         count,
       });
+    });
+    data.sort((a, b) => {
+      return moment(a.date, dateFormat).valueOf() - moment(b.date, dateFormat).valueOf();
     });
     return data;
   }

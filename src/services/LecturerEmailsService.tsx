@@ -22,6 +22,19 @@ type Response<T> = {
 };
 
 export class LecturerEmailsService {
+  static async getLecturer(id: any): Promise<Lecturer | null> {
+    if (id) {
+      try {
+        const response = await ApiAdapter.get(`/api/lecturers/${id}`);
+        const data = await response.json();
+        return Promise.resolve(data);
+      } catch (error) {
+        console.log('getEmails: ', error);
+        return Promise.reject(error);
+      }
+    }
+    return null;
+  }
   static async getLecturers(): Promise<Response<Lecturer[]>> {
     try {
       const response = await ApiAdapter.get('/api/lecturers/');
