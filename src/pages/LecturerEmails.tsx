@@ -1,7 +1,8 @@
 import { Button, Col, notification, Row, Space, Table, Tag } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
 import LecturerForm, { LecturerFormValues } from '../components/LecturerForm';
+import LecturersPieChart from '../components/LecturersPieChart';
 import { Lecturer, LecturerEmailsService } from '../services/LecturerEmailsService';
 
 interface LecturerEditProps {
@@ -65,6 +66,7 @@ function LecturersTable(props: LecturersTableProps) {
       render: (_text: string, record: Lecturer) => (
         <>
           <Space size="middle">
+            <a href={`/merged/${record.id}`}>Wydarzenia</a>
             <LecturerEdit onEdit={props.onEdit} lecturer={record} />
             <a onClick={() => props.onRemove(record)}>Usuń</a>
           </Space>
@@ -156,6 +158,9 @@ export default function LecturerEmails() {
           title="Dodaj prowadzącego"
           onCancel={() => setCreateModalVisible(false)}
         />
+      </Row>
+      <Row style={{ height: 300 }}>
+        <LecturersPieChart lecturers={lecturers} />
       </Row>
     </>
   );

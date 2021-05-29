@@ -1,5 +1,6 @@
 import { ApiAdapter } from './ApiAdapter';
 import { APP_URL } from './AuthService';
+import { Lecturer } from './LecturerEmailsService';
 
 export interface Event {
   id: number;
@@ -121,72 +122,33 @@ export class ScheduleService {
     }
   }
 
-  static async getMergedSchedule(): Promise<MergedSchedule> {
+  static async getMergedScheduleForLecturer(): Promise<MergedSchedule> {
+    const response = await ApiAdapter.get(`/api/me/schedules`);
+    const data = await response.json();
+
+    const schedules: Schedule[] = data.schedules;
+
+    const events = schedules.flatMap((schedule) => schedule.events);
+
+    return { events };
+  }
+
+  static async getMergedScheduleForAdmin(lecturerId: string): Promise<MergedSchedule> {
+    const response = await ApiAdapter.get(`/api/lecturers/${lecturerId}`);
+    const lecturer: Lecturer = await response.json();
+    const events = lecturer.schedules.flatMap((schedule) => schedule.events);
+    return { events };
+  }
+
+  static async getMergedSchedule(lecturerId: string | undefined): Promise<MergedSchedule> {
     try {
-      const response = await ApiAdapter.get(`/api/me/schedules`);
-      const data = await response.json();
-
-      const schedules: Schedule[] = data.schedules;
-
-      // const events = schedules.flatMap((schedule) => schedule.events);
-
-      // TODO: remove this when api is working
-      const events = [
-        {
-          beginTime: '2021-04-19T12:00:00.000Z',
-          endTime: '2021-04-19T15:00:00.000Z',
-          eventName: 'Wykład z kododawania',
-          form: 'local',
-          groupName: 'wszyscy',
-          hours: 4,
-          id: 1,
-          lecturerName: 'Jan',
-          lecturerSurname: 'Nowak',
-          room: '3.21',
-          type: 'lecture',
-        },
-        {
-          beginTime: '2021-04-19T16:00:00.000Z',
-          endTime: '2021-04-19T19:00:00.000Z',
-          eventName: 'Wykład z kododawania 2',
-          form: 'local',
-          groupName: 'wszyscy',
-          hours: 4,
-          id: 2,
-          lecturerName: 'Jan',
-          lecturerSurname: 'Nowak',
-          room: '3.21',
-          type: 'lecture',
-        },
-        {
-          beginTime: '2021-04-19T12:00:00.000Z',
-          endTime: '2021-04-19T15:00:00.000Z',
-          eventName: 'Wykład z kododawania',
-          form: 'local',
-          groupName: 'wszyscy',
-          hours: 4,
-          id: 1,
-          lecturerName: 'Jan',
-          lecturerSurname: 'Nowak',
-          room: '3.21',
-          type: 'lecture',
-        },
-        {
-          beginTime: '2021-04-19T16:00:00.000Z',
-          endTime: '2021-04-19T19:00:00.000Z',
-          eventName: 'Wykład z kododawania 2',
-          form: 'local',
-          groupName: 'wszyscy',
-          hours: 4,
-          id: 2,
-          lecturerName: 'Jan',
-          lecturerSurname: 'Nowak',
-          room: '3.21',
-          type: 'lecture',
-        },
-      ];
-
-      return Promise.resolve({ events });
+      let mergedSchedule;
+      if (lecturerId) {
+        mergedSchedule = this.getMergedScheduleForAdmin(lecturerId);
+      } else {
+        mergedSchedule = this.getMergedScheduleForLecturer();
+      }
+      return Promise.resolve(mergedSchedule);
     } catch (error) {
       console.log('getMergedSchedule: ', error);
       return Promise.reject(error);
@@ -259,12 +221,5 @@ export class ScheduleService {
       console.log('getAll: ', error);
       return Promise.reject(error);
     }
-  }
-
-  private static arrayOrElseEmptyArray(json: any): any[] {
-    if (!Array.isArray(json)) {
-      json = [];
-    }
-    return json;
   }
 }

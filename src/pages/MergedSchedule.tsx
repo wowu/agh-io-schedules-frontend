@@ -5,6 +5,9 @@ import moment from 'moment';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
 import EventListItem from '../components/EventListItem';
 import { useUser } from '../helpers/user';
+import { useParams } from 'react-router-dom';
+import LecturersBarChart from '../components/LecturersTimelineChart';
+import { Lecturer, LecturerEmailsService } from '../services/LecturerEmailsService';
 
 function getBadgeText(count: number): string {
   switch (count) {
@@ -51,7 +54,9 @@ function getAllEvents(schedule: ISchedule): Event[] {
 
 export default function MergedSchedule() {
   const user = useUser();
+  const { lecturerId } = useParams<any>();
 
+  const [lecturer, setLecturer] = useState<Lecturer | null>();
   const [schedule, setSchedule] = useState<any>();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -59,7 +64,7 @@ export default function MergedSchedule() {
   const [currentEvents, setCurrentEvents] = useState<Event[]>([]);
 
   const loadSchedule = useCallback(() => {
-    ScheduleService.getMergedSchedule()
+    ScheduleService.getMergedSchedule(lecturerId)
       .then((data) => {
         setSchedule(data);
         console.log(data);
@@ -68,7 +73,22 @@ export default function MergedSchedule() {
       .catch((reason: any) => {
         console.log(reason);
       });
-  }, []);
+  }, [lecturerId]);
+
+  const loadLecturer = useCallback(() => {
+    LecturerEmailsService.getLecturer(lecturerId)
+      .then((data) => {
+        setLecturer(data);
+        console.log(data);
+      })
+      .catch((reason: any) => {
+        console.log(reason);
+      });
+  }, [lecturerId]);
+
+  useEffect(() => {
+    loadLecturer();
+  }, [loadLecturer]);
 
   useEffect(() => {
     loadSchedule();
@@ -106,7 +126,7 @@ export default function MergedSchedule() {
       ) : (
         <>
           <CenteredHeader
-            title="Mój harmonogram"
+            title={lecturer ? `${lecturer.name} ${lecturer.surname}` : 'Mój harmonogram'}
             subtitle="Wydarzenia ze wszystkich harmonogramów"
           />
 
@@ -154,6 +174,17 @@ export default function MergedSchedule() {
               </Tabs>
             </Col>
           </Row>
+
+          {events.length > 0 ? (
+            <>
+              <CenteredHeader title="Statystyki" />
+              <Row style={{ height: 200 }} gutter={[16, 16]}>
+                <LecturersBarChart events={events} />
+              </Row>
+            </>
+          ) : (
+            <></>
+          )}
         </>
       )}
     </>
