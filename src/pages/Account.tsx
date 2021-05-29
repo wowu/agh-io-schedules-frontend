@@ -1,4 +1,4 @@
-import { Checkbox, Col, Divider, notification, Row } from 'antd';
+import { Checkbox, Col, Divider, notification as notify, Row } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
@@ -42,17 +42,24 @@ export default function Account() {
 
     setChangePasswordLoading(true);
     await UserService.changePassword(account.id, password);
-    notification['success']({ message: 'Zmieniono hasło.' });
+    notify['success']({ message: 'Zmieniono hasło.' });
     setChangePasswordLoading(false);
   };
 
   const handleNotificationCreate = async (notification: Notification) => {
+    if (notifications.find((n) => n.unit === notification.unit && n.value === notification.value)) {
+      notify['error']({ message: 'Powiadomienie już istnieje.' });
+      return;
+    }
+
+    const newNotifications = [...notifications, notification];
+
     if (user?.isAdmin) {
-      await NotificationService.setGlobalNotifications([...notifications, notification]);
+      await NotificationService.setGlobalNotifications(newNotifications);
     } else {
       await NotificationService.setUserNotifications({
         default: useDefaultNotifications,
-        notifications: [...notifications, notification],
+        notifications: newNotifications,
       });
     }
 
