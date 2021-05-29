@@ -46,23 +46,26 @@ export default function Account() {
     setChangePasswordLoading(false);
   };
 
-  const handleNotificationCreate = (notification: Notification) => {
+  const handleNotificationCreate = async (notification: Notification) => {
     if (user?.isAdmin) {
-      NotificationService.setGlobalNotifications([...notifications, notification]);
+      await NotificationService.setGlobalNotifications([...notifications, notification]);
     } else {
-      alert('not implemented');
+      await NotificationService.setUserNotifications({
+        default: useDefaultNotifications,
+        notifications: [...notifications, notification],
+      });
     }
 
     fetchNotifications();
   };
 
-  const handleNotificationDelete = (notification: Notification) => {
+  const handleNotificationDelete = async (notification: Notification) => {
     const notificationsWithoutDeleted = notifications.filter((n) => n !== notification);
 
     if (user?.isAdmin) {
-      NotificationService.setGlobalNotifications(notificationsWithoutDeleted);
+      await NotificationService.setGlobalNotifications(notificationsWithoutDeleted);
     } else {
-      NotificationService.setUserNotifications({
+      await NotificationService.setUserNotifications({
         default: useDefaultNotifications,
         notifications: notificationsWithoutDeleted,
       });
@@ -71,9 +74,9 @@ export default function Account() {
     fetchNotifications();
   };
 
-  const handleDefaultChange = (value: boolean) => {
-    NotificationService.setUserNotifications({
-      default: useDefaultNotifications,
+  const handleDefaultChange = async (value: boolean) => {
+    await NotificationService.setUserNotifications({
+      default: value,
       notifications: notifications,
     });
 

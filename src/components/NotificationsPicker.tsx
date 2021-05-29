@@ -14,7 +14,7 @@ const Add = (props: AddProps) => {
   return (
     <div style={{ textAlign: 'center' }}>
       <Space>
-        <InputNumber min={1} max={10} value={value} onChange={setValue} />
+        <InputNumber min={1} max={60} value={value} onChange={setValue} />
         <Select value={unit} onChange={setUnit}>
           <Select.Option value="minute">minuty</Select.Option>
           <Select.Option value="hour">godziny</Select.Option>
@@ -75,6 +75,7 @@ export default function NotificationPicker(props: NotificationsPickerProps) {
       <Table
         style={tableStyle()}
         pagination={false}
+        rowKey={(notification) => notification.unit + notification.value}
         footer={() => <Add onCreate={props.onCreate} />}
         columns={columns}
         dataSource={props.notifications}

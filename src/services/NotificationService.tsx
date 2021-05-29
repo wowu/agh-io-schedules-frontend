@@ -23,16 +23,9 @@ export class NotificationService {
   }
 
   static async getGlobalNotifications(): Promise<Notification[]> {
-    // const response = await ApiAdapter.get('/api/notifications');
-    // const { notifications } = await response.json();
-    // return Promise.resolve(notifications);
-
-    return Promise.resolve([
-      {
-        value: 1,
-        unit: 'day',
-      },
-    ]);
+    const response = await ApiAdapter.get('/api/notifications');
+    const { notifications } = await response.json();
+    return Promise.resolve(notifications);
   }
 
   static async setUserNotifications(userNotifications: UserNotifications) {
@@ -47,18 +40,8 @@ export class NotificationService {
   }
 
   static async getUserNotifications(): Promise<UserNotifications> {
-    // const response = await ApiAdapter.get('/api/me/notifications');
-    // const data = await response.json();
-    // return Promise.resolve(data);
-
-    return Promise.resolve({
-      default: false,
-      notifications: [
-        {
-          value: 1,
-          unit: 'day',
-        },
-      ],
-    });
+    const response = await ApiAdapter.get('/api/me/notifications');
+    const data = await response.json();
+    return Promise.resolve(data);
   }
 }
