@@ -1,41 +1,47 @@
 import { Lecturer } from './LecturerEmailsService';
 import moment from 'moment';
+import { Event } from './ScheduleService';
 
-export type LecturerTimelineDataPoint = {
-  x: string;
-  y: number;
+export type LecturerBarDataPoint = {
+  date: string;
+  count: number;
 };
 
-export type LecturerTimelineData = {
+export type LecturerPieDataPoint = {
   id: string;
-  data: LecturerTimelineDataPoint[];
+  value: number;
 };
+
 export const DATE_FORMAT = 'DD MM YYYY';
 
 export class StatsService {
-  static prepareTimelineData(lecturer: Lecturer): LecturerTimelineData {
-    const dateFormat = 'DD MM YYYY';
-    const data: LecturerTimelineDataPoint[] = [];
+  static prepareTimelineData(events: Event[]): LecturerBarDataPoint[] {
+    const dateFormat = 'MMMM D, YYYY';
+    const data: LecturerBarDataPoint[] = [];
     const eventsMap = new Map<string, number>();
-    lecturer.schedules.forEach((schedule) => {
-      schedule.events.forEach((event) => {
-        const date = moment(event.beginTime).format(dateFormat);
-        if (eventsMap.has(date)) {
-          eventsMap.set(date, eventsMap.get(date)! + 1);
-        } else {
-          eventsMap.set(date, 1);
-        }
-      });
+    events.forEach((event) => {
+      const date = moment(event.beginTime).format(dateFormat);
+      if (eventsMap.has(date)) {
+        eventsMap.set(date, eventsMap.get(date)! + 1);
+      } else {
+        eventsMap.set(date, 1);
+      }
     });
     eventsMap.forEach((count, date) => {
       data.push({
-        x: date,
-        y: count,
+        date,
+        count,
       });
     });
-    return {
-      data,
-      id: `${lecturer.name} ${lecturer.surname}`,
-    };
+    return data;
+  }
+
+  static preparePieData(lecturers: any[]): LecturerPieDataPoint[] {
+    return lecturers.map((lecturer) => {
+      return {
+        id: `${lecturer.name} ${lecturer.surname}`,
+        value: lecturer.eventsCount,
+      };
+    });
   }
 }

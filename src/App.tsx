@@ -50,7 +50,7 @@ function App() {
                   <PrivateRoute exact path="/">
                     <ScheduleList />
                   </PrivateRoute>
-                  <PrivateRoute path="/merged">
+                  <PrivateRoute path="/merged/:lecturerId?">
                     <MergedSchedule />
                   </PrivateRoute>
                   <PrivateRoute path="/import">

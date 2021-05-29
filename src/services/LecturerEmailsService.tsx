@@ -9,7 +9,7 @@ export type Lecturer = {
   email: string;
   // TODO: remove activeSubscription after FE stops using it
   activeSubscription?: boolean;
-  eventsCount: number;
+  eventCount: number;
   schedules: Schedule[];
 };
 

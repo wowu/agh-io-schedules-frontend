@@ -5,6 +5,8 @@ import moment from 'moment';
 import { Schedule as ISchedule, Event, ScheduleService } from '../services/ScheduleService';
 import EventListItem from '../components/EventListItem';
 import { useUser } from '../helpers/user';
+import { useParams } from 'react-router-dom';
+import LecturersBarChart from '../components/LecturersTimelineChart';
 
 function getBadgeText(count: number): string {
   switch (count) {
@@ -51,6 +53,7 @@ function getAllEvents(schedule: ISchedule): Event[] {
 
 export default function MergedSchedule() {
   const user = useUser();
+  const { lecturerId } = useParams<any>();
 
   const [schedule, setSchedule] = useState<any>();
   const [events, setEvents] = useState<Event[]>([]);
@@ -59,7 +62,7 @@ export default function MergedSchedule() {
   const [currentEvents, setCurrentEvents] = useState<Event[]>([]);
 
   const loadSchedule = useCallback(() => {
-    ScheduleService.getMergedSchedule()
+    ScheduleService.getMergedSchedule(lecturerId)
       .then((data) => {
         setSchedule(data);
         console.log(data);
@@ -68,7 +71,7 @@ export default function MergedSchedule() {
       .catch((reason: any) => {
         console.log(reason);
       });
-  }, []);
+  }, [lecturerId]);
 
   useEffect(() => {
     loadSchedule();
@@ -154,6 +157,17 @@ export default function MergedSchedule() {
               </Tabs>
             </Col>
           </Row>
+
+          {events.length > 0 ? (
+            <>
+              <CenteredHeader title="Statystyki" />
+              <Row style={{ height: 200 }} gutter={[16, 16]}>
+                <LecturersBarChart events={events} />
+              </Row>
+            </>
+          ) : (
+            <></>
+          )}
         </>
       )}
     </>
