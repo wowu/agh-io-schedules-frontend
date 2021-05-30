@@ -1,4 +1,4 @@
-import { Col, Row, Space, Table, Tag } from 'antd';
+import { Button, Col, Row, Space, Table, Tag } from 'antd';
 import { User } from '../services/UserService';
 import UserEdit from './UserEdit';
 import { UserFormValues } from './UserForm';
@@ -26,7 +26,9 @@ export default function UsersTable(props: UsersTableProps) {
             {props.onEdit && (
               <UserEdit onEdit={props.onEdit} user={record} fieldsToEdit={props.fieldsToShow} />
             )}
-            <a onClick={() => props.onRemove(record)}>Usuń</a>
+            <Button danger onClick={() => props.onRemove(record)}>
+              Usuń
+            </Button>
           </Space>
         </>
       ),

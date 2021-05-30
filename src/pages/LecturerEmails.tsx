@@ -1,5 +1,6 @@
-import { Button, Col, notification, Row, Space, Table, Tag } from 'antd';
-import { useEffect, useState } from 'react';
+import { Button, Col, notification, Popconfirm, Row, Space, Table, Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import CenteredHeader from '../components/CenteredHeader';
 import LecturerForm, { LecturerFormValues } from '../components/LecturerForm';
 import LecturersPieChart from '../components/LecturersPieChart';
@@ -20,7 +21,9 @@ function LecturerEdit(props: LecturerEditProps) {
 
   return (
     <>
-      <a onClick={() => setVisible(true)}>Edytuj</a>
+      <Button type={'default'} onClick={() => setVisible(true)}>
+        Edytuj
+      </Button>
 
       <LecturerForm
         visible={visible}
@@ -55,10 +58,8 @@ function LecturersTable(props: LecturersTableProps) {
       dataIndex: 'email',
     },
     {
-      title: 'Powiadomienia',
-      dataIndex: 'activeSubscription',
-      render: (_text: string, record: Lecturer) =>
-        record.activeSubscription ? <Tag color="green">TAK</Tag> : <Tag color="red">NIE</Tag>,
+      title: 'Liczba wydarzeń',
+      dataIndex: 'eventsCount',
     },
     {
       title: 'Akcje',
@@ -66,9 +67,14 @@ function LecturersTable(props: LecturersTableProps) {
       render: (_text: string, record: Lecturer) => (
         <>
           <Space size="middle">
-            <a href={`/merged/${record.id}`}>Wydarzenia</a>
+            <Button type={'link'}>
+              <Link to={`/merged/${record.id}`}>Wydarzenia</Link>
+            </Button>
             <LecturerEdit onEdit={props.onEdit} lecturer={record} />
-            <a onClick={() => props.onRemove(record)}>Usuń</a>
+
+            <Button danger onClick={() => props.onRemove(record)}>
+              Usuń
+            </Button>
           </Space>
         </>
       ),
@@ -107,8 +113,7 @@ export default function LecturerEmails() {
     const { response, error } = await LecturerEmailsService.createLecturer(
       values.name,
       values.surname,
-      values.email,
-      values.activeSubscription
+      values.email
     );
 
     if (!response.ok) {
@@ -128,8 +133,7 @@ export default function LecturerEmails() {
       lecturer.id,
       values.name,
       values.surname,
-      values.email,
-      values.activeSubscription
+      values.email
     );
 
     if (!response.ok) {
@@ -141,7 +145,7 @@ export default function LecturerEmails() {
 
   return (
     <>
-      <CenteredHeader title={'Emaile prowadzących'} />
+      <CenteredHeader title={'Prowadzący'} />
 
       <LecturersTable loading={loading} lecturers={lecturers} onRemove={onRemove} onEdit={onEdit} />
 

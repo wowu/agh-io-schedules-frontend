@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { User } from '../services/UserService';
 import UserForm, { UserFormValues } from './UserForm';
+import { Button } from 'antd';
 
 export interface UserEditProps {
   user: User;
@@ -19,7 +20,7 @@ export default function UserEdit(props: UserEditProps) {
 
   return (
     <>
-      <a onClick={() => setVisible(true)}>Edytuj</a>
+      <Button onClick={() => setVisible(true)}>Edytuj</Button>
 
       <UserForm
         visible={visible}

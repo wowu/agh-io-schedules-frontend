@@ -163,13 +163,6 @@ export default function Schedule() {
         </Row>
       ) : (
         <>
-          {!isPublic && user?.isAdmin && (
-            <Row justify={'end'} gutter={16}>
-              <Col>
-                <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
-              </Col>
-            </Row>
-          )}
           <CenteredHeader title={schedule.name} subtitle={schedule.description} />
 
           <Row gutter={[16, 16]} justify="space-between">
@@ -212,6 +205,7 @@ export default function Schedule() {
                       />
                     </Col>
                   </Row>
+                  <br />
                 </Tabs.TabPane>
               </Tabs>
             </Col>
@@ -220,7 +214,10 @@ export default function Schedule() {
             <>
               <Row gutter={16}>
                 <Col>
-                  <UpdateScheduleModal schedule={schedule} />
+                  <UpdateScheduleModal schedule={schedule} updateCallback={loadSchedule} />
+                </Col>
+                <Col>
+                  <UpdateScheduleMetadataModal schedule={schedule} updateCallback={loadSchedule} />
                 </Col>
                 <Col>
                   <DownloadFileButton

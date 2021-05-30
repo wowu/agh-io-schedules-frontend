@@ -6,7 +6,6 @@ export interface LecturerFormValues {
   name: string;
   surname: string;
   email: string;
-  activeSubscription: boolean;
 }
 
 interface LecturerFormProps {
@@ -22,7 +21,6 @@ export default function LecturerForm(props: LecturerFormProps) {
 
   useEffect(() => {
     form.setFieldsValue({
-      activeSubscription: false,
       ...props.lecturer,
     });
   }, [props.lecturer, form]);
@@ -55,9 +53,6 @@ export default function LecturerForm(props: LecturerFormProps) {
         </Form.Item>
         <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
           <Input placeholder="kowalski@example.com" />
-        </Form.Item>
-        <Form.Item valuePropName="checked" name="activeSubscription" initialValue={false}>
-          <Checkbox>Włączone powiadomienia</Checkbox>
         </Form.Item>
       </Form>
     </Modal>

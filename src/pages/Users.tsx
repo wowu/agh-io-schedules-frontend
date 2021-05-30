@@ -58,7 +58,7 @@ export default function Users() {
         users={users}
         onRemove={onRemove}
         onEdit={onEdit}
-        fieldsToShow={['email', 'activeSubscription']}
+        fieldsToShow={['email']}
       />
 
       <br />
@@ -73,7 +73,7 @@ export default function Users() {
           onSubmit={onCreateFormSubmit}
           title="Dodaj użytkownika"
           onCancel={() => setCreateModalVisible(false)}
-          fieldsToEdit={['email', 'activeSubscription', 'password']}
+          fieldsToEdit={['email', 'password']}
         />
       </Row>
     </>

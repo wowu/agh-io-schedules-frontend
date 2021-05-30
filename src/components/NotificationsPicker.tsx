@@ -55,7 +55,7 @@ export default function NotificationPicker(props: NotificationsPickerProps) {
     {
       key: 'actions',
       render: (notification: Notification) => (
-        <Button type="link" onClick={() => props.onDelete(notification)}>
+        <Button danger onClick={() => props.onDelete(notification)}>
           Usuń
         </Button>
       ),

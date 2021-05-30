@@ -127,17 +127,21 @@ export class ScheduleService {
     const data = await response.json();
 
     const schedules: Schedule[] = data.schedules;
-
     const events = schedules.flatMap((schedule) => schedule.events);
-
-    return { events };
+    const unique = events.filter(
+      (e, i, a) => a.indexOf(a.find((el: Event) => el.id == e.id) as Event) === i
+    );
+    return { events: unique };
   }
 
   static async getMergedScheduleForAdmin(lecturerId: string): Promise<MergedSchedule> {
     const response = await ApiAdapter.get(`/api/lecturers/${lecturerId}`);
     const lecturer: Lecturer = await response.json();
     const events = lecturer.schedules.flatMap((schedule) => schedule.events);
-    return { events };
+    const unique = events.filter(
+      (e, i, a) => a.indexOf(a.find((el: Event) => el.id == e.id) as Event) === i
+    );
+    return { events: unique };
   }
 
   static async getMergedSchedule(lecturerId: string | undefined): Promise<MergedSchedule> {
@@ -159,7 +163,6 @@ export class ScheduleService {
     try {
       const response = await ApiAdapter.get('/api/schedules/');
       const data = await response.json();
-      console.log(data);
       return Promise.resolve({ response, data });
     } catch (error) {
       console.log('getListSchedules: ', error);
