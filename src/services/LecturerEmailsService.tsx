@@ -7,8 +7,6 @@ export type Lecturer = {
   name: string;
   surname: string;
   email: string;
-  // TODO: remove activeSubscription after FE stops using it
-  activeSubscription?: boolean;
   eventCount: number;
   schedules: Schedule[];
 };

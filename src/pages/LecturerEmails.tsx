@@ -58,10 +58,8 @@ function LecturersTable(props: LecturersTableProps) {
       dataIndex: 'email',
     },
     {
-      title: 'Powiadomienia',
-      dataIndex: 'activeSubscription',
-      render: (_text: string, record: Lecturer) =>
-        record.activeSubscription ? <Tag color="green">TAK</Tag> : <Tag color="red">NIE</Tag>,
+      title: 'Liczba wydarzeń',
+      dataIndex: 'eventsCount',
     },
     {
       title: 'Akcje',
@@ -104,6 +102,7 @@ export default function LecturerEmails() {
     const { lecturers } = data;
     setLecturers(lecturers.sort((a, b) => a.id - b.id));
     setLoading(false);
+    console.log(lecturers);
   };
 
   useEffect(() => {
