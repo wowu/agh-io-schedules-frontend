@@ -72,7 +72,6 @@ function LecturersTable(props: LecturersTableProps) {
             </Button>
             <LecturerEdit onEdit={props.onEdit} lecturer={record} />
 
-            {/*< onClick={() => {}}>*/}
             <Button danger onClick={() => props.onRemove(record)}>
               Usuń
             </Button>
@@ -102,7 +101,6 @@ export default function LecturerEmails() {
     const { lecturers } = data;
     setLecturers(lecturers.sort((a, b) => a.id - b.id));
     setLoading(false);
-    console.log(lecturers);
   };
 
   useEffect(() => {
@@ -166,7 +164,6 @@ export default function LecturerEmails() {
         />
       </Row>
       <Row style={{ height: 300 }}>
-        {/*<Row style={{}}>*/}
         <LecturersPieChart lecturers={lecturers} />
       </Row>
     </>
