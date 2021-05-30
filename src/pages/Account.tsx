@@ -1,4 +1,4 @@
-import { Checkbox, Col, Divider, notification, Row } from 'antd';
+import { Checkbox, Col, Divider, notification as notify, Row } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useEffect, useState } from 'react';
 import CenteredHeader from '../components/CenteredHeader';
@@ -42,27 +42,37 @@ export default function Account() {
 
     setChangePasswordLoading(true);
     await UserService.changePassword(account.id, password);
-    notification['success']({ message: 'Zmieniono hasło.' });
+    notify['success']({ message: 'Zmieniono hasło.' });
     setChangePasswordLoading(false);
   };
 
-  const handleNotificationCreate = (notification: Notification) => {
+  const handleNotificationCreate = async (notification: Notification) => {
+    if (notifications.find((n) => n.unit === notification.unit && n.value === notification.value)) {
+      notify['error']({ message: 'Powiadomienie już istnieje.' });
+      return;
+    }
+
+    const newNotifications = [...notifications, notification];
+
     if (user?.isAdmin) {
-      NotificationService.setGlobalNotifications([...notifications, notification]);
+      await NotificationService.setGlobalNotifications(newNotifications);
     } else {
-      alert('not implemented');
+      await NotificationService.setUserNotifications({
+        default: useDefaultNotifications,
+        notifications: newNotifications,
+      });
     }
 
     fetchNotifications();
   };
 
-  const handleNotificationDelete = (notification: Notification) => {
+  const handleNotificationDelete = async (notification: Notification) => {
     const notificationsWithoutDeleted = notifications.filter((n) => n !== notification);
 
     if (user?.isAdmin) {
-      NotificationService.setGlobalNotifications(notificationsWithoutDeleted);
+      await NotificationService.setGlobalNotifications(notificationsWithoutDeleted);
     } else {
-      NotificationService.setUserNotifications({
+      await NotificationService.setUserNotifications({
         default: useDefaultNotifications,
         notifications: notificationsWithoutDeleted,
       });
@@ -71,9 +81,9 @@ export default function Account() {
     fetchNotifications();
   };
 
-  const handleDefaultChange = (value: boolean) => {
-    NotificationService.setUserNotifications({
-      default: useDefaultNotifications,
+  const handleDefaultChange = async (value: boolean) => {
+    await NotificationService.setUserNotifications({
+      default: value,
       notifications: notifications,
     });
 

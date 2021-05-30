@@ -16,11 +16,21 @@ export class ApiAdapter {
     body: FormData | string = new FormData(),
     options: ApiAdapterOptions = {}
   ): Promise<Response> {
+    let headers;
+
+    if (typeof body === 'string') {
+      headers = {
+        'Content-Type': 'application/json',
+      };
+    }
+
     const request = new Request(`${API_URL}${resource}`, {
       method: 'PUT',
-      body: body,
       redirect: 'follow',
+      body,
+      headers,
     });
+
     return this.call(request, options);
   }
 
