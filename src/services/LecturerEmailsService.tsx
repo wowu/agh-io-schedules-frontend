@@ -49,8 +49,7 @@ export class LecturerEmailsService {
   static async createLecturer(
     name: string,
     surname: string,
-    email: string,
-    activeSubscription: boolean
+    email: string
   ): Promise<Response<Lecturer>> {
     try {
       const response = await ApiAdapter.post(
@@ -59,7 +58,6 @@ export class LecturerEmailsService {
           name,
           surname,
           email,
-          activeSubscription,
         })
       );
       const data = await response.json();
@@ -79,8 +77,7 @@ export class LecturerEmailsService {
     id: number,
     name: string,
     surname: string,
-    email: string,
-    activeSubscription: boolean
+    email: string
   ): Promise<Response<Lecturer>> {
     try {
       const response = await ApiAdapter.put(
@@ -89,7 +86,6 @@ export class LecturerEmailsService {
           name,
           surname,
           email,
-          activeSubscription,
         })
       );
       const data = await response.json();

@@ -1,7 +1,7 @@
-import { Modal, Button, Alert } from 'antd';
+import { Modal, Button, Alert, Row, Col } from 'antd';
 import Dragger from 'antd/es/upload/Dragger';
 import React, { useState } from 'react';
-import { InboxOutlined } from '@ant-design/icons';
+import { EditOutlined, InboxOutlined, UploadOutlined } from '@ant-design/icons';
 import { Schedule, ScheduleService } from '../services/ScheduleService';
 import ImportCollisions from '../components/ImportCollisions';
 import ImportError from '../components/ImportError';
@@ -16,6 +16,7 @@ enum UpdateFileStatus {
 }
 interface UpdateScheduleModalProps {
   schedule: Schedule;
+  updateCallback: Function;
 }
 
 export default function UpdateScheduleModal(props: UpdateScheduleModalProps) {
@@ -60,6 +61,7 @@ export default function UpdateScheduleModal(props: UpdateScheduleModalProps) {
     setUpdateSuccessData(newSchedulesData);
     setUpdateStatus(UpdateFileStatus.success);
     setUpdateFile([]);
+    props.updateCallback();
   };
 
   const uploadNewSchedule = async () => {
@@ -167,7 +169,12 @@ export default function UpdateScheduleModal(props: UpdateScheduleModalProps) {
   return (
     <>
       <Button type="primary" onClick={showModal}>
-        Wyślij nową wersję
+        <Row gutter={8}>
+          <Col>
+            <UploadOutlined />
+          </Col>
+          <Col>Wyślij nową wersję</Col>
+        </Row>
       </Button>
       <Modal
         onCancel={hideModal}

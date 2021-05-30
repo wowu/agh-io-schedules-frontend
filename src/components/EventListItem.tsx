@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Event } from '../services/ScheduleService';
 import EventDetails from './EventDetails';
 import moment from 'moment';
+import 'moment/locale/pl';
 
 export interface EventListItemProps {
   item: Event;
@@ -16,11 +17,13 @@ function getLecturerFullName(event: Event) {
 function getTime(event: Event) {
   const begin = moment(event.beginTime);
   const end = moment(event.endTime);
+  begin.locale('pl');
+  end.locale('pl');
   if (end.diff(begin, 'days') < 1) {
-    return `${begin.format('dddd, MMMM D \u00B7 HH:MM')} - ${end.format('HH:MM')}`;
+    return `${begin.format('dddd, D MMMM \u00B7 HH:MM')} - ${end.format('HH:MM')}`;
   } else {
-    return `${begin.format('dddd, MMMM D \u00B7 HH:MM')} - ${end.format(
-      'dddd, MMMM D \u00B7 HH:MM'
+    return `${begin.format('dddd, D MMMM \u00B7 HH:MM')} - ${end.format(
+      'dddd, D MMMM \u00B7 HH:MM'
     )}`;
   }
 }

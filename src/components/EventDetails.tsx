@@ -11,7 +11,7 @@ export default function EventDetails(props: EventProps) {
   function formatTime() {
     const begin = moment(props.event.beginTime);
     const end = moment(props.event.endTime);
-    return begin.format('dddd, MMMM D \u00B7 HH:MM') + ' - ' + end.format('HH:MM');
+    return begin.format('dddd, D MMMM \u00B7 HH:MM') + ' - ' + end.format('HH:MM');
   }
 
   return (

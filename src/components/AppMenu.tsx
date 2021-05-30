@@ -38,7 +38,7 @@ function AppMenu() {
                 <Link to="/import">Wyślij nowy</Link>
               </Menu.Item>
               <Menu.Item key="emails">
-                <Link to="/emails">Emaile prowadzących</Link>
+                <Link to="/emails">Prowadzący</Link>
               </Menu.Item>
               <Menu.Item key="users">
                 <Link to="/users">Użytkownicy</Link>
