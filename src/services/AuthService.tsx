@@ -31,7 +31,7 @@ export class AuthService {
     const data = JSON.parse(text);
 
     if (!response.ok) {
-      if (data.error === 'Wrong username or password.') {
+      if (data.error === 'Niepoprawna nazwa użytkownika lub hasło.') {
         return AuthResponse.WrongPassword;
       } else {
         return AuthResponse.UnknownError;
