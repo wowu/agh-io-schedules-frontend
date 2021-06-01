@@ -24,3 +24,17 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
+
+## Instrukcja uruchomienia na serwerze
+
+Wymagania lokalne:
+- node.js 14
+- yarn
+
+Wymagania serwera:
+- serwer plików statycznych
+- certyfikat SSL
+
+Po sklonowaniu projektu należy zainstalować zależności komendą `yarn install`, następnie ustawić adres backendu w pliku `.env.production`. Następnym krokiem jest zbudowanie projektu komendą `yarn build`.
+
+W folderze `dist` pojawią się zbudowane pliki projektu. Mogą być swerwowane przez dowolny serwer obsługujący statyczne pliki, na przykład `apache2` lub `nginx`. Zalecane jest użycie certyfikatu SSL.
