@@ -5,8 +5,22 @@ import CenteredHeader from '../components/CenteredHeader';
 import NotificationPicker from '../components/NotificationsPicker';
 import PasswordForm from '../components/PasswordForm';
 import { useUser } from '../helpers/user';
+import { unitTranslation } from '../utils/l10n';
 import { Notification, NotificationService } from '../services/NotificationService';
 import { User, UserService } from '../services/UserService';
+
+function renderDefaultNotificationsDetails(notifications: Notification[]) {
+  return (
+    <>
+      {' '}
+      (
+      {notifications
+        .map((notification) => `${notification.value} ${unitTranslation[notification.unit]}`)
+        .join(', ')}
+      )
+    </>
+  );
+}
 
 export default function Account() {
   const user = useUser();
@@ -15,10 +29,16 @@ export default function Account() {
   const [changePasswordLoading, setChangePasswordLoading] = useState<boolean>(false);
   const [useDefaultNotifications, setUseDefaultNotifications] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [defaultNotifications, setDefaultNotifications] = useState<Notification[]>([]);
 
   const fetchAccount = async () => {
     const { data: account } = await UserService.getUser(user!.id);
     setAccount(account);
+  };
+
+  const fetchGlobalNotifications = async () => {
+    const notifications = await NotificationService.getGlobalNotifications();
+    setDefaultNotifications(notifications);
   };
 
   const fetchNotifications = async () => {
@@ -35,6 +55,7 @@ export default function Account() {
   useEffect(() => {
     fetchAccount();
     fetchNotifications();
+    fetchGlobalNotifications();
   }, []);
 
   const changePassword = async (password: string) => {
@@ -128,6 +149,7 @@ export default function Account() {
                   checked={useDefaultNotifications}
                 >
                   Użyj domyślnych powiadomień systemu
+                  {renderDefaultNotificationsDetails(defaultNotifications)}
                 </Checkbox>
               </Row>
             </>

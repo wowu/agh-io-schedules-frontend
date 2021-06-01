@@ -1,6 +1,7 @@
 import { Button, InputNumber, List, Select, Space, Table } from 'antd';
 import { CSSProperties } from 'react';
 import { useState } from 'react';
+import { unitTranslation } from '../utils/l10n';
 import { Notification } from '../services/NotificationService';
 
 type AddProps = {
@@ -36,12 +37,6 @@ type NotificationsPickerProps = {
 };
 
 export default function NotificationPicker(props: NotificationsPickerProps) {
-  const unitTranslation = {
-    minute: 'minuty',
-    hour: 'godziny',
-    day: 'dni',
-  };
-
   const columns = [
     {
       title: 'Wartość',
