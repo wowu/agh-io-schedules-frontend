@@ -8,7 +8,6 @@ import 'moment/locale/pl';
 
 moment.locale('pl');
 
-
 export interface EventListItemProps {
   item: Event;
 }
