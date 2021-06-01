@@ -48,7 +48,7 @@ Wymagania serwera:
 3. Zbudowanie projektu
 
     ```bash
-    yarn install
+    yarn build
     ```
 
 4. W folderze `dist` pojawią się zbudowane pliki projektu. Mogą być serwowane przez dowolny serwer obsługujący statyczne pliki, na przykład `apache2` lub `nginx`. Zalecane jest użycie certyfikatu SSL.
