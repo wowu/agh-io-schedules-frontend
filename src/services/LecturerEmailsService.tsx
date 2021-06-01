@@ -62,7 +62,6 @@ export class LecturerEmailsService {
 
       let error;
       if (data.error) error = data.error;
-      if (data.ERROR) error = data.ERROR;
 
       return Promise.resolve({ response, data, error });
     } catch (error) {
@@ -90,7 +89,6 @@ export class LecturerEmailsService {
 
       let error;
       if (data.error) error = data.error;
-      if (data.ERROR) error = data.ERROR;
 
       return Promise.resolve({ response, data, error });
     } catch (error) {
