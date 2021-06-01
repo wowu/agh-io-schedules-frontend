@@ -163,7 +163,7 @@ export default function LecturerEmails() {
           onCancel={() => setCreateModalVisible(false)}
         />
       </Row>
-      <Row style={{ height: 300 }}>
+      <Row style={{ height: 400 }}>
         <LecturersPieChart lecturers={lecturers} />
       </Row>
     </>
