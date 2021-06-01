@@ -35,7 +35,7 @@ export default function LoginForm() {
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    setError('Popraw błędy w formularzu człowieku');
+    setError('Popraw błędy w formularzu.');
   };
 
   const layout = {
