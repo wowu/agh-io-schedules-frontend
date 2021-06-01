@@ -23,7 +23,7 @@ export default function LecturersPieChart(props: LecturersPieChartProps) {
   return (
     <ResponsivePie
       data={data}
-      margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+      margin={{ top: 80, right: 80, bottom: 80, left: 80 }}
       innerRadius={0.4}
       padAngle={0.7}
       cornerRadius={3}
@@ -32,11 +32,11 @@ export default function LecturersPieChart(props: LecturersPieChartProps) {
       arcLabelsSkipAngle={10}
       legends={[
         {
-          anchor: 'bottom',
+          anchor: 'left',
           direction: 'column',
           justify: false,
-          translateX: 0,
-          translateY: 64,
+          translateX: 150,
+          translateY: 0,
           itemsSpacing: 2,
           itemWidth: 120,
           itemHeight: 20,
