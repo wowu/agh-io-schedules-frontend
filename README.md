@@ -35,6 +35,20 @@ Wymagania serwera:
 - serwer plików statycznych
 - certyfikat SSL
 
-Po sklonowaniu projektu należy zainstalować zależności komendą `yarn install`, następnie ustawić adres backendu w pliku `.env.production`. Następnym krokiem jest zbudowanie projektu komendą `yarn build`.
+### Instalacja
 
-W folderze `dist` pojawią się zbudowane pliki projektu. Mogą być swerwowane przez dowolny serwer obsługujący statyczne pliki, na przykład `apache2` lub `nginx`. Zalecane jest użycie certyfikatu SSL.
+1. Instalacja zależności
+
+    ```bash
+    yarn install
+    ```
+
+2. Konfiguracja: ustawienie adresu backendu w pliku `.env.production`.
+
+3. Zbudowanie projektu
+
+    ```bash
+    yarn install
+    ```
+
+4. W folderze `dist` pojawią się zbudowane pliki projektu. Mogą być serwowane przez dowolny serwer obsługujący statyczne pliki, na przykład `apache2` lub `nginx`. Zalecane jest użycie certyfikatu SSL.
